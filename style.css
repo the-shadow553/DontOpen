@@ -1,0 +1,286 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    background: #313338;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+/* SERVIDORES */
+
+.servidores {
+    width: 72px;
+    background: #1e1f22;
+    padding: 12px 10px;
+}
+
+.servidor {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 12px;
+    border-radius: 16px;
+    background: #313338;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.servidor:hover {
+    border-radius: 12px;
+    background: #5865f2;
+}
+
+.servidor.ativo {
+    background: #5865f2;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    width: 240px;
+    background: #2b2d31;
+    display: flex;
+    flex-direction: column;
+}
+
+.servidor-topo {
+    height: 58px;
+    padding: 0 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #202225;
+}
+
+.categoria {
+    font-size: 11px;
+    font-weight: bold;
+    color: #949ba4;
+    padding: 20px 12px 8px;
+}
+
+.canal {
+    margin: 2px 8px;
+    padding: 10px;
+    border-radius: 6px;
+    color: #b5bac1;
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+.canal:hover {
+    background: #404249;
+    color: white;
+}
+
+.ativo-canal {
+    background: #404249;
+    color: white;
+}
+
+/* USUÁRIO */
+
+.usuario-logado {
+    margin-top: auto;
+    background: #232428;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #5865f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pequeno {
+    width: 38px;
+    height: 38px;
+}
+
+.usuario-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.usuario-info span {
+    color: #23a55a;
+    font-size: 12px;
+}
+
+.acoes {
+    font-size: 14px;
+}
+
+/* CHAT */
+
+.chat {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.cabecalho {
+    height: 65px;
+    padding: 10px 22px;
+    border-bottom: 1px solid #26272a;
+    display: flex;
+    align-items: center;
+}
+
+.cabecalho h1 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.cabecalho p {
+    margin: 4px 0 0;
+    color: #949ba4;
+    font-size: 13px;
+}
+
+.mensagens {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.mensagem-chat {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.conteudo-mensagem {
+    flex: 1;
+}
+
+.topo-mensagem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.topo-mensagem strong {
+    color: #ffffff;
+}
+
+.topo-mensagem span {
+    color: #949ba4;
+    font-size: 11px;
+}
+
+.conteudo-mensagem p {
+    margin: 5px 0 0;
+    color: #dbdee1;
+    word-break: break-word;
+}
+
+/* CAIXA DE TEXTO */
+
+.mensagem {
+    margin: 0 20px 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.mensagem input {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    background: #1e1f22;
+    color: white;
+    font-size: 15px;
+}
+
+.mensagem input::placeholder {
+    color: #949ba4;
+}
+
+.mensagem button {
+    border: none;
+    border-radius: 8px;
+    padding: 0 22px;
+    background: #5865f2;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.mensagem button:hover {
+    background: #4752c4;
+}
+
+/* MEMBROS */
+
+.membros {
+    width: 210px;
+    background: #2b2d31;
+    padding: 20px 12px;
+}
+
+.membros h3 {
+    margin: 0 8px 15px;
+    font-size: 11px;
+    color: #949ba4;
+}
+
+.membro {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+.membro:hover {
+    background: #404249;
+}
+
+.membro strong {
+    display: block;
+    font-size: 14px;
+}
+
+.membro span {
+    color: #949ba4;
+    font-size: 11px;
+}
+
+/* CELULAR / JANELA PEQUENA */
+
+@media (max-width: 900px) {
+    .membros {
+        display: none;
+    }
+}
+
+@media (max-width: 650px) {
+    .servidores {
+        width: 60px;
+    }
+
+    .sidebar {
+        width: 190px;
+    }
+}

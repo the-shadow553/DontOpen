@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Discord</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- SERVIDORES -->
+    <aside class="servidores">
+        <div class="servidor ativo">M</div>
+        <div class="servidor">🎮</div>
+        <div class="servidor">🔥</div>
+        <div class="servidor">+</div>
+    </aside>
+
+    <!-- CANAIS -->
+    <aside class="sidebar">
+
+        <div class="servidor-topo">
+            <strong>Meu Discord</strong>
+            <span>⌄</span>
+        </div>
+
+        <div class="categoria">CANAIS DE TEXTO</div>
+
+        <div class="canal ativo-canal" onclick="trocarCanal('geral')">
+            <span>💬</span> geral
+        </div>
+
+        <div class="canal" onclick="trocarCanal('jogos')">
+            <span>🎮</span> jogos
+        </div>
+
+        <div class="canal" onclick="trocarCanal('resenha')">
+            <span>😂</span> resenha
+        </div>
+
+        <div class="categoria">CANAIS DE VOZ</div>
+
+        <div class="canal">
+            <span>🔊</span> Sala 1
+        </div>
+
+        <div class="canal">
+            <span>🔊</span> Sala 2
+        </div>
+
+        <div class="usuario-logado">
+            <div class="avatar pequeno">👤</div>
+
+            <div class="usuario-info">
+                <strong>Você</strong>
+                <span>online</span>
+            </div>
+
+            <div class="acoes">🎤 ⚙️</div>
+        </div>
+
+    </aside>
+
+    <!-- CHAT -->
+    <main class="chat">
+
+        <header class="cabecalho">
+            <div>
+                <h1 id="nomeCanal">💬 geral</h1>
+                <p id="descricaoCanal">Conversa do servidor</p>
+            </div>
+        </header>
+
+        <div id="mensagens" class="mensagens"></div>
+
+        <div class="mensagem">
+            <input
+                type="text"
+                id="entradaMensagem"
+                placeholder="Digite uma mensagem..."
+                autocomplete="off"
+            >
+
+            <button onclick="enviarMensagem()">Enviar</button>
+        </div>
+
+    </main>
+
+    <!-- MEMBROS -->
+    <aside class="membros">
+
+        <h3>ONLINE — 3</h3>
+
+        <div class="membro">
+            <div class="avatar">🧑</div>
+            <div>
+                <strong>João</strong>
+                <span>Jogando</span>
+            </div>
+        </div>
+
+        <div class="membro">
+            <div class="avatar">👩</div>
+            <div>
+                <strong>Maria</strong>
+                <span>Online</span>
+            </div>
+        </div>
+
+        <div class="membro">
+            <div class="avatar">😎</div>
+            <div>
+                <strong>Pedro</strong>
+                <span>Online</span>
+            </div>
+        </div>
+
+    </aside>
+
+    <script>
+
+        let canalAtual = "geral";
+
+        let mensagensPorCanal =
+            JSON.parse(localStorage.getItem("mensagensMeuDiscord")) || {
+                geral: [],
+                jogos: [],
+                resenha: []
+            };
+
+        function salvarMensagens() {
+            localStorage.setItem(
+                "mensagensMeuDiscord",
+                JSON.stringify(mensagensPorCanal)
+            );
+        }
+
+        function trocarCanal(canal) {
+
+            canalAtual = canal;
+
+            const nomeCanal = document.getElementById("nomeCanal");
+            const descricaoCanal = document.getElementById("descricaoCanal");
+
+            if (canal === "geral") {
+                nomeCanal.textContent = "💬 geral";
+                descricaoCanal.textContent = "Conversa do servidor";
+            }
+
+            if (canal === "jogos") {
+                nomeCanal.textContent = "🎮 jogos";
+                descricaoCanal.textContent = "Converse sobre jogos";
+            }
+
+            if (canal === "resenha") {
+                nomeCanal.textContent = "😂 resenha";
+                descricaoCanal.textContent = "Canal para trocar ideia";
+            }
+
+            document.querySelectorAll(".canal").forEach(function(item) {
+                item.classList.remove("ativo-canal");
+            });
+
+            event.currentTarget.classList.add("ativo-canal");
+
+            mostrarMensagens();
+        }
+
+        function mostrarMensagens() {
+
+            const mensagens = document.getElementById("mensagens");
+
+            mensagens.innerHTML = "";
+
+            mensagensPorCanal[canalAtual].forEach(function(mensagem) {
+
+                criarMensagemNaTela(
+                    mensagem.texto,
+                    mensagem.horario
+                );
+
+            });
+        }
+
+        function enviarMensagem() {
+
+            const entrada =
+                document.getElementById("entradaMensagem");
+
+            const texto = entrada.value.trim();
+
+            if (texto === "") {
+                return;
+            }
+
+            const horario =
+                new Date().toLocaleTimeString("pt-BR", {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                });
+
+            mensagensPorCanal[canalAtual].push({
+                texto: texto,
+                horario: horario
+            });
+
+            salvarMensagens();
+
+            criarMensagemNaTela(texto, horario);
+
+            entrada.value = "";
+
+            entrada.focus();
+        }
+
+        function criarMensagemNaTela(texto, horario) {
+
+            const mensagens =
+                document.getElementById("mensagens");
+
+            const novaMensagem =
+                document.createElement("div");
+
+            novaMensagem.className = "mensagem-chat";
+
+            novaMensagem.innerHTML = `
+                <div class="avatar">👤</div>
+
+                <div class="conteudo-mensagem">
+
+                    <div class="topo-mensagem">
+                        <strong>Você</strong>
+                        <span>${horario}</span>
+                    </div>
+
+                    <p></p>
+
+                </div>
+            `;
+
+            novaMensagem.querySelector("p").textContent = texto;
+
+            mensagens.appendChild(novaMensagem);
+
+            mensagens.scrollTop = mensagens.scrollHeight;
+        }
+
+        document
+            .getElementById("entradaMensagem")
+            .addEventListener("keydown", function(event) {
+
+                if (event.key === "Enter") {
+                    enviarMensagem();
+                }
+
+            });
+
+        mostrarMensagens();
+
+    </script>
+
+</body>
+</html>

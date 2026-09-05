@@ -1,264 +1,1354 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Discord</title>
+
+    <title>Discordia</title>
+
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
 
-    <!-- SERVIDORES -->
-    <aside class="servidores">
-        <div class="servidor ativo">M</div>
-        <div class="servidor">🎮</div>
-        <div class="servidor">🔥</div>
-        <div class="servidor">+</div>
-    </aside>
+    <!-- =====================================================
+         TELA DE LOGIN / CADASTRO
+    ====================================================== -->
 
-    <!-- CANAIS -->
-    <aside class="sidebar">
+    <div id="telaLogin" class="tela-login">
 
-        <div class="servidor-topo">
-            <strong>Meu Discord</strong>
-            <span>⌄</span>
-        </div>
+        <div class="caixa-login">
 
-        <div class="categoria">CANAIS DE TEXTO</div>
-
-        <div class="canal ativo-canal" onclick="trocarCanal('geral')">
-            <span>💬</span> geral
-        </div>
-
-        <div class="canal" onclick="trocarCanal('jogos')">
-            <span>🎮</span> jogos
-        </div>
-
-        <div class="canal" onclick="trocarCanal('resenha')">
-            <span>😂</span> resenha
-        </div>
-
-        <div class="categoria">CANAIS DE VOZ</div>
-
-        <div class="canal">
-            <span>🔊</span> Sala 1
-        </div>
-
-        <div class="canal">
-            <span>🔊</span> Sala 2
-        </div>
-
-        <div class="usuario-logado">
-            <div class="avatar pequeno">👤</div>
-
-            <div class="usuario-info">
-                <strong>Você</strong>
-                <span>online</span>
+            <div class="logo-login">
+                💬
             </div>
 
-            <div class="acoes">🎤 ⚙️</div>
-        </div>
+            <h1>Discordia</h1>
 
-    </aside>
+            <p class="subtitulo-login">
+                Entre na sua conta ou crie uma nova
+            </p>
 
-    <!-- CHAT -->
-    <main class="chat">
-
-        <header class="cabecalho">
-            <div>
-                <h1 id="nomeCanal">💬 geral</h1>
-                <p id="descricaoCanal">Conversa do servidor</p>
-            </div>
-        </header>
-
-        <div id="mensagens" class="mensagens"></div>
-
-        <div class="mensagem">
             <input
-                type="text"
-                id="entradaMensagem"
-                placeholder="Digite uma mensagem..."
-                autocomplete="off"
+                type="email"
+                id="emailLogin"
+                placeholder="Seu e-mail"
+                autocomplete="email"
             >
 
-            <button onclick="enviarMensagem()">Enviar</button>
+            <input
+                type="password"
+                id="senhaLogin"
+                placeholder="Sua senha"
+                autocomplete="current-password"
+            >
+
+            <button
+                class="botao-login"
+                onclick="fazerLogin()"
+            >
+                Entrar
+            </button>
+
+            <button
+                class="botao-cadastro"
+                onclick="fazerCadastro()"
+            >
+                Criar conta
+            </button>
+
+            <p id="mensagemLogin" class="mensagem-login"></p>
+
         </div>
 
-    </main>
+    </div>
 
-    <!-- MEMBROS -->
-    <aside class="membros">
 
-        <h3>ONLINE — 3</h3>
+    <!-- =====================================================
+         APLICAÇÃO
+    ====================================================== -->
 
-        <div class="membro">
-            <div class="avatar">🧑</div>
-            <div>
-                <strong>João</strong>
-                <span>Jogando</span>
+    <div id="app" class="app">
+
+
+        <!-- =================================================
+             SERVIDORES
+        ================================================== -->
+
+        <aside class="servidores">
+
+            <button
+                class="servidor ativo"
+                title="Meu servidor"
+            >
+                M
+            </button>
+
+            <button
+                class="servidor"
+                title="Jogos"
+            >
+                🎮
+            </button>
+
+            <button
+                class="servidor"
+                title="Resenha"
+            >
+                🔥
+            </button>
+
+            <button
+                class="servidor adicionar-servidor"
+                title="Adicionar servidor"
+            >
+                +
+            </button>
+
+        </aside>
+
+
+        <!-- =================================================
+             SIDEBAR
+        ================================================== -->
+
+        <aside class="sidebar">
+
+            <div class="topo-sidebar">
+                <h2>Meu Discord</h2>
             </div>
-        </div>
 
-        <div class="membro">
-            <div class="avatar">👩</div>
-            <div>
-                <strong>Maria</strong>
-                <span>Online</span>
+
+            <!-- CANAIS -->
+
+            <div class="lista-canais">
+
+                <div class="titulo-canais">
+                    <span>CANAIS DE TEXTO</span>
+                    <button title="Adicionar canal">+</button>
+                </div>
+
+                <button
+                    class="canal ativo"
+                    onclick="trocarCanal('geral', this)"
+                >
+                    <span>#</span>
+                    <span>geral</span>
+                </button>
+
+                <button
+                    class="canal"
+                    onclick="trocarCanal('jogos', this)"
+                >
+                    <span>#</span>
+                    <span>jogos</span>
+                </button>
+
+                <button
+                    class="canal"
+                    onclick="trocarCanal('resenha', this)"
+                >
+                    <span>#</span>
+                    <span>resenha</span>
+                </button>
+
+
+                <div class="titulo-canais titulo-voz">
+                    <span>CANAIS DE VOZ</span>
+                    <button title="Adicionar canal">+</button>
+                </div>
+
+                <button
+                    class="canal canal-voz"
+                    onclick="entrarSala('Sala 1')"
+                >
+                    <span>🔊</span>
+                    <span>Sala 1</span>
+                </button>
+
+                <button
+                    class="canal canal-voz"
+                    onclick="entrarSala('Sala 2')"
+                >
+                    <span>🔊</span>
+                    <span>Sala 2</span>
+                </button>
+
             </div>
-        </div>
 
-        <div class="membro">
-            <div class="avatar">😎</div>
-            <div>
-                <strong>Pedro</strong>
-                <span>Online</span>
+
+            <!-- USUÁRIO -->
+
+            <div class="usuario-area">
+
+                <div
+                    class="avatar-container"
+                    onclick="abrirSeletorFoto()"
+                    title="Alterar foto"
+                >
+
+                    <img
+                        id="avatarUsuario"
+                        class="avatar"
+                        src=""
+                        alt="Avatar"
+                    >
+
+                    <div class="status-online"></div>
+
+                </div>
+
+
+                <div class="dados-usuario">
+
+                    <strong id="nomeUsuario">
+                        Usuário
+                    </strong>
+
+                    <span id="emailUsuario">
+                        conectado
+                    </span>
+
+                </div>
+
+
+                <button
+                    class="botao-sair"
+                    onclick="sairDaConta()"
+                    title="Sair"
+                >
+                    ⏻
+                </button>
+
             </div>
-        </div>
 
-    </aside>
+
+            <!-- INPUT DA FOTO -->
+
+            <input
+                type="file"
+                id="inputFoto"
+                class="input-foto-escondido"
+                accept="image/png,image/jpeg,image/webp"
+            >
+
+        </aside>
+
+
+        <!-- =================================================
+             CHAT
+        ================================================== -->
+
+        <main class="chat">
+
+
+            <!-- CABEÇALHO -->
+
+            <header class="cabecalho-chat">
+
+                <div class="titulo-chat">
+
+                    <span class="hashtag">#</span>
+
+                    <h2 id="nomeCanal">
+                        geral
+                    </h2>
+
+                </div>
+
+                <div class="acoes-chat">
+
+                    <button title="Notificações">
+                        🔔
+                    </button>
+
+                    <button title="Pesquisar">
+                        🔍
+                    </button>
+
+                    <button title="Membros">
+                        👥
+                    </button>
+
+                </div>
+
+            </header>
+
+
+            <!-- MENSAGENS -->
+
+            <section
+                id="mensagens"
+                class="mensagens"
+            >
+            </section>
+
+
+            <!-- ÁREA DE ENVIO -->
+
+            <div class="area-envio">
+
+                <div class="caixa-envio">
+
+                    <input
+                        type="text"
+                        id="campoMensagem"
+                        placeholder="Conversar em #geral"
+                        autocomplete="off"
+                        onkeydown="verificarEnter(event)"
+                    >
+
+                    <button
+                        class="botao-enviar"
+                        onclick="enviarMensagem()"
+                        title="Enviar mensagem"
+                    >
+                        ➤
+                    </button>
+
+                </div>
+
+            </div>
+
+        </main>
+
+
+        <!-- =================================================
+             MEMBROS
+        ================================================== -->
+
+        <aside class="membros">
+
+            <h3>
+                MEMBROS — <span id="quantidadeMembros">3</span>
+            </h3>
+
+
+            <div class="membro">
+
+                <div class="avatar-membro">
+                    J
+                    <span></span>
+                </div>
+
+                <div>
+                    <strong>João</strong>
+                    <small>online</small>
+                </div>
+
+            </div>
+
+
+            <div class="membro">
+
+                <div class="avatar-membro">
+                    M
+                    <span></span>
+                </div>
+
+                <div>
+                    <strong>Maria</strong>
+                    <small>online</small>
+                </div>
+
+            </div>
+
+
+            <div class="membro">
+
+                <div class="avatar-membro">
+                    P
+                    <span></span>
+                </div>
+
+                <div>
+                    <strong>Pedro</strong>
+                    <small>online</small>
+                </div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
 
     <script>
 
-        let canalAtual = "geral";
+        /* =====================================================
+           SUPABASE
+        ====================================================== */
 
-        let mensagensPorCanal =
-            JSON.parse(localStorage.getItem("mensagensMeuDiscord")) || {
-                geral: [],
-                jogos: [],
-                resenha: []
-            };
+        const SUPABASE_URL =
+            "https://mliwzqoeflvigwbeajqi.supabase.co";
 
-        function salvarMensagens() {
-            localStorage.setItem(
-                "mensagensMeuDiscord",
-                JSON.stringify(mensagensPorCanal)
-            );
-        }
+        /*
+         * COLE AQUI SUA PUBLISHABLE KEY DO SUPABASE.
+         *
+         * NÃO coloque sua senha do Supabase aqui.
+         * Use somente a Publishable Key.
+         */
 
-        function trocarCanal(canal) {
+        const SUPABASE_KEY =
+            "sb_publishable_ky9IuzH6EbM-UmZ11NCWXg_wG9eEjIu";
 
-            canalAtual = canal;
 
-            const nomeCanal = document.getElementById("nomeCanal");
-            const descricaoCanal = document.getElementById("descricaoCanal");
+        let supabaseClient = null;
 
-            if (canal === "geral") {
-                nomeCanal.textContent = "💬 geral";
-                descricaoCanal.textContent = "Conversa do servidor";
-            }
 
-            if (canal === "jogos") {
-                nomeCanal.textContent = "🎮 jogos";
-                descricaoCanal.textContent = "Converse sobre jogos";
-            }
 
-            if (canal === "resenha") {
-                nomeCanal.textContent = "😂 resenha";
-                descricaoCanal.textContent = "Canal para trocar ideia";
-            }
 
-            document.querySelectorAll(".canal").forEach(function(item) {
-                item.classList.remove("ativo-canal");
-            });
-
-            event.currentTarget.classList.add("ativo-canal");
-
-            mostrarMensagens();
-        }
-
-        function mostrarMensagens() {
-
-            const mensagens = document.getElementById("mensagens");
-
-            mensagens.innerHTML = "";
-
-            mensagensPorCanal[canalAtual].forEach(function(mensagem) {
-
-                criarMensagemNaTela(
-                    mensagem.texto,
-                    mensagem.horario
+            supabaseClient =
+                window.supabase.createClient(
+                    SUPABASE_URL,
+                    SUPABASE_KEY
                 );
 
-            });
+        
+
+
+        /* =====================================================
+           VARIÁVEIS
+        ====================================================== */
+
+        let canalAtual = "geral";
+
+
+        const mensagensPorCanal = {
+
+            geral: [],
+
+            jogos: [],
+
+            resenha: []
+
+        };
+
+
+        /* =====================================================
+           LOGIN
+        ====================================================== */
+
+        function mostrarMensagemLogin(texto) {
+
+            const mensagem =
+                document.getElementById("mensagemLogin");
+
+            mensagem.textContent = texto;
+
         }
 
-        function enviarMensagem() {
 
-            const entrada =
-                document.getElementById("entradaMensagem");
+        async function fazerLogin() {
 
-            const texto = entrada.value.trim();
+            if (!supabaseClient) {
 
-            if (texto === "") {
+                mostrarMensagemLogin(
+                    "Configure sua Publishable Key do Supabase."
+                );
+
+                return;
+
+            }
+
+
+            const email =
+                document
+                    .getElementById("emailLogin")
+                    .value
+                    .trim();
+
+
+            const senha =
+                document
+                    .getElementById("senhaLogin")
+                    .value;
+
+
+            if (!email || !senha) {
+
+                mostrarMensagemLogin(
+                    "Digite seu e-mail e sua senha."
+                );
+
+                return;
+
+            }
+
+
+            mostrarMensagemLogin(
+                "Entrando..."
+            );
+
+
+            const { data, error } =
+                await supabaseClient.auth.signInWithPassword({
+
+                    email: email,
+
+                    password: senha
+
+                });
+
+
+            if (error) {
+
+                mostrarMensagemLogin(
+                    "Erro: " + error.message
+                );
+
+                return;
+
+            }
+
+
+            mostrarSite(
+                data.user
+            );
+
+        }
+
+
+        /* =====================================================
+           CADASTRO
+        ====================================================== */
+
+        async function fazerCadastro() {
+
+            if (!supabaseClient) {
+
+                mostrarMensagemLogin(
+                    "Configure sua Publishable Key do Supabase."
+                );
+
+                return;
+
+            }
+
+
+            const email =
+                document
+                    .getElementById("emailLogin")
+                    .value
+                    .trim();
+
+
+            const senha =
+                document
+                    .getElementById("senhaLogin")
+                    .value;
+
+
+            if (!email || !senha) {
+
+                mostrarMensagemLogin(
+                    "Digite seu e-mail e crie uma senha."
+                );
+
+                return;
+
+            }
+
+
+            if (senha.length < 6) {
+
+                mostrarMensagemLogin(
+                    "A senha precisa ter pelo menos 6 caracteres."
+                );
+
+                return;
+
+            }
+
+
+            mostrarMensagemLogin(
+                "Criando sua conta..."
+            );
+
+
+            const { data, error } =
+                await supabaseClient.auth.signUp({
+
+                    email: email,
+
+                    password: senha
+
+                });
+
+
+            if (error) {
+
+                mostrarMensagemLogin(
+                    "Erro: " + error.message
+                );
+
+                return;
+
+            }
+
+
+            if (data.session) {
+
+                mostrarSite(
+                    data.user
+                );
+
+            } else {
+
+                mostrarMensagemLogin(
+                    "Conta criada! Confira seu e-mail para confirmar a conta."
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
+           MOSTRAR APLICAÇÃO
+        ====================================================== */
+
+        function mostrarSite(usuario) {
+
+            document
+                .getElementById("telaLogin")
+                .classList.add("escondido");
+
+
+            document
+                .getElementById("app")
+                .classList.add("visivel");
+
+
+            const nome =
+                usuario.user_metadata?.nome ||
+                usuario.email?.split("@")[0] ||
+                "Usuário";
+
+
+            document
+                .getElementById("nomeUsuario")
+                .textContent = nome;
+
+
+            document
+                .getElementById("emailUsuario")
+                .textContent =
+                usuario.email || "";
+
+
+            mostrarAvatarPadrao();
+
+
+            carregarAvatar();
+
+
+            mostrarMensagens();
+
+        }
+
+
+        /* =====================================================
+           VERIFICAR SESSÃO
+        ====================================================== */
+
+        async function verificarSessao() {
+
+            if (!supabaseClient) {
+
+                document
+                    .getElementById("telaLogin")
+                    .classList.remove("escondido");
+
+                return;
+
+            }
+
+
+            const {
+                data: {
+                    session
+                }
+            } =
+                await supabaseClient.auth.getSession();
+
+
+            if (session?.user) {
+
+                mostrarSite(
+                    session.user
+                );
+
+            } else {
+
+                document
+                    .getElementById("telaLogin")
+                    .classList.remove("escondido");
+
+            }
+
+        }
+
+
+        /* =====================================================
+           OBSERVAR LOGIN / LOGOUT
+        ====================================================== */
+
+        if (supabaseClient) {
+
+            supabaseClient.auth.onAuthStateChange(
+
+                (event, session) => {
+
+                    if (
+                        event === "SIGNED_IN" &&
+                        session?.user
+                    ) {
+
+                        mostrarSite(
+                            session.user
+                        );
+
+                    }
+
+
+                    if (
+                        event === "SIGNED_OUT"
+                    ) {
+
+                        document
+                            .getElementById("app")
+                            .classList.remove("visivel");
+
+
+                        document
+                            .getElementById("telaLogin")
+                            .classList.remove("escondido");
+
+
+                        document
+                            .getElementById("emailLogin")
+                            .value = "";
+
+
+                        document
+                            .getElementById("senhaLogin")
+                            .value = "";
+
+                    }
+
+                }
+
+            );
+
+        }
+
+
+        /* =====================================================
+           SAIR
+        ====================================================== */
+
+        async function sairDaConta() {
+
+            if (!supabaseClient) {
                 return;
             }
 
-            const horario =
-                new Date().toLocaleTimeString("pt-BR", {
-                    hour: "2-digit",
-                    minute: "2-digit"
-                });
 
-            mensagensPorCanal[canalAtual].push({
-                texto: texto,
-                horario: horario
-            });
+            await supabaseClient.auth.signOut();
 
-            salvarMensagens();
-
-            criarMensagemNaTela(texto, horario);
-
-            entrada.value = "";
-
-            entrada.focus();
         }
 
-        function criarMensagemNaTela(texto, horario) {
 
-            const mensagens =
+        /* =====================================================
+           AVATAR
+        ====================================================== */
+
+        function mostrarAvatarPadrao() {
+
+            const avatar =
+                document.getElementById("avatarUsuario");
+
+
+            avatar.src =
+                "https://ui-avatars.com/api/?name=Usuario&background=7b2831&color=ffffff&size=128";
+
+        }
+
+
+        function abrirSeletorFoto() {
+
+            document
+                .getElementById("inputFoto")
+                .click();
+
+        }
+
+
+        document
+            .getElementById("inputFoto")
+            .addEventListener(
+                "change",
+                enviarFoto
+            );
+
+
+        async function enviarFoto(event) {
+
+            const arquivo =
+                event.target.files[0];
+
+
+            if (!arquivo) {
+                return;
+            }
+
+
+            if (
+                !arquivo.type.startsWith("image/")
+            ) {
+
+                alert(
+                    "Escolha uma imagem válida."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                arquivo.size > 6 * 1024 * 1024
+            ) {
+
+                alert(
+                    "A imagem precisa ter no máximo 6 MB."
+                );
+
+                return;
+
+            }
+
+
+            if (!supabaseClient) {
+                return;
+            }
+
+
+            const {
+                data: {
+                    user
+                }
+            } =
+                await supabaseClient.auth.getUser();
+
+
+            if (!user) {
+
+                alert(
+                    "Você precisa estar logado."
+                );
+
+                return;
+
+            }
+
+
+            const extensao =
+                arquivo.name
+                    .split(".")
+                    .pop()
+                    .toLowerCase();
+
+
+            const caminho =
+                `usuarios/${user.id}/avatar.${extensao}`;
+
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .storage
+                    .from("avatars")
+                    .upload(
+                        caminho,
+                        arquivo,
+                        {
+                            upsert: true,
+                            contentType: arquivo.type
+                        }
+                    );
+
+
+            if (error) {
+
+                alert(
+                    "Erro ao enviar foto: " +
+                    error.message
+                );
+
+                return;
+
+            }
+
+
+            const {
+                data
+            } =
+                supabaseClient
+                    .storage
+                    .from("avatars")
+                    .getPublicUrl(
+                        caminho
+                    );
+
+
+            const url =
+                data.publicUrl +
+                "?t=" +
+                Date.now();
+
+
+            document
+                .getElementById("avatarUsuario")
+                .src = url;
+
+
+            event.target.value = "";
+
+        }
+
+
+        async function carregarAvatar() {
+
+            if (!supabaseClient) {
+                return;
+            }
+
+
+            const {
+                data: {
+                    user
+                }
+            } =
+                await supabaseClient.auth.getUser();
+
+
+            if (!user) {
+                return;
+            }
+
+
+            /*
+             * Tentamos alguns formatos comuns.
+             */
+
+            const extensoes = [
+                "png",
+                "jpg",
+                "jpeg",
+                "webp"
+            ];
+
+
+            for (const extensao of extensoes) {
+
+                const caminho =
+                    `usuarios/${user.id}/avatar.${extensao}`;
+
+
+                const {
+                    data
+                } =
+                    supabaseClient
+                        .storage
+                        .from("avatars")
+                        .getPublicUrl(
+                            caminho
+                        );
+
+
+                const url =
+                    data.publicUrl +
+                    "?t=" +
+                    Date.now();
+
+
+                const imagem =
+                    new Image();
+
+
+                imagem.onload = function () {
+
+                    document
+                        .getElementById("avatarUsuario")
+                        .src = url;
+
+                };
+
+
+                imagem.src = url;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           CANAIS
+        ====================================================== */
+
+        function trocarCanal(
+            nome,
+            botao
+        ) {
+
+            canalAtual = nome;
+
+
+            document
+                .querySelectorAll(".canal")
+                .forEach(
+                    canal => canal.classList.remove("ativo")
+                );
+
+
+            if (botao) {
+
+                botao.classList.add("ativo");
+
+            }
+
+
+            document
+                .getElementById("nomeCanal")
+                .textContent = nome;
+
+
+            document
+                .getElementById("campoMensagem")
+                .placeholder =
+                "Conversar em #" + nome;
+
+
+            mostrarMensagens();
+
+        }
+
+
+        function entrarSala(nome) {
+
+            alert(
+                "Você entrou na " + nome + " 🔊"
+            );
+
+        }
+
+
+        /* =====================================================
+           MENSAGENS
+        ====================================================== */
+
+        function mostrarMensagens() {
+
+            const container =
                 document.getElementById("mensagens");
 
-            const novaMensagem =
+
+            container.innerHTML = "";
+
+
+            const mensagens =
+                mensagensPorCanal[canalAtual] || [];
+
+
+            if (mensagens.length === 0) {
+
+                const vazio =
+                    document.createElement("div");
+
+
+                vazio.className =
+                    "mensagem-vazia";
+
+
+                vazio.innerHTML = `
+                    <div class="icone-vazio">#</div>
+                    <h2>Bem-vindo ao #${canalAtual}!</h2>
+                    <p>Este é o começo deste canal.</p>
+                `;
+
+
+                container.appendChild(
+                    vazio
+                );
+
+                return;
+
+            }
+
+
+            mensagens.forEach(
+                mensagem => {
+
+                    criarMensagemNaTela(
+                        mensagem
+                    );
+
+                }
+            );
+
+        }
+
+
+        function criarMensagemNaTela(
+            mensagem
+        ) {
+
+            const container =
+                document.getElementById("mensagens");
+
+
+            const elemento =
                 document.createElement("div");
 
-            novaMensagem.className = "mensagem-chat";
 
-            novaMensagem.innerHTML = `
-                <div class="avatar">👤</div>
+            elemento.className =
+                "mensagem";
+
+
+            elemento.innerHTML = `
+
+                <div class="avatar-mensagem">
+                    ${mensagem.nome.charAt(0).toUpperCase()}
+                </div>
 
                 <div class="conteudo-mensagem">
 
-                    <div class="topo-mensagem">
-                        <strong>Você</strong>
-                        <span>${horario}</span>
+                    <div class="cabecalho-mensagem">
+
+                        <strong>
+                            ${escapeHtml(mensagem.nome)}
+                        </strong>
+
+                        <span>
+                            ${mensagem.hora}
+                        </span>
+
                     </div>
 
-                    <p></p>
+                    <p>
+                        ${escapeHtml(mensagem.texto)}
+                    </p>
 
                 </div>
+
             `;
 
-            novaMensagem.querySelector("p").textContent = texto;
 
-            mensagens.appendChild(novaMensagem);
+            container.appendChild(
+                elemento
+            );
 
-            mensagens.scrollTop = mensagens.scrollHeight;
+
+            container.scrollTop =
+                container.scrollHeight;
+
         }
 
-        document
-            .getElementById("entradaMensagem")
-            .addEventListener("keydown", function(event) {
 
-                if (event.key === "Enter") {
-                    enviarMensagem();
-                }
+        function escapeHtml(texto) {
+
+            const div =
+                document.createElement("div");
+
+
+            div.textContent =
+                texto;
+
+
+            return div.innerHTML;
+
+        }
+
+
+        /* =====================================================
+           ENVIAR MENSAGEM
+        ====================================================== */
+
+        function enviarMensagem() {
+
+            const campo =
+                document.getElementById(
+                    "campoMensagem"
+                );
+
+
+            const texto =
+                campo.value.trim();
+
+
+            if (!texto) {
+                return;
+            }
+
+
+            const nome =
+                document
+                    .getElementById(
+                        "nomeUsuario"
+                    )
+                    .textContent ||
+                "Você";
+
+
+            const agora =
+                new Date();
+
+
+            const hora =
+                agora.toLocaleTimeString(
+                    "pt-BR",
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    }
+                );
+
+
+            if (
+                !mensagensPorCanal[canalAtual]
+            ) {
+
+                mensagensPorCanal[canalAtual] =
+                    [];
+
+            }
+
+
+            mensagensPorCanal[canalAtual]
+                .push({
+
+                    nome: nome,
+
+                    texto: texto,
+
+                    hora: hora
+
+                });
+
+
+            salvarMensagens();
+
+
+            criarMensagemNaTela({
+
+                nome: nome,
+
+                texto: texto,
+
+                hora: hora
 
             });
 
-        mostrarMensagens();
+
+            campo.value = "";
+
+
+            campo.focus();
+
+        }
+
+
+        function verificarEnter(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                event.preventDefault();
+
+                enviarMensagem();
+
+            }
+
+        }
+
+
+        /* =====================================================
+           LOCAL STORAGE
+        ====================================================== */
+
+        function salvarMensagens() {
+
+            localStorage.setItem(
+
+                "meuDiscordMensagens",
+
+                JSON.stringify(
+                    mensagensPorCanal
+                )
+
+            );
+
+        }
+
+
+        function carregarMensagens() {
+
+            const dados =
+                localStorage.getItem(
+                    "meuDiscordMensagens"
+                );
+
+
+            if (!dados) {
+                return;
+            }
+
+
+            try {
+
+                const mensagens =
+                    JSON.parse(dados);
+
+
+                Object.assign(
+                    mensagensPorCanal,
+                    mensagens
+                );
+
+            } catch (erro) {
+
+                console.log(
+                    "Não foi possível carregar as mensagens."
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
+           INICIALIZAÇÃO
+        ====================================================== */
+
+        carregarMensagens();
+
+        verificarSessao();
 
     </script>
 
 </body>
+
 </html>

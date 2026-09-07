@@ -7,107 +7,72 @@
 
     <title>Discordia</title>
 
-    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
 
     <!-- =====================================================
-         TELA DE LOGIN / CADASTRO
+         LOGIN
     ====================================================== -->
 
-    <div id="telaLogin" class="tela-login">
+    <section id="telaLogin" class="tela-login">
 
         <div class="caixa-login">
 
-            <div class="logo-login">
-                💬
-            </div>
+            <h1>💬 Discordia</h1>
 
-            <h1>Discordia</h1>
-
-            <p class="subtitulo-login">
-                Entre na sua conta ou crie uma nova
-            </p>
+            <p>Entre na sua conta ou crie uma nova</p>
 
             <input
                 type="email"
                 id="emailLogin"
-                placeholder="Seu e-mail"
+                placeholder="E-mail"
                 autocomplete="email"
             >
 
             <input
                 type="password"
                 id="senhaLogin"
-                placeholder="Sua senha"
+                placeholder="Senha"
                 autocomplete="current-password"
             >
 
-            <button
-                class="botao-login"
-                onclick="fazerLogin()"
-            >
+            <button id="botaoEntrar" type="button">
                 Entrar
             </button>
 
-            <button
-                class="botao-cadastro"
-                onclick="fazerCadastro()"
-            >
+            <button id="botaoCriarConta" type="button">
                 Criar conta
             </button>
 
-            <p id="mensagemLogin" class="mensagem-login"></p>
+            <div id="mensagemLogin" class="mensagem-login"></div>
 
         </div>
 
-    </div>
+    </section>
 
 
     <!-- =====================================================
          APLICAÇÃO
     ====================================================== -->
 
-    <div id="app" class="app">
-
+    <main id="app" class="oculto">
 
         <!-- =================================================
              SERVIDORES
         ================================================== -->
 
-        <aside class="servidores">
+        <aside class="lista-servidores">
 
             <button
                 class="servidor ativo"
-                title="Meu servidor"
+                type="button"
+                title="Discordia"
             >
-                M
-            </button>
-
-            <button
-                class="servidor"
-                title="Jogos"
-            >
-                🎮
-            </button>
-
-            <button
-                class="servidor"
-                title="Resenha"
-            >
-                🔥
-            </button>
-
-            <button
-                class="servidor adicionar-servidor"
-                title="Adicionar servidor"
-            >
-                +
+                D
             </button>
 
         </aside>
@@ -119,263 +84,343 @@
 
         <aside class="sidebar">
 
-            <div class="topo-sidebar">
-                <h2>Meu Discord</h2>
-            </div>
+            <header class="cabecalho-servidor">
+                <strong>Discordia</strong>
+                <span>⌄</span>
+            </header>
 
-
-            <!-- CANAIS -->
 
             <div class="lista-canais">
 
-                <div class="titulo-canais">
-                    <span>CANAIS DE TEXTO</span>
-                    <button title="Adicionar canal">+</button>
+                <div class="categoria-canal">
+
+                    <div class="titulo-categoria">
+                        Canais de texto
+                    </div>
+
+                    <button
+                        class="canal ativo"
+                        type="button"
+                        data-channel="geral"
+                    >
+                        # <span>geral</span>
+                    </button>
+
+                    <button
+                        class="canal"
+                        type="button"
+                        data-channel="jogos"
+                    >
+                        # <span>jogos</span>
+                    </button>
+
+                    <button
+                        class="canal"
+                        type="button"
+                        data-channel="resenha"
+                    >
+                        # <span>resenha</span>
+                    </button>
+
                 </div>
 
-                <button
-                    class="canal ativo"
-                    onclick="trocarCanal('geral', this)"
-                >
-                    <span>#</span>
-                    <span>geral</span>
-                </button>
 
-                <button
-                    class="canal"
-                    onclick="trocarCanal('jogos', this)"
-                >
-                    <span>#</span>
-                    <span>jogos</span>
-                </button>
+                <div class="categoria-canal">
 
-                <button
-                    class="canal"
-                    onclick="trocarCanal('resenha', this)"
-                >
-                    <span>#</span>
-                    <span>resenha</span>
-                </button>
+                    <div class="titulo-categoria">
+                        Canais de voz
+                    </div>
 
+                    <button
+                        class="canal-voz"
+                        type="button"
+                        data-voice="Sala 1"
+                    >
+                        🔊 <span>Sala 1</span>
+                    </button>
 
-                <div class="titulo-canais titulo-voz">
-                    <span>CANAIS DE VOZ</span>
-                    <button title="Adicionar canal">+</button>
+                    <button
+                        class="canal-voz"
+                        type="button"
+                        data-voice="Sala 2"
+                    >
+                        🔊 <span>Sala 2</span>
+                    </button>
+
                 </div>
-
-                <button
-                    class="canal canal-voz"
-                    onclick="entrarSala('Sala 1')"
-                >
-                    <span>🔊</span>
-                    <span>Sala 1</span>
-                </button>
-
-                <button
-                    class="canal canal-voz"
-                    onclick="entrarSala('Sala 2')"
-                >
-                    <span>🔊</span>
-                    <span>Sala 2</span>
-                </button>
 
             </div>
 
 
-            <!-- USUÁRIO -->
+            <!-- =================================================
+                 USUÁRIO
+            ================================================== -->
 
-            <div class="usuario-area">
-
-                <div
-                    class="avatar-container"
-                    onclick="abrirSeletorFoto()"
-                    title="Alterar foto"
-                >
-
-                    <img
-                        id="avatarUsuario"
-                        class="avatar"
-                        src=""
-                        alt="Avatar"
-                    >
-
-                    <div class="status-online"></div>
-
-                </div>
-
+            <div class="area-usuario">
 
                 <div class="dados-usuario">
 
-                    <strong id="nomeUsuario">
-                        Usuário
-                    </strong>
+                    <div
+                        id="avatarUsuario"
+                        class="avatar-usuario"
+                    >
+                        ?
+                    </div>
 
-                    <span id="emailUsuario">
-                        conectado
-                    </span>
+                    <div>
+
+                        <div
+                            id="nomeUsuario"
+                            class="nome-usuario"
+                        >
+                            Usuário
+                        </div>
+
+                        <div class="status-usuario">
+                            Online
+                        </div>
+
+                    </div>
 
                 </div>
 
 
-                <button
-                    class="botao-sair"
-                    onclick="sairDaConta()"
-                    title="Sair"
-                >
-                    ⏻
-                </button>
+                <div class="acoes-usuario">
+
+                    <button
+                        id="botaoEditarNome"
+                        class="botao-editar-nome"
+                        type="button"
+                        title="Editar nome"
+                    >
+                        ✏️
+                    </button>
+
+                    <button
+                        id="botaoAvatar"
+                        class="botao-avatar"
+                        type="button"
+                        title="Alterar avatar"
+                    >
+                        🖼️
+                    </button>
+
+                    <button
+                        id="botaoSair"
+                        class="botao-sair"
+                        type="button"
+                        title="Sair"
+                    >
+                        🚪
+                    </button>
+
+                </div>
 
             </div>
-
-
-            <!-- INPUT DA FOTO -->
-
-            <input
-                type="file"
-                id="inputFoto"
-                class="input-foto-escondido"
-                accept="image/png,image/jpeg,image/webp"
-            >
 
         </aside>
 
 
         <!-- =================================================
-             CHAT
+             ÁREA PRINCIPAL
         ================================================== -->
 
-        <main class="chat">
-
-
-            <!-- CABEÇALHO -->
+        <section class="area-principal">
 
             <header class="cabecalho-chat">
 
-                <div class="titulo-chat">
+                <h2 id="nomeCanal">
+                    # geral
+                </h2>
 
-                    <span class="hashtag">#</span>
-
-                    <h2 id="nomeCanal">
-                        geral
-                    </h2>
-
-                </div>
-
-                <div class="acoes-chat">
-
-                    <button title="Notificações">
-                        🔔
-                    </button>
-
-                    <button title="Pesquisar">
-                        🔍
-                    </button>
-
-                    <button title="Membros">
-                        👥
-                    </button>
-
-                </div>
+                <span id="descricaoCanal">
+                    Bem-vindo ao Discordia
+                </span>
 
             </header>
 
 
-            <!-- MENSAGENS -->
-
-            <section
+            <div
                 id="mensagens"
                 class="mensagens"
-            >
-            </section>
+            ></div>
 
-
-            <!-- ÁREA DE ENVIO -->
 
             <div class="area-envio">
 
-                <div class="caixa-envio">
+                <form
+                    id="formMensagem"
+                    class="form-mensagem"
+                >
 
                     <input
+                        id="inputMensagem"
                         type="text"
-                        id="campoMensagem"
-                        placeholder="Conversar em #geral"
+                        placeholder="Enviar mensagem em #geral"
                         autocomplete="off"
-                        onkeydown="verificarEnter(event)"
                     >
 
                     <button
-                        class="botao-enviar"
-                        onclick="enviarMensagem()"
-                        title="Enviar mensagem"
+                        type="submit"
+                        title="Enviar"
                     >
                         ➤
                     </button>
 
-                </div>
+                </form>
 
             </div>
 
-        </main>
+        </section>
 
 
         <!-- =================================================
              MEMBROS
         ================================================== -->
 
-        <aside class="membros">
+        <aside class="sidebar-membros">
 
-            <h3>
-                MEMBROS — <span id="quantidadeMembros">3</span>
-            </h3>
-
-
-            <div class="membro">
-
-                <div class="avatar-membro">
-                    J
-                    <span></span>
-                </div>
-
-                <div>
-                    <strong>João</strong>
-                    <small>online</small>
-                </div>
-
+            <div class="titulo-membros">
+                Membros
             </div>
 
-
-            <div class="membro">
-
-                <div class="avatar-membro">
-                    M
-                    <span></span>
-                </div>
-
-                <div>
-                    <strong>Maria</strong>
-                    <small>online</small>
-                </div>
-
-            </div>
-
-
-            <div class="membro">
-
-                <div class="avatar-membro">
-                    P
-                    <span></span>
-                </div>
-
-                <div>
-                    <strong>Pedro</strong>
-                    <small>online</small>
-                </div>
-
-            </div>
+            <div
+                id="listaMembros"
+                class="lista-membros"
+            ></div>
 
         </aside>
 
+    </main>
+
+
+    <!-- =====================================================
+         MODAL EDITAR NOME
+    ====================================================== -->
+
+    <div
+        id="modalNome"
+        class="modal-nome"
+    >
+
+        <div class="caixa-modal-nome">
+
+            <h2>Alterar nome</h2>
+
+            <p>
+                Escolha o nome que aparecerá no Discordia.
+            </p>
+
+            <input
+                id="inputNovoNome"
+                type="text"
+                maxlength="30"
+                placeholder="Seu nome"
+            >
+
+            <div class="botoes-modal">
+
+                <button
+                    id="botaoCancelarNome"
+                    type="button"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    id="botaoSalvarNome"
+                    type="button"
+                >
+                    Salvar
+                </button>
+
+            </div>
+
+        </div>
+
     </div>
+
+
+    <!-- =====================================================
+         INPUT DE AVATAR
+    ====================================================== -->
+
+    <input
+        id="inputAvatar"
+        type="file"
+        accept="image/*"
+    >
+
+
+    <!-- =====================================================
+         PAINEL DE VOZ
+    ====================================================== -->
+
+    <section
+        id="painelVoz"
+        class="painel-voz"
+    >
+
+        <header class="cabecalho-voz">
+
+            <div>
+
+                <strong id="nomeSalaVoz">
+                    Sala 1
+                </strong>
+
+                <small>
+                    Conectado
+                </small>
+
+            </div>
+
+            <button
+                id="botaoFecharVoz"
+                type="button"
+            >
+                ✕
+            </button>
+
+        </header>
+
+
+        <div
+            id="participantesVoz"
+            class="participantes-voz"
+        ></div>
+
+
+        <div class="controles-voz">
+
+            <button
+                id="botaoMicrofone"
+                type="button"
+                title="Microfone"
+            >
+                🎤
+            </button>
+
+            <button
+                id="botaoSom"
+                type="button"
+                title="Som"
+            >
+                🔊
+            </button>
+
+            <button
+                id="botaoSairVoz"
+                class="sair-voz"
+                type="button"
+                title="Sair da sala"
+            >
+                📞
+            </button>
+
+        </div>
+
+    </section>
 
 
     <!-- =====================================================
@@ -384,28 +429,25 @@
 
     <script>
 
-        /* =====================================================
+        /* =================================================
            SUPABASE
-        ====================================================== */
+        ================================================== */
 
         const SUPABASE_URL =
             "https://mliwzqoeflvigwbeajqi.supabase.co";
 
-        /*
-         * COLE AQUI SUA PUBLISHABLE KEY DO SUPABASE.
-         *
-         * NÃO coloque sua senha do Supabase aqui.
-         * Use somente a Publishable Key.
-         */
-
         const SUPABASE_KEY =
             "sb_publishable_ky9IuzH6EbM-UmZ11NCWXg_wG9eEjIu";
 
-
         let supabaseClient = null;
 
+        try {
 
-
+            if (!window.supabase) {
+                throw new Error(
+                    "A biblioteca do Supabase não foi carregada."
+                );
+            }
 
             supabaseClient =
                 window.supabase.createClient(
@@ -413,66 +455,220 @@
                     SUPABASE_KEY
                 );
 
-        
+            console.log(
+                "Supabase inicializado com sucesso."
+            );
 
+        } catch (error) {
 
-        /* =====================================================
-           VARIÁVEIS
-        ====================================================== */
-
-        let canalAtual = "geral";
-
-
-        const mensagensPorCanal = {
-
-            geral: [],
-
-            jogos: [],
-
-            resenha: []
-
-        };
-
-
-        /* =====================================================
-           LOGIN
-        ====================================================== */
-
-        function mostrarMensagemLogin(texto) {
-
-            const mensagem =
-                document.getElementById("mensagemLogin");
-
-            mensagem.textContent = texto;
+            console.error(
+                "Erro ao iniciar Supabase:",
+                error
+            );
 
         }
 
 
-        async function fazerLogin() {
+        /* =================================================
+           ELEMENTOS
+        ================================================== */
 
-            if (!supabaseClient) {
+        const telaLogin =
+            document.getElementById("telaLogin");
 
-                mostrarMensagemLogin(
-                    "Configure sua Publishable Key do Supabase."
-                );
+        const app =
+            document.getElementById("app");
+
+        const emailLogin =
+            document.getElementById("emailLogin");
+
+        const senhaLogin =
+            document.getElementById("senhaLogin");
+
+        const botaoEntrar =
+            document.getElementById("botaoEntrar");
+
+        const botaoCriarConta =
+            document.getElementById("botaoCriarConta");
+
+        const mensagemLogin =
+            document.getElementById("mensagemLogin");
+
+        const nomeUsuario =
+            document.getElementById("nomeUsuario");
+
+        const avatarUsuario =
+            document.getElementById("avatarUsuario");
+
+        const botaoSair =
+            document.getElementById("botaoSair");
+
+        const botaoEditarNome =
+            document.getElementById("botaoEditarNome");
+
+        const botaoAvatar =
+            document.getElementById("botaoAvatar");
+
+        const inputAvatar =
+            document.getElementById("inputAvatar");
+
+        const modalNome =
+            document.getElementById("modalNome");
+
+        const inputNovoNome =
+            document.getElementById("inputNovoNome");
+
+        const botaoCancelarNome =
+            document.getElementById("botaoCancelarNome");
+
+        const botaoSalvarNome =
+            document.getElementById("botaoSalvarNome");
+
+        const nomeCanal =
+            document.getElementById("nomeCanal");
+
+        const inputMensagem =
+            document.getElementById("inputMensagem");
+
+        const formMensagem =
+            document.getElementById("formMensagem");
+
+        const mensagens =
+            document.getElementById("mensagens");
+
+        const listaMembros =
+            document.getElementById("listaMembros");
+
+        const painelVoz =
+            document.getElementById("painelVoz");
+
+        const nomeSalaVoz =
+            document.getElementById("nomeSalaVoz");
+
+        const botaoFecharVoz =
+            document.getElementById("botaoFecharVoz");
+
+        const botaoSairVoz =
+            document.getElementById("botaoSairVoz");
+
+        const participantesVoz =
+            document.getElementById("participantesVoz");
+
+
+        /* =================================================
+           ESTADO
+        ================================================== */
+
+        let usuarioAtual = null;
+        let canalAtual = "geral";
+        let salaVozAtual = null;
+
+        let mensagensSubscription = null;
+
+        const mensagensRenderizadas =
+            new Set();
+
+        let carregandoMensagens = false;
+
+        let mensagensRealtimePendentes = [];
+
+        let aplicacaoAberta = false;
+
+        let carregandoAplicacao = false;
+
+
+        /* =================================================
+           MENSAGEM DE LOGIN
+        ================================================== */
+
+        function mostrarMensagemLogin(
+            texto,
+            sucesso = false
+        ) {
+
+            mensagemLogin.textContent =
+                texto || "";
+
+            if (!texto) {
+
+                mensagemLogin.className =
+                    "mensagem-login";
 
                 return;
-
             }
 
+            mensagemLogin.className =
+                sucesso
+                    ? "mensagem-login mensagem-sucesso"
+                    : "mensagem-login mensagem-erro";
+        }
+
+
+        /* =================================================
+           MOSTRAR LOGIN
+        ================================================== */
+
+        function mostrarTelaLogin() {
+
+            aplicacaoAberta = false;
+
+            telaLogin.classList.remove(
+                "oculto"
+            );
+
+            telaLogin.classList.remove(
+                "escondido"
+            );
+
+            app.classList.add(
+                "oculto"
+            );
+
+            app.classList.remove(
+                "visivel"
+            );
+        }
+
+
+        /* =================================================
+           MOSTRAR APLICAÇÃO
+        ================================================== */
+
+        function mostrarTelaAplicacao() {
+
+            telaLogin.classList.add(
+                "oculto"
+            );
+
+            telaLogin.classList.add(
+                "escondido"
+            );
+
+            app.classList.remove(
+                "oculto"
+            );
+
+            app.classList.remove(
+                "escondido"
+            );
+
+            app.classList.add(
+                "visivel"
+            );
+        }
+
+
+        /* =================================================
+           LOGIN
+        ================================================== */
+
+        async function entrar() {
 
             const email =
-                document
-                    .getElementById("emailLogin")
-                    .value
-                    .trim();
-
+                emailLogin.value.trim();
 
             const senha =
-                document
-                    .getElementById("senhaLogin")
-                    .value;
-
+                senhaLogin.value;
 
             if (!email || !senha) {
 
@@ -481,83 +677,107 @@
                 );
 
                 return;
-
             }
 
+            if (!supabaseClient) {
+
+                mostrarMensagemLogin(
+                    "Supabase não foi iniciado."
+                );
+
+                return;
+            }
+
+            botaoEntrar.disabled = true;
+            botaoCriarConta.disabled = true;
+
+            botaoEntrar.textContent =
+                "Entrando...";
 
             mostrarMensagemLogin(
                 "Entrando..."
             );
 
+            try {
 
-            const { data, error } =
-                await supabaseClient.auth.signInWithPassword({
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient.auth.signInWithPassword({
+                        email: email,
+                        password: senha
+                    });
 
-                    email: email,
+                if (error) {
+                    throw error;
+                }
 
-                    password: senha
+                if (!data || !data.user) {
 
-                });
+                    throw new Error(
+                        "Não foi possível identificar o usuário."
+                    );
+                }
 
-
-            if (error) {
+                usuarioAtual =
+                    data.user;
 
                 mostrarMensagemLogin(
-                    "Erro: " + error.message
+                    "Login realizado!",
+                    true
                 );
 
-                return;
+                await abrirAplicacao(
+                    usuarioAtual
+                );
 
+            } catch (error) {
+
+                console.error(
+                    "Erro ao entrar:",
+                    error
+                );
+
+                mostrarMensagemLogin(
+                    error?.message ||
+                    "Não foi possível entrar."
+                );
+
+            } finally {
+
+                botaoEntrar.disabled =
+                    false;
+
+                botaoCriarConta.disabled =
+                    false;
+
+                botaoEntrar.textContent =
+                    "Entrar";
             }
-
-
-            mostrarSite(
-                data.user
-            );
-
         }
 
 
-        /* =====================================================
-           CADASTRO
-        ====================================================== */
+        /* =================================================
+           CRIAR CONTA
+        ================================================== */
 
-        async function fazerCadastro() {
-
-            if (!supabaseClient) {
-
-                mostrarMensagemLogin(
-                    "Configure sua Publishable Key do Supabase."
-                );
-
-                return;
-
-            }
-
+        async function criarConta() {
 
             const email =
-                document
-                    .getElementById("emailLogin")
-                    .value
-                    .trim();
-
+                emailLogin.value.trim();
 
             const senha =
-                document
-                    .getElementById("senhaLogin")
-                    .value;
-
+                senhaLogin.value;
 
             if (!email || !senha) {
 
                 mostrarMensagemLogin(
-                    "Digite seu e-mail e crie uma senha."
+                    "Digite um e-mail e uma senha."
                 );
 
                 return;
-
             }
-
 
             if (senha.length < 6) {
 
@@ -566,784 +786,1696 @@
                 );
 
                 return;
-
             }
 
+            if (!supabaseClient) {
+
+                mostrarMensagemLogin(
+                    "Supabase não foi iniciado."
+                );
+
+                return;
+            }
+
+            botaoEntrar.disabled = true;
+            botaoCriarConta.disabled = true;
+
+            botaoCriarConta.textContent =
+                "Criando...";
 
             mostrarMensagemLogin(
                 "Criando sua conta..."
             );
 
+            try {
 
-            const { data, error } =
-                await supabaseClient.auth.signUp({
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient.auth.signUp({
+                        email: email,
+                        password: senha
+                    });
 
-                    email: email,
+                if (error) {
+                    throw error;
+                }
 
-                    password: senha
+                if (
+                    data &&
+                    data.session &&
+                    data.user
+                ) {
 
-                });
+                    usuarioAtual =
+                        data.user;
 
+                    mostrarMensagemLogin(
+                        "Conta criada!",
+                        true
+                    );
 
-            if (error) {
+                    await abrirAplicacao(
+                        data.user
+                    );
+
+                } else {
+
+                    mostrarMensagemLogin(
+                        "Conta criada! Verifique seu e-mail para confirmar a conta.",
+                        true
+                    );
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao criar conta:",
+                    error
+                );
 
                 mostrarMensagemLogin(
-                    "Erro: " + error.message
+                    error?.message ||
+                    "Não foi possível criar a conta."
+                );
+
+            } finally {
+
+                botaoEntrar.disabled =
+                    false;
+
+                botaoCriarConta.disabled =
+                    false;
+
+                botaoCriarConta.textContent =
+                    "Criar conta";
+            }
+        }
+
+
+        /* =================================================
+           ABRIR APLICAÇÃO
+        ================================================== */
+
+        async function abrirAplicacao(
+            usuario = usuarioAtual
+        ) {
+
+            if (!usuario) {
+                return;
+            }
+
+            if (carregandoAplicacao) {
+                return;
+            }
+
+            if (aplicacaoAberta) {
+                return;
+            }
+
+            carregandoAplicacao = true;
+
+            usuarioAtual =
+                usuario;
+
+            console.log(
+                "Abrindo aplicação para:",
+                usuario.email
+            );
+
+            mostrarTelaAplicacao();
+
+            try {
+                await carregarPerfil();
+            } catch (error) {
+                console.error(
+                    "Erro no carregamento do perfil:",
+                    error
+                );
+            }
+
+            try {
+                configurarRealtime();
+            } catch (error) {
+                console.error(
+                    "Erro ao iniciar realtime:",
+                    error
+                );
+            }
+
+            try {
+                await carregarMensagens();
+            } catch (error) {
+                console.error(
+                    "Erro no carregamento das mensagens:",
+                    error
+                );
+            }
+
+            try {
+                await carregarMembros();
+            } catch (error) {
+                console.error(
+                    "Erro no carregamento dos membros:",
+                    error
+                );
+            }
+
+            aplicacaoAberta = true;
+            carregandoAplicacao = false;
+
+            setTimeout(
+                () => {
+                    try {
+                        inputMensagem.focus();
+                    } catch (e) {}
+                },
+                100
+            );
+        }
+
+
+        /* =================================================
+           DAQUI CONTINUA A PARTE 2
+        ================================================== */
+               /* =================================================
+           PERFIL
+        ================================================== */
+
+        async function carregarPerfil() {
+
+            if (!usuarioAtual) {
+                return;
+            }
+
+            const nomePadrao =
+                usuarioAtual.email?.split("@")[0] ||
+                "Usuário";
+
+            atualizarNomeNaTela(
+                nomePadrao
+            );
+
+            avatarUsuario.textContent =
+                nomePadrao
+                    .charAt(0)
+                    .toUpperCase();
+
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .from("profiles")
+                        .select(
+                            "username, avatar_url"
+                        )
+                        .eq(
+                            "id",
+                            usuarioAtual.id
+                        )
+                        .maybeSingle();
+
+                if (error) {
+                    throw error;
+                }
+
+                const nome =
+                    data?.username ||
+                    nomePadrao;
+
+                atualizarNomeNaTela(
+                    nome
+                );
+
+                if (data?.avatar_url) {
+
+                    avatarUsuario.innerHTML =
+                        "";
+
+                    const imagem =
+                        document.createElement(
+                            "img"
+                        );
+
+                    imagem.src =
+                        data.avatar_url;
+
+                    imagem.alt =
+                        "Avatar";
+
+                    avatarUsuario.appendChild(
+                        imagem
+                    );
+
+                } else {
+
+                    avatarUsuario.textContent =
+                        nome
+                            .charAt(0)
+                            .toUpperCase();
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao carregar perfil:",
+                    error
+                );
+
+                atualizarNomeNaTela(
+                    nomePadrao
+                );
+
+                avatarUsuario.textContent =
+                    nomePadrao
+                        .charAt(0)
+                        .toUpperCase();
+            }
+        }
+
+
+        /* =================================================
+           ATUALIZAR NOME
+        ================================================== */
+
+        function atualizarNomeNaTela(
+            nome
+        ) {
+
+            nomeUsuario.textContent =
+                nome || "Usuário";
+        }
+
+
+        /* =================================================
+           EDITAR NOME
+        ================================================== */
+
+        botaoEditarNome.addEventListener(
+            "click",
+            () => {
+
+                inputNovoNome.value =
+                    nomeUsuario.textContent;
+
+                modalNome.classList.add(
+                    "aberto"
+                );
+
+                inputNovoNome.focus();
+            }
+        );
+
+
+        botaoCancelarNome.addEventListener(
+            "click",
+            () => {
+
+                modalNome.classList.remove(
+                    "aberto"
+                );
+            }
+        );
+
+
+        botaoSalvarNome.addEventListener(
+            "click",
+            salvarNome
+        );
+
+
+        async function salvarNome() {
+
+            const novoNome =
+                inputNovoNome.value.trim();
+
+            if (!novoNome) {
+
+                alert(
+                    "Digite um nome."
                 );
 
                 return;
-
             }
 
+            if (!usuarioAtual) {
+                return;
+            }
 
-            if (data.session) {
+            botaoSalvarNome.disabled =
+                true;
 
-                mostrarSite(
-                    data.user
+            try {
+
+                const {
+                    error
+                } =
+                    await supabaseClient
+                        .from("profiles")
+                        .update({
+                            username: novoNome
+                        })
+                        .eq(
+                            "id",
+                            usuarioAtual.id
+                        );
+
+                if (error) {
+                    throw error;
+                }
+
+                atualizarNomeNaTela(
+                    novoNome
+                );
+
+                modalNome.classList.remove(
+                    "aberto"
+                );
+
+                await carregarMembros();
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao salvar nome:",
+                    error
+                );
+
+                alert(
+                    error?.message ||
+                    "Não foi possível salvar o nome."
+                );
+
+            } finally {
+
+                botaoSalvarNome.disabled =
+                    false;
+            }
+        }
+
+
+        /* =================================================
+           AVATAR
+        ================================================== */
+
+        botaoAvatar.addEventListener(
+            "click",
+            () => {
+
+                inputAvatar.click();
+            }
+        );
+
+
+        inputAvatar.addEventListener(
+            "change",
+            async () => {
+
+                const arquivo =
+                    inputAvatar.files?.[0];
+
+                if (!arquivo) {
+                    return;
+                }
+
+                if (!usuarioAtual) {
+                    return;
+                }
+
+                try {
+
+                    const extensao =
+                        arquivo.name
+                            .split(".")
+                            .pop()
+                            .toLowerCase();
+
+                    const caminho =
+                        `${usuarioAtual.id}.${extensao}`;
+
+                    const {
+                        error: uploadError
+                    } =
+                        await supabaseClient
+                            .storage
+                            .from("avatars")
+                            .upload(
+                                caminho,
+                                arquivo,
+                                {
+                                    upsert: true
+                                }
+                            );
+
+                    if (uploadError) {
+                        throw uploadError;
+                    }
+
+                    const {
+                        data
+                    } =
+                        supabaseClient
+                            .storage
+                            .from("avatars")
+                            .getPublicUrl(
+                                caminho
+                            );
+
+                    const avatarUrl =
+                        data.publicUrl;
+
+                    const {
+                        error: updateError
+                    } =
+                        await supabaseClient
+                            .from("profiles")
+                            .update({
+                                avatar_url:
+                                    avatarUrl
+                            })
+                            .eq(
+                                "id",
+                                usuarioAtual.id
+                            );
+
+                    if (updateError) {
+                        throw updateError;
+                    }
+
+                    avatarUsuario.innerHTML =
+                        "";
+
+                    const imagem =
+                        document.createElement(
+                            "img"
+                        );
+
+                    imagem.src =
+                        avatarUrl +
+                        "?t=" +
+                        Date.now();
+
+                    imagem.alt =
+                        "Avatar";
+
+                    avatarUsuario.appendChild(
+                        imagem
+                    );
+
+                    await carregarMembros();
+
+                } catch (error) {
+
+                    console.error(
+                        "Erro no avatar:",
+                        error
+                    );
+
+                    alert(
+                        "Não foi possível alterar o avatar:\n\n" +
+                        error.message
+                    );
+
+                } finally {
+
+                    inputAvatar.value =
+                        "";
+                }
+            }
+        );
+
+
+        /* =================================================
+           CANAIS
+        ================================================== */
+
+        document
+            .querySelectorAll(".canal")
+            .forEach(
+                botao => {
+
+                    botao.addEventListener(
+                        "click",
+                        async () => {
+
+                            document
+                                .querySelectorAll(
+                                    ".canal"
+                                )
+                                .forEach(
+                                    item => {
+
+                                        item.classList.remove(
+                                            "ativo"
+                                        );
+                                    }
+                                );
+
+                            botao.classList.add(
+                                "ativo"
+                            );
+
+                            canalAtual =
+                                botao.dataset.channel;
+
+                            nomeCanal.textContent =
+                                "# " +
+                                canalAtual;
+
+                            inputMensagem.placeholder =
+                                "Enviar mensagem em #" +
+                                canalAtual;
+
+                            try {
+
+                                await carregarMensagens();
+
+                            } catch (error) {
+
+                                console.error(
+                                    "Erro ao mudar canal:",
+                                    error
+                                );
+                            }
+                        }
+                    );
+                }
+            );
+
+
+        /* =================================================
+           CARREGAR MENSAGENS
+        ================================================== */
+
+        async function carregarMensagens() {
+
+            if (!supabaseClient) {
+                return;
+            }
+
+            const canalCarregado =
+                canalAtual;
+
+            carregandoMensagens =
+                true;
+
+            mensagensRealtimePendentes =
+                [];
+
+            mensagens.innerHTML =
+                `<div class="mensagem-sucesso">Carregando mensagens...</div>`;
+
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .from("messages")
+                        .select("*")
+                        .eq(
+                            "channel",
+                            canalCarregado
+                        )
+                        .order(
+                            "created_at",
+                            {
+                                ascending: true
+                            }
+                        );
+
+                if (error) {
+                    throw error;
+                }
+
+                if (
+                    canalAtual !==
+                    canalCarregado
+                ) {
+                    return;
+                }
+
+                mensagens.innerHTML =
+                    "";
+
+                mensagensRenderizadas.clear();
+
+                if (
+                    !data ||
+                    data.length === 0
+                ) {
+
+                    mensagens.innerHTML =
+                        `<div class="mensagem-sucesso">Nenhuma mensagem ainda neste canal.</div>`;
+
+                } else {
+
+                    data.forEach(
+                        mensagem => {
+
+                            adicionarMensagemNaTela(
+                                mensagem
+                            );
+                        }
+                    );
+                }
+
+                const pendentes =
+                    mensagensRealtimePendentes.filter(
+                        mensagem =>
+                            mensagem &&
+                            mensagem.channel ===
+                            canalCarregado
+                    );
+
+                pendentes.forEach(
+                    mensagem => {
+
+                        adicionarMensagemNaTela(
+                            mensagem
+                        );
+                    }
+                );
+
+                mensagensRealtimePendentes =
+                    [];
+
+                mensagens.scrollTop =
+                    mensagens.scrollHeight;
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao carregar mensagens:",
+                    error
+                );
+
+                if (
+                    canalAtual ===
+                    canalCarregado
+                ) {
+
+                    mensagens.innerHTML =
+                        `<div class="mensagem-erro">Não foi possível carregar as mensagens.<br><br>${escapeHtml(error.message)}</div>`;
+                }
+
+            } finally {
+
+                if (
+                    canalAtual ===
+                    canalCarregado
+                ) {
+
+                    carregandoMensagens =
+                        false;
+                }
+            }
+        }
+
+
+        /* =================================================
+           ADICIONAR MENSAGEM
+        ================================================== */
+
+        function adicionarMensagemNaTela(
+            mensagem
+        ) {
+
+            if (!mensagem) {
+                return;
+            }
+
+            if (
+                mensagem.channel !==
+                canalAtual
+            ) {
+                return;
+            }
+
+            const idMensagem =
+                mensagem.id !== undefined &&
+                mensagem.id !== null
+                    ? String(mensagem.id)
+                    : null;
+
+            if (
+                idMensagem &&
+                mensagensRenderizadas.has(
+                    idMensagem
+                )
+            ) {
+                return;
+            }
+
+            if (idMensagem) {
+
+                mensagensRenderizadas.add(
+                    idMensagem
+                );
+            }
+
+            const elemento =
+                document.createElement(
+                    "div"
+                );
+
+            elemento.className =
+                "mensagem";
+
+            const avatar =
+                document.createElement(
+                    "div"
+                );
+
+            avatar.className =
+                "avatar-mensagem";
+
+            const primeiraLetra =
+                (
+                    mensagem.username ||
+                    "U"
+                )
+                    .charAt(0)
+                    .toUpperCase();
+
+            avatar.textContent =
+                primeiraLetra;
+
+            const conteudo =
+                document.createElement(
+                    "div"
+                );
+
+            conteudo.className =
+                "conteudo-mensagem";
+
+            const cabecalho =
+                document.createElement(
+                    "div"
+                );
+
+            cabecalho.className =
+                "cabecalho-mensagem";
+
+            const autor =
+                document.createElement(
+                    "span"
+                );
+
+            autor.className =
+                "autor-mensagem";
+
+            autor.textContent =
+                mensagem.username ||
+                "Usuário";
+
+            const hora =
+                document.createElement(
+                    "span"
+                );
+
+            hora.className =
+                "hora-mensagem";
+
+            if (mensagem.created_at) {
+
+                hora.textContent =
+                    new Date(
+                        mensagem.created_at
+                    ).toLocaleTimeString(
+                        "pt-BR",
+                        {
+                            hour: "2-digit",
+                            minute: "2-digit"
+                        }
+                    );
+            }
+
+            cabecalho.appendChild(
+                autor
+            );
+
+            cabecalho.appendChild(
+                hora
+            );
+
+            const texto =
+                document.createElement(
+                    "div"
+                );
+
+            texto.className =
+                "texto-mensagem";
+
+            texto.textContent =
+                mensagem.content ||
+                "";
+
+            conteudo.appendChild(
+                cabecalho
+            );
+
+            conteudo.appendChild(
+                texto
+            );
+
+            elemento.appendChild(
+                avatar
+            );
+
+            elemento.appendChild(
+                conteudo
+            );
+
+            mensagens.appendChild(
+                elemento
+            );
+        }
+
+
+        /* =================================================
+           ESCAPE HTML
+        ================================================== */
+
+        function escapeHtml(
+            texto
+        ) {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.textContent =
+                texto || "";
+
+            return div.innerHTML;
+        }
+
+
+        /* =================================================
+           ENVIAR MENSAGEM
+        ================================================== */
+
+        formMensagem.addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+                const texto =
+                    inputMensagem.value.trim();
+
+                if (!texto) {
+                    return;
+                }
+
+                if (!usuarioAtual) {
+
+                    alert(
+                        "Você não está conectado."
+                    );
+
+                    return;
+                }
+
+                inputMensagem.disabled =
+                    true;
+
+                try {
+
+                    const nome =
+                        nomeUsuario.textContent ||
+                        "Usuário";
+
+                    const {
+                        error
+                    } =
+                        await supabaseClient
+                            .from("messages")
+                            .insert({
+                                user_id:
+                                    usuarioAtual.id,
+
+                                channel:
+                                    canalAtual,
+
+                                username:
+                                    nome,
+
+                                content:
+                                    texto
+                            });
+
+                    if (error) {
+                        throw error;
+                    }
+
+                    inputMensagem.value =
+                        "";
+
+                } catch (error) {
+
+                    console.error(
+                        "Erro ao enviar mensagem:",
+                        error
+                    );
+
+                    alert(
+                        "Erro ao enviar mensagem:\n\n" +
+                        error.message
+                    );
+
+                } finally {
+
+                    inputMensagem.disabled =
+                        false;
+
+                    inputMensagem.focus();
+                }
+            }
+        );
+
+
+        /* =================================================
+           MEMBROS
+        ================================================== */
+
+        async function carregarMembros() {
+
+            if (!supabaseClient) {
+                return;
+            }
+
+            listaMembros.innerHTML =
+                `<div class="membro-nome">
+                    Carregando...
+                </div>`;
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .select(
+                        "id, username, avatar_url"
+                    )
+                    .order(
+                        "username",
+                        {
+                            ascending: true
+                        }
+                    );
+
+            if (error) {
+
+                console.error(
+                    "Erro ao carregar membros:",
+                    error
+                );
+
+                listaMembros.innerHTML =
+                    `<div class="membro-nome">
+                        Não foi possível carregar os membros.
+                    </div>`;
+
+                return;
+            }
+
+            listaMembros.innerHTML =
+                "";
+
+            if (!data) {
+                return;
+            }
+
+            data.forEach(
+                membro => {
+
+                    adicionarMembroNaTela(
+                        membro
+                    );
+                }
+            );
+        }
+
+
+        function adicionarMembroNaTela(
+            membro
+        ) {
+
+            const elemento =
+                document.createElement(
+                    "div"
+                );
+
+            elemento.className =
+                "membro";
+
+            const avatar =
+                document.createElement(
+                    "div"
+                );
+
+            avatar.className =
+                "avatar-membro";
+
+            if (membro.avatar_url) {
+
+                const imagem =
+                    document.createElement(
+                        "img"
+                    );
+
+                imagem.src =
+                    membro.avatar_url;
+
+                imagem.alt =
+                    "Avatar";
+
+                avatar.appendChild(
+                    imagem
                 );
 
             } else {
 
-                mostrarMensagemLogin(
-                    "Conta criada! Confira seu e-mail para confirmar a conta."
-                );
-
+                avatar.textContent =
+                    (
+                        membro.username ||
+                        "U"
+                    )
+                        .charAt(0)
+                        .toUpperCase();
             }
 
-        }
+            const status =
+                document.createElement(
+                    "span"
+                );
 
+            status.className =
+                "avatar-membro-status";
 
-        /* =====================================================
-           MOSTRAR APLICAÇÃO
-        ====================================================== */
-
-        function mostrarSite(usuario) {
-
-            document
-                .getElementById("telaLogin")
-                .classList.add("escondido");
-
-
-            document
-                .getElementById("app")
-                .classList.add("visivel");
-
+            avatar.appendChild(
+                status
+            );
 
             const nome =
-                usuario.user_metadata?.nome ||
-                usuario.email?.split("@")[0] ||
+                document.createElement(
+                    "div"
+                );
+
+            nome.className =
+                "membro-nome";
+
+            nome.textContent =
+                membro.username ||
                 "Usuário";
 
+            elemento.appendChild(
+                avatar
+            );
 
-            document
-                .getElementById("nomeUsuario")
-                .textContent = nome;
+            elemento.appendChild(
+                nome
+            );
 
-
-            document
-                .getElementById("emailUsuario")
-                .textContent =
-                usuario.email || "";
-
-
-            mostrarAvatarPadrao();
-
-
-            carregarAvatar();
-
-
-            mostrarMensagens();
-
+            listaMembros.appendChild(
+                elemento
+            );
         }
 
 
-        /* =====================================================
+        /* =================================================
+           REALTIME
+        ================================================== */
+
+        function configurarRealtime() {
+
+            if (!supabaseClient) {
+                return;
+            }
+
+            if (mensagensSubscription) {
+
+                supabaseClient.removeChannel(
+                    mensagensSubscription
+                );
+
+                mensagensSubscription =
+                    null;
+            }
+
+            mensagensSubscription =
+                supabaseClient
+                    .channel(
+                        "discordia-messages-realtime"
+                    )
+                    .on(
+                        "postgres_changes",
+                        {
+                            event: "INSERT",
+                            schema: "public",
+                            table: "messages"
+                        },
+                        payload => {
+
+                            console.log(
+                                "Realtime INSERT:",
+                                payload
+                            );
+
+                            const mensagem =
+                                payload?.new;
+
+                            if (
+                                !mensagem ||
+                                mensagem.channel !==
+                                canalAtual
+                            ) {
+                                return;
+                            }
+
+                            if (
+                                carregandoMensagens
+                            ) {
+
+                                mensagensRealtimePendentes.push(
+                                    mensagem
+                                );
+
+                                return;
+                            }
+
+                            adicionarMensagemNaTela(
+                                mensagem
+                            );
+
+                            mensagens.scrollTop =
+                                mensagens.scrollHeight;
+                        }
+                    )
+                    .subscribe(
+                        status => {
+
+                            console.log(
+                                "Realtime messages:",
+                                status
+                            );
+
+                            if (
+                                status ===
+                                "SUBSCRIBED"
+                            ) {
+
+                                console.log(
+                                    "Realtime conectado com sucesso."
+                                );
+                            }
+
+                            if (
+                                status ===
+                                "CHANNEL_ERROR"
+                            ) {
+
+                                console.error(
+                                    "Erro no canal Realtime."
+                                );
+                            }
+
+                            if (
+                                status ===
+                                "TIMED_OUT"
+                            ) {
+
+                                console.error(
+                                    "Realtime demorou demais para conectar."
+                                );
+                            }
+                        }
+                    );
+        }
+
+
+        /* =================================================
+           VOZ
+        ================================================== */
+
+        document
+            .querySelectorAll(".canal-voz")
+            .forEach(
+                botao => {
+
+                    botao.addEventListener(
+                        "click",
+                        () => {
+
+                            entrarSalaVoz(
+                                botao.dataset.voice
+                            );
+                        }
+                    );
+                }
+            );
+
+
+        function entrarSalaVoz(
+            sala
+        ) {
+
+            salaVozAtual =
+                sala;
+
+            nomeSalaVoz.textContent =
+                sala;
+
+            painelVoz.classList.add(
+                "visivel"
+            );
+
+            const nome =
+                nomeUsuario.textContent ||
+                "Usuário";
+
+            participantesVoz.innerHTML =
+                "";
+
+            const participante =
+                document.createElement(
+                    "div"
+                );
+
+            participante.className =
+                "participante-voz";
+
+            const avatar =
+                document.createElement(
+                    "div"
+                );
+
+            avatar.className =
+                "avatar-voz";
+
+            avatar.textContent =
+                nome
+                    .charAt(0)
+                    .toUpperCase();
+
+            const nomeElemento =
+                document.createElement(
+                    "span"
+                );
+
+            nomeElemento.textContent =
+                nome;
+
+            const status =
+                document.createElement(
+                    "small"
+                );
+
+            status.textContent =
+                "🎤 conectado";
+
+            participante.appendChild(
+                avatar
+            );
+
+            participante.appendChild(
+                nomeElemento
+            );
+
+            participante.appendChild(
+                status
+            );
+
+            participantesVoz.appendChild(
+                participante
+            );
+
+            document
+                .querySelectorAll(
+                    ".canal-voz"
+                )
+                .forEach(
+                    item => {
+
+                        item.classList.remove(
+                            "conectado"
+                        );
+                    }
+                );
+
+            document
+                .querySelectorAll(
+                    ".canal-voz"
+                )
+                .forEach(
+                    item => {
+
+                        if (
+                            item.dataset.voice ===
+                            sala
+                        ) {
+
+                            item.classList.add(
+                                "conectado"
+                            );
+                        }
+                    }
+                );
+        }
+
+
+        function sairSalaVoz() {
+
+            salaVozAtual =
+                null;
+
+            painelVoz.classList.remove(
+                "visivel"
+            );
+
+            participantesVoz.innerHTML =
+                "";
+
+            document
+                .querySelectorAll(
+                    ".canal-voz"
+                )
+                .forEach(
+                    item => {
+
+                        item.classList.remove(
+                            "conectado"
+                        );
+                    }
+                );
+        }
+
+
+        botaoFecharVoz.addEventListener(
+            "click",
+            sairSalaVoz
+        );
+
+
+        botaoSairVoz.addEventListener(
+            "click",
+            sairSalaVoz
+        );
+
+
+        /* =================================================
+           SAIR
+        ================================================== */
+
+        botaoSair.addEventListener(
+            "click",
+            async () => {
+
+                if (
+                    !confirm(
+                        "Deseja sair da sua conta?"
+                    )
+                ) {
+                    return;
+                }
+
+                try {
+
+                    sairSalaVoz();
+
+                    if (
+                        mensagensSubscription
+                    ) {
+
+                        await supabaseClient
+                            .removeChannel(
+                                mensagensSubscription
+                            );
+
+                        mensagensSubscription =
+                            null;
+
+                        mensagensRenderizadas.clear();
+
+                        mensagensRealtimePendentes =
+                            [];
+                    }
+
+                    await supabaseClient
+                        .auth
+                        .signOut();
+
+                } catch (error) {
+
+                    console.error(
+                        "Erro ao sair:",
+                        error
+                    );
+
+                } finally {
+
+                    usuarioAtual =
+                        null;
+
+                    aplicacaoAberta =
+                        false;
+
+                    carregandoAplicacao =
+                        false;
+
+                    emailLogin.value =
+                        "";
+
+                    senhaLogin.value =
+                        "";
+
+                    mostrarTelaLogin();
+
+                    mostrarMensagemLogin(
+                        ""
+                    );
+                }
+            }
+        );
+
+
+        /* =================================================
+           AUTH STATE CHANGE
+        ================================================== */
+
+        if (supabaseClient) {
+
+            supabaseClient.auth.onAuthStateChange(
+                (
+                    event,
+                    session
+                ) => {
+
+                    console.log(
+                        "AUTH EVENT:",
+                        event
+                    );
+
+                    if (
+                        event ===
+                        "SIGNED_IN" &&
+                        session?.user
+                    ) {
+
+                        usuarioAtual =
+                            session.user;
+
+                        setTimeout(
+                            () => {
+
+                                abrirAplicacao(
+                                    session.user
+                                );
+
+                            },
+                            0
+                        );
+                    }
+
+                    if (
+                        event ===
+                        "SIGNED_OUT"
+                    ) {
+
+                        usuarioAtual =
+                            null;
+
+                        aplicacaoAberta =
+                            false;
+
+                        carregandoAplicacao =
+                            false;
+
+                        mostrarTelaLogin();
+                    }
+                }
+            );
+        }
+
+
+        /* =================================================
            VERIFICAR SESSÃO
-        ====================================================== */
+        ================================================== */
 
         async function verificarSessao() {
 
             if (!supabaseClient) {
 
-                document
-                    .getElementById("telaLogin")
-                    .classList.remove("escondido");
-
-                return;
-
-            }
-
-
-            const {
-                data: {
-                    session
-                }
-            } =
-                await supabaseClient.auth.getSession();
-
-
-            if (session?.user) {
-
-                mostrarSite(
-                    session.user
-                );
-
-            } else {
-
-                document
-                    .getElementById("telaLogin")
-                    .classList.remove("escondido");
-
-            }
-
-        }
-
-
-        /* =====================================================
-           OBSERVAR LOGIN / LOGOUT
-        ====================================================== */
-
-        if (supabaseClient) {
-
-            supabaseClient.auth.onAuthStateChange(
-
-                (event, session) => {
-
-                    if (
-                        event === "SIGNED_IN" &&
-                        session?.user
-                    ) {
-
-                        mostrarSite(
-                            session.user
-                        );
-
-                    }
-
-
-                    if (
-                        event === "SIGNED_OUT"
-                    ) {
-
-                        document
-                            .getElementById("app")
-                            .classList.remove("visivel");
-
-
-                        document
-                            .getElementById("telaLogin")
-                            .classList.remove("escondido");
-
-
-                        document
-                            .getElementById("emailLogin")
-                            .value = "";
-
-
-                        document
-                            .getElementById("senhaLogin")
-                            .value = "";
-
-                    }
-
-                }
-
-            );
-
-        }
-
-
-        /* =====================================================
-           SAIR
-        ====================================================== */
-
-        async function sairDaConta() {
-
-            if (!supabaseClient) {
-                return;
-            }
-
-
-            await supabaseClient.auth.signOut();
-
-        }
-
-
-        /* =====================================================
-           AVATAR
-        ====================================================== */
-
-        function mostrarAvatarPadrao() {
-
-            const avatar =
-                document.getElementById("avatarUsuario");
-
-
-            avatar.src =
-                "https://ui-avatars.com/api/?name=Usuario&background=7b2831&color=ffffff&size=128";
-
-        }
-
-
-        function abrirSeletorFoto() {
-
-            document
-                .getElementById("inputFoto")
-                .click();
-
-        }
-
-
-        document
-            .getElementById("inputFoto")
-            .addEventListener(
-                "change",
-                enviarFoto
-            );
-
-
-        async function enviarFoto(event) {
-
-            const arquivo =
-                event.target.files[0];
-
-
-            if (!arquivo) {
-                return;
-            }
-
-
-            if (
-                !arquivo.type.startsWith("image/")
-            ) {
-
-                alert(
-                    "Escolha uma imagem válida."
+                mostrarMensagemLogin(
+                    "Não foi possível iniciar o Supabase."
                 );
 
                 return;
-
             }
-
-
-            if (
-                arquivo.size > 6 * 1024 * 1024
-            ) {
-
-                alert(
-                    "A imagem precisa ter no máximo 6 MB."
-                );
-
-                return;
-
-            }
-
-
-            if (!supabaseClient) {
-                return;
-            }
-
-
-            const {
-                data: {
-                    user
-                }
-            } =
-                await supabaseClient.auth.getUser();
-
-
-            if (!user) {
-
-                alert(
-                    "Você precisa estar logado."
-                );
-
-                return;
-
-            }
-
-
-            const extensao =
-                arquivo.name
-                    .split(".")
-                    .pop()
-                    .toLowerCase();
-
-
-            const caminho =
-                `usuarios/${user.id}/avatar.${extensao}`;
-
-
-            const {
-                error
-            } =
-                await supabaseClient
-                    .storage
-                    .from("avatars")
-                    .upload(
-                        caminho,
-                        arquivo,
-                        {
-                            upsert: true,
-                            contentType: arquivo.type
-                        }
-                    );
-
-
-            if (error) {
-
-                alert(
-                    "Erro ao enviar foto: " +
-                    error.message
-                );
-
-                return;
-
-            }
-
-
-            const {
-                data
-            } =
-                supabaseClient
-                    .storage
-                    .from("avatars")
-                    .getPublicUrl(
-                        caminho
-                    );
-
-
-            const url =
-                data.publicUrl +
-                "?t=" +
-                Date.now();
-
-
-            document
-                .getElementById("avatarUsuario")
-                .src = url;
-
-
-            event.target.value = "";
-
-        }
-
-
-        async function carregarAvatar() {
-
-            if (!supabaseClient) {
-                return;
-            }
-
-
-            const {
-                data: {
-                    user
-                }
-            } =
-                await supabaseClient.auth.getUser();
-
-
-            if (!user) {
-                return;
-            }
-
-
-            /*
-             * Tentamos alguns formatos comuns.
-             */
-
-            const extensoes = [
-                "png",
-                "jpg",
-                "jpeg",
-                "webp"
-            ];
-
-
-            for (const extensao of extensoes) {
-
-                const caminho =
-                    `usuarios/${user.id}/avatar.${extensao}`;
-
-
-                const {
-                    data
-                } =
-                    supabaseClient
-                        .storage
-                        .from("avatars")
-                        .getPublicUrl(
-                            caminho
-                        );
-
-
-                const url =
-                    data.publicUrl +
-                    "?t=" +
-                    Date.now();
-
-
-                const imagem =
-                    new Image();
-
-
-                imagem.onload = function () {
-
-                    document
-                        .getElementById("avatarUsuario")
-                        .src = url;
-
-                };
-
-
-                imagem.src = url;
-
-            }
-
-        }
-
-
-        /* =====================================================
-           CANAIS
-        ====================================================== */
-
-        function trocarCanal(
-            nome,
-            botao
-        ) {
-
-            canalAtual = nome;
-
-
-            document
-                .querySelectorAll(".canal")
-                .forEach(
-                    canal => canal.classList.remove("ativo")
-                );
-
-
-            if (botao) {
-
-                botao.classList.add("ativo");
-
-            }
-
-
-            document
-                .getElementById("nomeCanal")
-                .textContent = nome;
-
-
-            document
-                .getElementById("campoMensagem")
-                .placeholder =
-                "Conversar em #" + nome;
-
-
-            mostrarMensagens();
-
-        }
-
-
-        function entrarSala(nome) {
-
-            alert(
-                "Você entrou na " + nome + " 🔊"
-            );
-
-        }
-
-
-        /* =====================================================
-           MENSAGENS
-        ====================================================== */
-
-        function mostrarMensagens() {
-
-            const container =
-                document.getElementById("mensagens");
-
-
-            container.innerHTML = "";
-
-
-            const mensagens =
-                mensagensPorCanal[canalAtual] || [];
-
-
-            if (mensagens.length === 0) {
-
-                const vazio =
-                    document.createElement("div");
-
-
-                vazio.className =
-                    "mensagem-vazia";
-
-
-                vazio.innerHTML = `
-                    <div class="icone-vazio">#</div>
-                    <h2>Bem-vindo ao #${canalAtual}!</h2>
-                    <p>Este é o começo deste canal.</p>
-                `;
-
-
-                container.appendChild(
-                    vazio
-                );
-
-                return;
-
-            }
-
-
-            mensagens.forEach(
-                mensagem => {
-
-                    criarMensagemNaTela(
-                        mensagem
-                    );
-
-                }
-            );
-
-        }
-
-
-        function criarMensagemNaTela(
-            mensagem
-        ) {
-
-            const container =
-                document.getElementById("mensagens");
-
-
-            const elemento =
-                document.createElement("div");
-
-
-            elemento.className =
-                "mensagem";
-
-
-            elemento.innerHTML = `
-
-                <div class="avatar-mensagem">
-                    ${mensagem.nome.charAt(0).toUpperCase()}
-                </div>
-
-                <div class="conteudo-mensagem">
-
-                    <div class="cabecalho-mensagem">
-
-                        <strong>
-                            ${escapeHtml(mensagem.nome)}
-                        </strong>
-
-                        <span>
-                            ${mensagem.hora}
-                        </span>
-
-                    </div>
-
-                    <p>
-                        ${escapeHtml(mensagem.texto)}
-                    </p>
-
-                </div>
-
-            `;
-
-
-            container.appendChild(
-                elemento
-            );
-
-
-            container.scrollTop =
-                container.scrollHeight;
-
-        }
-
-
-        function escapeHtml(texto) {
-
-            const div =
-                document.createElement("div");
-
-
-            div.textContent =
-                texto;
-
-
-            return div.innerHTML;
-
-        }
-
-
-        /* =====================================================
-           ENVIAR MENSAGEM
-        ====================================================== */
-
-        function enviarMensagem() {
-
-            const campo =
-                document.getElementById(
-                    "campoMensagem"
-                );
-
-
-            const texto =
-                campo.value.trim();
-
-
-            if (!texto) {
-                return;
-            }
-
-
-            const nome =
-                document
-                    .getElementById(
-                        "nomeUsuario"
-                    )
-                    .textContent ||
-                "Você";
-
-
-            const agora =
-                new Date();
-
-
-            const hora =
-                agora.toLocaleTimeString(
-                    "pt-BR",
-                    {
-                        hour: "2-digit",
-                        minute: "2-digit"
-                    }
-                );
-
-
-            if (
-                !mensagensPorCanal[canalAtual]
-            ) {
-
-                mensagensPorCanal[canalAtual] =
-                    [];
-
-            }
-
-
-            mensagensPorCanal[canalAtual]
-                .push({
-
-                    nome: nome,
-
-                    texto: texto,
-
-                    hora: hora
-
-                });
-
-
-            salvarMensagens();
-
-
-            criarMensagemNaTela({
-
-                nome: nome,
-
-                texto: texto,
-
-                hora: hora
-
-            });
-
-
-            campo.value = "";
-
-
-            campo.focus();
-
-        }
-
-
-        function verificarEnter(event) {
-
-            if (
-                event.key === "Enter"
-            ) {
-
-                event.preventDefault();
-
-                enviarMensagem();
-
-            }
-
-        }
-
-
-        /* =====================================================
-           LOCAL STORAGE
-        ====================================================== */
-
-        function salvarMensagens() {
-
-            localStorage.setItem(
-
-                "meuDiscordMensagens",
-
-                JSON.stringify(
-                    mensagensPorCanal
-                )
-
-            );
-
-        }
-
-
-        function carregarMensagens() {
-
-            const dados =
-                localStorage.getItem(
-                    "meuDiscordMensagens"
-                );
-
-
-            if (!dados) {
-                return;
-            }
-
 
             try {
 
-                const mensagens =
-                    JSON.parse(dados);
-
-
-                Object.assign(
-                    mensagensPorCanal,
-                    mensagens
-                );
-
-            } catch (erro) {
-
                 console.log(
-                    "Não foi possível carregar as mensagens."
+                    "Verificando sessão..."
                 );
 
-            }
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .auth
+                        .getSession();
 
+                if (error) {
+                    throw error;
+                }
+
+                if (
+                    data &&
+                    data.session &&
+                    data.session.user
+                ) {
+
+                    console.log(
+                        "Sessão encontrada."
+                    );
+
+                    usuarioAtual =
+                        data.session.user;
+
+                    await abrirAplicacao(
+                        data.session.user
+                    );
+
+                } else {
+
+                    console.log(
+                        "Nenhuma sessão encontrada."
+                    );
+
+                    mostrarTelaLogin();
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao verificar sessão:",
+                    error
+                );
+
+                mostrarMensagemLogin(
+                    "Erro ao verificar sua sessão."
+                );
+
+                mostrarTelaLogin();
+            }
         }
 
 
-        /* =====================================================
-           INICIALIZAÇÃO
-        ====================================================== */
+        /* =================================================
+           EVENTOS LOGIN
+        ================================================== */
 
-        carregarMensagens();
+        botaoEntrar.addEventListener(
+            "click",
+            entrar
+        );
+
+
+        botaoCriarConta.addEventListener(
+            "click",
+            criarConta
+        );
+
+
+        senhaLogin.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key ===
+                    "Enter"
+                ) {
+
+                    entrar();
+                }
+            }
+        );
+
+
+        emailLogin.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key ===
+                    "Enter"
+                ) {
+
+                    entrar();
+                }
+            }
+        );
+
+
+        /* =================================================
+           MODAL
+        ================================================== */
+
+        modalNome.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    modalNome
+                ) {
+
+                    modalNome.classList.remove(
+                        "aberto"
+                    );
+                }
+            }
+        );
+
+
+        /* =================================================
+           INICIAR
+        ================================================== */
+
+        console.log(
+            "Discordia iniciado."
+        );
 
         verificarSessao();
 
@@ -1351,4 +2483,4 @@
 
 </body>
 
-</html>
+</html> 

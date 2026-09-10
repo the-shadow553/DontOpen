@@ -3,11 +3,18 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Discordia</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -18,13 +25,18 @@
          LOGIN
     ====================================================== -->
 
-    <section id="telaLogin" class="tela-login">
+    <section
+        id="telaLogin"
+        class="tela-login"
+    >
 
         <div class="caixa-login">
 
             <h1>💬 Discordia</h1>
 
-            <p>Entre na sua conta ou crie uma nova</p>
+            <p>
+                Entre na sua conta ou crie uma nova
+            </p>
 
             <input
                 type="email"
@@ -40,15 +52,139 @@
                 autocomplete="current-password"
             >
 
-            <button id="botaoEntrar" type="button">
+            <input
+                type="text"
+                id="nomeCadastro"
+                placeholder="Nome de usuário (obrigatório para criar conta)"
+                autocomplete="username"
+                maxlength="30"
+            >
+
+            <button
+                id="botaoEntrar"
+                class="botao-login"
+                type="button"
+            >
                 Entrar
             </button>
 
-            <button id="botaoCriarConta" type="button">
+            <button
+                id="botaoCriarConta"
+                class="botao-cadastro"
+                type="button"
+            >
                 Criar conta
             </button>
 
-            <div id="mensagemLogin" class="mensagem-login"></div>
+            <button
+                id="botaoEsqueciSenha"
+                class="botao-esqueci-senha"
+                type="button"
+            >
+                Esqueci minha senha
+            </button>
+
+            <div
+                id="mensagemLogin"
+                class="mensagem-login"
+            ></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         RECUPERAR SENHA
+    ====================================================== -->
+
+    <section
+        id="telaRecuperarSenha"
+        class="tela-login oculto"
+    >
+
+        <div class="caixa-login">
+
+            <h1>🔑 Recuperar senha</h1>
+
+            <p>
+                Digite o e-mail da sua conta para receber
+                o link de recuperação.
+            </p>
+
+            <input
+                type="email"
+                id="emailRecuperacao"
+                placeholder="E-mail"
+                autocomplete="email"
+            >
+
+            <button
+                id="botaoEnviarRecuperacao"
+                type="button"
+            >
+                Enviar link
+            </button>
+
+            <button
+                id="botaoVoltarLogin"
+                type="button"
+            >
+                Voltar para o login
+            </button>
+
+            <div
+                id="mensagemRecuperacao"
+                class="mensagem-login"
+            ></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         NOVA SENHA
+    ====================================================== -->
+
+    <section
+        id="telaNovaSenha"
+        class="tela-login oculto"
+    >
+
+        <div class="caixa-login">
+
+            <h1>🔐 Nova senha</h1>
+
+            <p>
+                Digite sua nova senha para recuperar sua conta.
+            </p>
+
+            <input
+                type="password"
+                id="novaSenha"
+                placeholder="Nova senha"
+                autocomplete="new-password"
+            >
+
+            <input
+                type="password"
+                id="confirmarNovaSenha"
+                placeholder="Confirmar nova senha"
+                autocomplete="new-password"
+            >
+
+            <button
+                id="botaoSalvarNovaSenha"
+                type="button"
+            >
+                Salvar nova senha
+            </button>
+
+            <div
+                id="mensagemNovaSenha"
+                class="mensagem-login"
+            ></div>
 
         </div>
 
@@ -59,7 +195,10 @@
          APLICAÇÃO
     ====================================================== -->
 
-    <main id="app" class="oculto">
+    <main
+        id="app"
+        class="oculto"
+    >
 
         <!-- =================================================
              SERVIDORES
@@ -85,12 +224,21 @@
         <aside class="sidebar">
 
             <header class="cabecalho-servidor">
-                <strong>Discordia</strong>
-                <span>⌄</span>
+
+                <strong>
+                    Discordia
+                </strong>
+
+                <span>
+                    ⌄
+                </span>
+
             </header>
 
 
             <div class="lista-canais">
+
+                <!-- CANAIS DE TEXTO -->
 
                 <div class="categoria-canal">
 
@@ -103,7 +251,10 @@
                         type="button"
                         data-channel="geral"
                     >
-                        # <span>geral</span>
+                        #
+                        <span>
+                            geral
+                        </span>
                     </button>
 
                     <button
@@ -111,7 +262,10 @@
                         type="button"
                         data-channel="jogos"
                     >
-                        # <span>jogos</span>
+                        #
+                        <span>
+                            jogos
+                        </span>
                     </button>
 
                     <button
@@ -119,11 +273,16 @@
                         type="button"
                         data-channel="resenha"
                     >
-                        # <span>resenha</span>
+                        #
+                        <span>
+                            resenha
+                        </span>
                     </button>
 
                 </div>
 
+
+                <!-- CANAIS DE VOZ -->
 
                 <div class="categoria-canal">
 
@@ -136,7 +295,10 @@
                         type="button"
                         data-voice="Sala 1"
                     >
-                        🔊 <span>Sala 1</span>
+                        🔊
+                        <span>
+                            Sala 1
+                        </span>
                     </button>
 
                     <button
@@ -144,7 +306,10 @@
                         type="button"
                         data-voice="Sala 2"
                     >
-                        🔊 <span>Sala 2</span>
+                        🔊
+                        <span>
+                            Sala 2
+                        </span>
                     </button>
 
                 </div>
@@ -222,20 +387,24 @@
 
 
         <!-- =================================================
-             ÁREA PRINCIPAL
+             CHAT
         ================================================== -->
 
         <section class="area-principal">
 
             <header class="cabecalho-chat">
 
-                <h2 id="nomeCanal">
-                    # geral
-                </h2>
+                <div>
 
-                <span id="descricaoCanal">
-                    Bem-vindo ao Discordia
-                </span>
+                    <h2 id="nomeCanal">
+                        # geral
+                    </h2>
+
+                    <span id="descricaoCanal">
+                        Bem-vindo ao Discordia
+                    </span>
+
+                </div>
 
             </header>
 
@@ -295,7 +464,7 @@
 
 
     <!-- =====================================================
-         MODAL EDITAR NOME
+         MODAL DE NOME
     ====================================================== -->
 
     <div
@@ -303,19 +472,17 @@
         class="modal-nome"
     >
 
-        <div class="caixa-modal-nome">
+        <div class="caixa-modal">
 
-            <h2>Alterar nome</h2>
-
-            <p>
-                Escolha o nome que aparecerá no Discordia.
-            </p>
+            <h2>
+                Alterar nome
+            </h2>
 
             <input
                 id="inputNovoNome"
                 type="text"
+                placeholder="Novo nome"
                 maxlength="30"
-                placeholder="Seu nome"
             >
 
             <div class="botoes-modal">
@@ -342,18 +509,19 @@
 
 
     <!-- =====================================================
-         INPUT DE AVATAR
+         AVATAR
     ====================================================== -->
 
     <input
         id="inputAvatar"
         type="file"
         accept="image/*"
+        hidden
     >
 
 
     <!-- =====================================================
-         PAINEL DE VOZ
+         PAINEL DE VOZ REAL
     ====================================================== -->
 
     <section
@@ -369,8 +537,8 @@
                     Sala 1
                 </strong>
 
-                <small>
-                    Conectado
+                <small id="statusVoz">
+                    Conectando...
                 </small>
 
             </div>
@@ -378,6 +546,7 @@
             <button
                 id="botaoFecharVoz"
                 type="button"
+                title="Fechar"
             >
                 ✕
             </button>
@@ -385,11 +554,31 @@
         </header>
 
 
+        <!-- PARTICIPANTES -->
+
         <div
             id="participantesVoz"
             class="participantes-voz"
         ></div>
 
+
+        <!-- ÁUDIOS DOS OUTROS USUÁRIOS -->
+
+        <div
+            id="audiosRemotos"
+            class="audios-remotos"
+        ></div>
+
+
+        <!-- VÍDEOS / COMPARTILHAMENTO -->
+
+        <div
+            id="telasCompartilhadas"
+            class="telas-compartilhadas"
+        ></div>
+
+
+        <!-- CONTROLES -->
 
         <div class="controles-voz">
 
@@ -401,13 +590,34 @@
                 🎤
             </button>
 
+
             <button
                 id="botaoSom"
                 type="button"
-                title="Som"
+                title="Desativar áudio"
             >
                 🔊
             </button>
+
+
+            <button
+                id="botaoCompartilharTela"
+                type="button"
+                title="Compartilhar tela"
+            >
+                🖥️
+            </button>
+
+
+            <button
+                id="botaoPararTela"
+                type="button"
+                title="Parar compartilhamento"
+                class="oculto"
+            >
+                ⛔
+            </button>
+
 
             <button
                 id="botaoSairVoz"
@@ -439,15 +649,23 @@
         const SUPABASE_KEY =
             "sb_publishable_ky9IuzH6EbM-UmZ11NCWXg_wG9eEjIu";
 
+        const SITE_URL =
+            "https://the-shadow553.github.io/DontOpen/";
+
+
         let supabaseClient = null;
+
 
         try {
 
             if (!window.supabase) {
+
                 throw new Error(
                     "A biblioteca do Supabase não foi carregada."
                 );
+
             }
+
 
             supabaseClient =
                 window.supabase.createClient(
@@ -455,9 +673,11 @@
                     SUPABASE_KEY
                 );
 
+
             console.log(
                 "Supabase inicializado com sucesso."
             );
+
 
         } catch (error) {
 
@@ -474,85 +694,254 @@
         ================================================== */
 
         const telaLogin =
-            document.getElementById("telaLogin");
+            document.getElementById(
+                "telaLogin"
+            );
+
+        const telaRecuperarSenha =
+            document.getElementById(
+                "telaRecuperarSenha"
+            );
+
+        const telaNovaSenha =
+            document.getElementById(
+                "telaNovaSenha"
+            );
 
         const app =
-            document.getElementById("app");
+            document.getElementById(
+                "app"
+            );
+
 
         const emailLogin =
-            document.getElementById("emailLogin");
+            document.getElementById(
+                "emailLogin"
+            );
 
         const senhaLogin =
-            document.getElementById("senhaLogin");
+            document.getElementById(
+                "senhaLogin"
+            );
+
+        const nomeCadastro =
+            document.getElementById(
+                "nomeCadastro"
+            );
+
 
         const botaoEntrar =
-            document.getElementById("botaoEntrar");
+            document.getElementById(
+                "botaoEntrar"
+            );
 
         const botaoCriarConta =
-            document.getElementById("botaoCriarConta");
+            document.getElementById(
+                "botaoCriarConta"
+            );
+
+        const botaoEsqueciSenha =
+            document.getElementById(
+                "botaoEsqueciSenha"
+            );
+
 
         const mensagemLogin =
-            document.getElementById("mensagemLogin");
+            document.getElementById(
+                "mensagemLogin"
+            );
+
+
+        const emailRecuperacao =
+            document.getElementById(
+                "emailRecuperacao"
+            );
+
+        const botaoEnviarRecuperacao =
+            document.getElementById(
+                "botaoEnviarRecuperacao"
+            );
+
+        const botaoVoltarLogin =
+            document.getElementById(
+                "botaoVoltarLogin"
+            );
+
+        const mensagemRecuperacao =
+            document.getElementById(
+                "mensagemRecuperacao"
+            );
+
+
+        const novaSenha =
+            document.getElementById(
+                "novaSenha"
+            );
+
+        const confirmarNovaSenha =
+            document.getElementById(
+                "confirmarNovaSenha"
+            );
+
+        const botaoSalvarNovaSenha =
+            document.getElementById(
+                "botaoSalvarNovaSenha"
+            );
+
+        const mensagemNovaSenha =
+            document.getElementById(
+                "mensagemNovaSenha"
+            );
+
 
         const nomeUsuario =
-            document.getElementById("nomeUsuario");
+            document.getElementById(
+                "nomeUsuario"
+            );
 
         const avatarUsuario =
-            document.getElementById("avatarUsuario");
+            document.getElementById(
+                "avatarUsuario"
+            );
+
 
         const botaoSair =
-            document.getElementById("botaoSair");
+            document.getElementById(
+                "botaoSair"
+            );
 
         const botaoEditarNome =
-            document.getElementById("botaoEditarNome");
+            document.getElementById(
+                "botaoEditarNome"
+            );
 
         const botaoAvatar =
-            document.getElementById("botaoAvatar");
+            document.getElementById(
+                "botaoAvatar"
+            );
 
         const inputAvatar =
-            document.getElementById("inputAvatar");
+            document.getElementById(
+                "inputAvatar"
+            );
+
 
         const modalNome =
-            document.getElementById("modalNome");
+            document.getElementById(
+                "modalNome"
+            );
 
         const inputNovoNome =
-            document.getElementById("inputNovoNome");
+            document.getElementById(
+                "inputNovoNome"
+            );
 
         const botaoCancelarNome =
-            document.getElementById("botaoCancelarNome");
+            document.getElementById(
+                "botaoCancelarNome"
+            );
 
         const botaoSalvarNome =
-            document.getElementById("botaoSalvarNome");
+            document.getElementById(
+                "botaoSalvarNome"
+            );
+
 
         const nomeCanal =
-            document.getElementById("nomeCanal");
+            document.getElementById(
+                "nomeCanal"
+            );
+
+        const descricaoCanal =
+            document.getElementById(
+                "descricaoCanal"
+            );
 
         const inputMensagem =
-            document.getElementById("inputMensagem");
+            document.getElementById(
+                "inputMensagem"
+            );
 
         const formMensagem =
-            document.getElementById("formMensagem");
+            document.getElementById(
+                "formMensagem"
+            );
 
         const mensagens =
-            document.getElementById("mensagens");
+            document.getElementById(
+                "mensagens"
+            );
 
         const listaMembros =
-            document.getElementById("listaMembros");
+            document.getElementById(
+                "listaMembros"
+            );
+
+
+        /* =================================================
+           VOZ
+        ================================================== */
 
         const painelVoz =
-            document.getElementById("painelVoz");
+            document.getElementById(
+                "painelVoz"
+            );
 
         const nomeSalaVoz =
-            document.getElementById("nomeSalaVoz");
+            document.getElementById(
+                "nomeSalaVoz"
+            );
 
-        const botaoFecharVoz =
-            document.getElementById("botaoFecharVoz");
-
-        const botaoSairVoz =
-            document.getElementById("botaoSairVoz");
+        const statusVoz =
+            document.getElementById(
+                "statusVoz"
+            );
 
         const participantesVoz =
-            document.getElementById("participantesVoz");
+            document.getElementById(
+                "participantesVoz"
+            );
+
+        const audiosRemotos =
+            document.getElementById(
+                "audiosRemotos"
+            );
+
+        const telasCompartilhadas =
+            document.getElementById(
+                "telasCompartilhadas"
+            );
+
+
+        const botaoMicrofone =
+            document.getElementById(
+                "botaoMicrofone"
+            );
+
+        const botaoSom =
+            document.getElementById(
+                "botaoSom"
+            );
+
+        const botaoCompartilharTela =
+            document.getElementById(
+                "botaoCompartilharTela"
+            );
+
+        const botaoPararTela =
+            document.getElementById(
+                "botaoPararTela"
+            );
+
+        const botaoFecharVoz =
+            document.getElementById(
+                "botaoFecharVoz"
+            );
+
+        const botaoSairVoz =
+            document.getElementById(
+                "botaoSairVoz"
+            );
 
 
         /* =================================================
@@ -560,17 +949,29 @@
         ================================================== */
 
         let usuarioAtual = null;
+
         let canalAtual = "geral";
+
         let salaVozAtual = null;
 
-        let mensagensSubscription = null;
 
-        const mensagensRenderizadas =
-            new Set();
+        let streamLocal = null;
 
-        let carregandoMensagens = false;
+        let streamTela = null;
 
-        let mensagensRealtimePendentes = [];
+        let microfoneAtivo = false;
+
+        let somAtivo = true;
+
+        let compartilhandoTela = false;
+
+
+        const conexoesVoz =
+            new Map();
+
+
+        let canalSinalizacaoVoz = null;
+
 
         let aplicacaoAberta = false;
 
@@ -578,7 +979,30 @@
 
 
         /* =================================================
-           MENSAGEM DE LOGIN
+           CONFIGURAÇÃO WEBRTC
+        ================================================== */
+
+        const CONFIG_WEBRTC = {
+
+            iceServers: [
+
+                {
+                    urls:
+                        "stun:stun.l.google.com:19302"
+                },
+
+                {
+                    urls:
+                        "stun:stun1.l.google.com:19302"
+                }
+
+            ]
+
+        };
+
+
+        /* =================================================
+           MENSAGENS DE LOGIN
         ================================================== */
 
         function mostrarMensagemLogin(
@@ -586,75 +1010,137 @@
             sucesso = false
         ) {
 
-            mensagemLogin.textContent =
-                texto || "";
-
-            if (!texto) {
-
-                mensagemLogin.className =
-                    "mensagem-login";
-
+            if (!mensagemLogin) {
                 return;
             }
 
+            mensagemLogin.textContent =
+                texto;
+
             mensagemLogin.className =
                 sucesso
-                    ? "mensagem-login mensagem-sucesso"
-                    : "mensagem-login mensagem-erro";
+                    ? "mensagem-login sucesso"
+                    : "mensagem-login erro";
+
+        }
+
+
+        function mostrarMensagemRecuperacao(
+            texto,
+            sucesso = false
+        ) {
+
+            if (!mensagemRecuperacao) {
+                return;
+            }
+
+            mensagemRecuperacao.textContent =
+                texto;
+
+            mensagemRecuperacao.className =
+                sucesso
+                    ? "mensagem-login sucesso"
+                    : "mensagem-login erro";
+
+        }
+
+
+        function mostrarMensagemNovaSenha(
+            texto,
+            sucesso = false
+        ) {
+
+            if (!mensagemNovaSenha) {
+                return;
+            }
+
+            mensagemNovaSenha.textContent =
+                texto;
+
+            mensagemNovaSenha.className =
+                sucesso
+                    ? "mensagem-login sucesso"
+                    : "mensagem-login erro";
+
         }
 
 
         /* =================================================
-           MOSTRAR LOGIN
+           TELAS
         ================================================== */
+
+        function esconderTelasAuth() {
+
+            telaLogin.classList.add(
+                "oculto"
+            );
+
+            telaRecuperarSenha.classList.add(
+                "oculto"
+            );
+
+            telaNovaSenha.classList.add(
+                "oculto"
+            );
+
+        }
+
 
         function mostrarTelaLogin() {
 
-            aplicacaoAberta = false;
-
-            telaLogin.classList.remove(
-                "oculto"
-            );
-
-            telaLogin.classList.remove(
-                "escondido"
-            );
+            esconderTelasAuth();
 
             app.classList.add(
                 "oculto"
             );
 
-            app.classList.remove(
-                "visivel"
+            telaLogin.classList.remove(
+                "oculto"
             );
+
         }
 
 
-        /* =================================================
-           MOSTRAR APLICAÇÃO
-        ================================================== */
+        function mostrarTelaRecuperarSenha() {
+
+            esconderTelasAuth();
+
+            app.classList.add(
+                "oculto"
+            );
+
+            telaRecuperarSenha.classList.remove(
+                "oculto"
+            );
+
+            emailRecuperacao.focus();
+
+        }
+
+
+        function mostrarTelaNovaSenha() {
+
+            esconderTelasAuth();
+
+            app.classList.add(
+                "oculto"
+            );
+
+            telaNovaSenha.classList.remove(
+                "oculto"
+            );
+
+        }
+
 
         function mostrarTelaAplicacao() {
 
-            telaLogin.classList.add(
-                "oculto"
-            );
-
-            telaLogin.classList.add(
-                "escondido"
-            );
+            esconderTelasAuth();
 
             app.classList.remove(
                 "oculto"
             );
 
-            app.classList.remove(
-                "escondido"
-            );
-
-            app.classList.add(
-                "visivel"
-            );
         }
 
 
@@ -670,14 +1156,17 @@
             const senha =
                 senhaLogin.value;
 
+
             if (!email || !senha) {
 
                 mostrarMensagemLogin(
-                    "Digite seu e-mail e sua senha."
+                    "Preencha o e-mail e a senha."
                 );
 
                 return;
+
             }
+
 
             if (!supabaseClient) {
 
@@ -686,17 +1175,15 @@
                 );
 
                 return;
+
             }
 
+
             botaoEntrar.disabled = true;
-            botaoCriarConta.disabled = true;
 
             botaoEntrar.textContent =
                 "Entrando...";
 
-            mostrarMensagemLogin(
-                "Entrando..."
-            );
 
             try {
 
@@ -704,38 +1191,53 @@
                     data,
                     error
                 } =
-                    await supabaseClient.auth.signInWithPassword({
-                        email: email,
-                        password: senha
-                    });
+                    await supabaseClient.auth
+                        .signInWithPassword({
+                            email,
+                            password: senha
+                        });
+
 
                 if (error) {
                     throw error;
                 }
 
-                if (!data || !data.user) {
-
-                    throw new Error(
-                        "Não foi possível identificar o usuário."
-                    );
-                }
 
                 usuarioAtual =
                     data.user;
 
-                mostrarMensagemLogin(
-                    "Login realizado!",
-                    true
-                );
+
+                try {
+                    const chaveNome =
+                        `discordia_pending_username_${email.toLowerCase()}`;
+                    const nomePendente =
+                        localStorage.getItem(chaveNome);
+                    if (nomePendente) {
+                        const resultadoNome =
+                            await supabaseClient
+                                .from("profiles")
+                                .upsert({
+                                    id: data.user.id,
+                                    username: nomePendente
+                                });
+                        if (!resultadoNome.error) {
+                            localStorage.removeItem(chaveNome);
+                        }
+                    }
+                } catch (erroNome) {
+                    console.warn("Não foi possível aplicar o nome de usuário:", erroNome);
+                }
+
 
                 await abrirAplicacao(
                     usuarioAtual
                 );
 
+
             } catch (error) {
 
                 console.error(
-                    "Erro ao entrar:",
+                    "Erro no login:",
                     error
                 );
 
@@ -744,17 +1246,17 @@
                     "Não foi possível entrar."
                 );
 
+
             } finally {
 
                 botaoEntrar.disabled =
                     false;
 
-                botaoCriarConta.disabled =
-                    false;
-
                 botaoEntrar.textContent =
                     "Entrar";
+
             }
+
         }
 
 
@@ -770,14 +1272,21 @@
             const senha =
                 senhaLogin.value;
 
+            const username =
+                nomeCadastro?.value.trim() ||
+                "";
+
+
             if (!email || !senha) {
 
                 mostrarMensagemLogin(
-                    "Digite um e-mail e uma senha."
+                    "Preencha o e-mail e a senha."
                 );
 
                 return;
+
             }
+
 
             if (senha.length < 6) {
 
@@ -786,7 +1295,35 @@
                 );
 
                 return;
+
             }
+
+
+            if (!username) {
+
+                mostrarMensagemLogin(
+                    "Digite um nome de usuário para criar a conta."
+                );
+
+                nomeCadastro?.focus();
+
+                return;
+
+            }
+
+
+            if (username.length < 3) {
+
+                mostrarMensagemLogin(
+                    "O nome de usuário precisa ter pelo menos 3 caracteres."
+                );
+
+                nomeCadastro?.focus();
+
+                return;
+
+            }
+
 
             if (!supabaseClient) {
 
@@ -795,17 +1332,16 @@
                 );
 
                 return;
+
             }
 
-            botaoEntrar.disabled = true;
-            botaoCriarConta.disabled = true;
+
+            botaoCriarConta.disabled =
+                true;
 
             botaoCriarConta.textContent =
                 "Criando...";
 
-            mostrarMensagemLogin(
-                "Criando sua conta..."
-            );
 
             try {
 
@@ -813,28 +1349,36 @@
                     data,
                     error
                 } =
-                    await supabaseClient.auth.signUp({
-                        email: email,
-                        password: senha
-                    });
+                    await supabaseClient.auth
+                        .signUp({
+                            email,
+                            password: senha,
+                            options: {
+                                emailRedirectTo:
+                                    SITE_URL,
+                                data: {
+                                    username
+                                }
+                            }
+                        });
+
 
                 if (error) {
                     throw error;
                 }
 
-                if (
-                    data &&
-                    data.session &&
-                    data.user
-                ) {
+
+                if (data?.session) {
 
                     usuarioAtual =
                         data.user;
 
-                    mostrarMensagemLogin(
-                        "Conta criada!",
-                        true
-                    );
+                    await supabaseClient
+                        .from("profiles")
+                        .upsert({
+                            id: data.user.id,
+                            username
+                        });
 
                     await abrirAplicacao(
                         data.user
@@ -842,11 +1386,18 @@
 
                 } else {
 
+                    localStorage.setItem(
+                        `discordia_pending_username_${email.toLowerCase()}`,
+                        username
+                    );
+
                     mostrarMensagemLogin(
-                        "Conta criada! Verifique seu e-mail para confirmar a conta.",
+                        "Conta criada! Verifique seu e-mail para confirmar.",
                         true
                     );
+
                 }
+
 
             } catch (error) {
 
@@ -860,106 +1411,112 @@
                     "Não foi possível criar a conta."
                 );
 
-            } finally {
 
-                botaoEntrar.disabled =
-                    false;
+            } finally {
 
                 botaoCriarConta.disabled =
                     false;
 
                 botaoCriarConta.textContent =
                     "Criar conta";
+
             }
+
         }
 
 
         /* =================================================
-           ABRIR APLICAÇÃO
+           RECUPERAÇÃO
         ================================================== */
 
-        async function abrirAplicacao(
-            usuario = usuarioAtual
-        ) {
+        async function enviarRecuperacaoSenha() {
 
-            if (!usuario) {
+            const email =
+                emailRecuperacao.value.trim();
+
+
+            if (!email) {
+
+                mostrarMensagemRecuperacao(
+                    "Digite seu e-mail."
+                );
+
                 return;
+
             }
 
-            if (carregandoAplicacao) {
+
+            if (!supabaseClient) {
+
+                mostrarMensagemRecuperacao(
+                    "Supabase não foi iniciado."
+                );
+
                 return;
+
             }
 
-            if (aplicacaoAberta) {
-                return;
-            }
 
-            carregandoAplicacao = true;
+            botaoEnviarRecuperacao.disabled =
+                true;
 
-            usuarioAtual =
-                usuario;
+            botaoEnviarRecuperacao.textContent =
+                "Enviando...";
 
-            console.log(
-                "Abrindo aplicação para:",
-                usuario.email
-            );
-
-            mostrarTelaAplicacao();
 
             try {
-                await carregarPerfil();
+
+                const {
+                    error
+                } =
+                    await supabaseClient.auth
+                        .resetPasswordForEmail(
+                            email,
+                            {
+                                redirectTo:
+                                    SITE_URL
+                            }
+                        );
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                mostrarMensagemRecuperacao(
+                    "Link enviado! Verifique seu e-mail.",
+                    true
+                );
+
+
             } catch (error) {
+
                 console.error(
-                    "Erro no carregamento do perfil:",
+                    "Erro na recuperação:",
                     error
                 );
-            }
 
-            try {
-                configurarRealtime();
-            } catch (error) {
-                console.error(
-                    "Erro ao iniciar realtime:",
-                    error
+                mostrarMensagemRecuperacao(
+                    error?.message ||
+                    "Não foi possível enviar o link."
                 );
+
+
+            } finally {
+
+                botaoEnviarRecuperacao.disabled =
+                    false;
+
+                botaoEnviarRecuperacao.textContent =
+                    "Enviar link";
+
             }
 
-            try {
-                await carregarMensagens();
-            } catch (error) {
-                console.error(
-                    "Erro no carregamento das mensagens:",
-                    error
-                );
-            }
-
-            try {
-                await carregarMembros();
-            } catch (error) {
-                console.error(
-                    "Erro no carregamento dos membros:",
-                    error
-                );
-            }
-
-            aplicacaoAberta = true;
-            carregandoAplicacao = false;
-
-            setTimeout(
-                () => {
-                    try {
-                        inputMensagem.focus();
-                    } catch (e) {}
-                },
-                100
-            );
         }
 
 
         /* =================================================
-           DAQUI CONTINUA A PARTE 2
-        ================================================== */
-               /* =================================================
            PERFIL
         ================================================== */
 
@@ -969,18 +1526,22 @@
                 return;
             }
 
+
             const nomePadrao =
                 usuarioAtual.email?.split("@")[0] ||
                 "Usuário";
+
 
             atualizarNomeNaTela(
                 nomePadrao
             );
 
+
             avatarUsuario.textContent =
                 nomePadrao
                     .charAt(0)
                     .toUpperCase();
+
 
             try {
 
@@ -999,45 +1560,37 @@
                         )
                         .maybeSingle();
 
+
                 if (error) {
                     throw error;
                 }
 
-                const nome =
-                    data?.username ||
-                    nomePadrao;
 
-                atualizarNomeNaTela(
-                    nome
-                );
+                if (data?.username) {
+
+                    atualizarNomeNaTela(
+                        data.username
+                    );
+
+                }
+
 
                 if (data?.avatar_url) {
 
-                    avatarUsuario.innerHTML =
-                        "";
+                    avatarUsuario.style.backgroundImage =
+                        `url("${data.avatar_url}")`;
 
-                    const imagem =
-                        document.createElement(
-                            "img"
-                        );
+                    avatarUsuario.style.backgroundSize =
+                        "cover";
 
-                    imagem.src =
-                        data.avatar_url;
-
-                    imagem.alt =
-                        "Avatar";
-
-                    avatarUsuario.appendChild(
-                        imagem
-                    );
-
-                } else {
+                    avatarUsuario.style.backgroundPosition =
+                        "center";
 
                     avatarUsuario.textContent =
-                        nome
-                            .charAt(0)
-                            .toUpperCase();
+                        "";
+
                 }
+
 
             } catch (error) {
 
@@ -1046,1329 +1599,231 @@
                     error
                 );
 
-                atualizarNomeNaTela(
-                    nomePadrao
-                );
-
-                avatarUsuario.textContent =
-                    nomePadrao
-                        .charAt(0)
-                        .toUpperCase();
             }
+
         }
 
-
-        /* =================================================
-           ATUALIZAR NOME
-        ================================================== */
 
         function atualizarNomeNaTela(
             nome
         ) {
 
+            if (!nomeUsuario) {
+                return;
+            }
+
             nomeUsuario.textContent =
                 nome || "Usuário";
+
         }
 
 
         /* =================================================
-           EDITAR NOME
+           NOVA SENHA
         ================================================== */
 
-        botaoEditarNome.addEventListener(
-            "click",
-            () => {
+        async function salvarNovaSenha() {
 
-                inputNovoNome.value =
-                    nomeUsuario.textContent;
+            const senha =
+                novaSenha.value;
 
-                modalNome.classList.add(
-                    "aberto"
-                );
-
-                inputNovoNome.focus();
-            }
-        );
+            const confirmacao =
+                confirmarNovaSenha.value;
 
 
-        botaoCancelarNome.addEventListener(
-            "click",
-            () => {
+            if (!senha || !confirmacao) {
 
-                modalNome.classList.remove(
-                    "aberto"
-                );
-            }
-        );
-
-
-        botaoSalvarNome.addEventListener(
-            "click",
-            salvarNome
-        );
-
-
-        async function salvarNome() {
-
-            const novoNome =
-                inputNovoNome.value.trim();
-
-            if (!novoNome) {
-
-                alert(
-                    "Digite um nome."
+                mostrarMensagemNovaSenha(
+                    "Preencha os dois campos."
                 );
 
                 return;
+
             }
 
-            if (!usuarioAtual) {
+
+            if (senha.length < 6) {
+
+                mostrarMensagemNovaSenha(
+                    "A senha precisa ter pelo menos 6 caracteres."
+                );
+
                 return;
+
             }
 
-            botaoSalvarNome.disabled =
+
+            if (senha !== confirmacao) {
+
+                mostrarMensagemNovaSenha(
+                    "As senhas não são iguais."
+                );
+
+                return;
+
+            }
+
+
+            botaoSalvarNovaSenha.disabled =
                 true;
+
+            botaoSalvarNovaSenha.textContent =
+                "Salvando...";
+
 
             try {
 
                 const {
                     error
                 } =
-                    await supabaseClient
-                        .from("profiles")
-                        .update({
-                            username: novoNome
-                        })
-                        .eq(
-                            "id",
-                            usuarioAtual.id
-                        );
+                    await supabaseClient.auth
+                        .updateUser({
+                            password: senha
+                        });
+
 
                 if (error) {
                     throw error;
                 }
 
-                atualizarNomeNaTela(
-                    novoNome
+
+                mostrarMensagemNovaSenha(
+                    "Senha alterada com sucesso!",
+                    true
                 );
 
-                modalNome.classList.remove(
-                    "aberto"
+
+                setTimeout(
+                    async () => {
+
+                        await supabaseClient.auth
+                            .signOut();
+
+                        mostrarTelaLogin();
+
+                        mostrarMensagemLogin(
+                            "Senha alterada! Entre com sua nova senha.",
+                            true
+                        );
+
+                    },
+                    1500
                 );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao alterar senha:",
+                    error
+                );
+
+                mostrarMensagemNovaSenha(
+                    error?.message ||
+                    "Não foi possível alterar a senha."
+                );
+
+
+            } finally {
+
+                botaoSalvarNovaSenha.disabled =
+                    false;
+
+                botaoSalvarNovaSenha.textContent =
+                    "Salvar nova senha";
+
+            }
+
+        }
+
+
+        /* =================================================
+           APLICAÇÃO
+        ================================================== */
+
+        async function abrirAplicacao(
+            usuario
+        ) {
+
+            if (!usuario) {
+                return;
+            }
+
+
+            if (carregandoAplicacao) {
+                return;
+            }
+
+
+            carregandoAplicacao =
+                true;
+
+
+            usuarioAtual =
+                usuario;
+
+
+            try {
+
+                mostrarTelaAplicacao();
+
+                await carregarPerfil();
 
                 await carregarMembros();
 
-            } catch (error) {
+                await carregarMensagens();
 
-                console.error(
-                    "Erro ao salvar nome:",
-                    error
-                );
+                configurarRealtimeMensagens();
 
-                alert(
-                    error?.message ||
-                    "Não foi possível salvar o nome."
-                );
-
-            } finally {
-
-                botaoSalvarNome.disabled =
-                    false;
-            }
-        }
-
-
-        /* =================================================
-           AVATAR
-        ================================================== */
-
-        botaoAvatar.addEventListener(
-            "click",
-            () => {
-
-                inputAvatar.click();
-            }
-        );
-
-
-        inputAvatar.addEventListener(
-            "change",
-            async () => {
-
-                const arquivo =
-                    inputAvatar.files?.[0];
-
-                if (!arquivo) {
-                    return;
-                }
-
-                if (!usuarioAtual) {
-                    return;
-                }
-
-                try {
-
-                    const extensao =
-                        arquivo.name
-                            .split(".")
-                            .pop()
-                            .toLowerCase();
-
-                    const caminho =
-                        `${usuarioAtual.id}.${extensao}`;
-
-                    const {
-                        error: uploadError
-                    } =
-                        await supabaseClient
-                            .storage
-                            .from("avatars")
-                            .upload(
-                                caminho,
-                                arquivo,
-                                {
-                                    upsert: true
-                                }
-                            );
-
-                    if (uploadError) {
-                        throw uploadError;
-                    }
-
-                    const {
-                        data
-                    } =
-                        supabaseClient
-                            .storage
-                            .from("avatars")
-                            .getPublicUrl(
-                                caminho
-                            );
-
-                    const avatarUrl =
-                        data.publicUrl;
-
-                    const {
-                        error: updateError
-                    } =
-                        await supabaseClient
-                            .from("profiles")
-                            .update({
-                                avatar_url:
-                                    avatarUrl
-                            })
-                            .eq(
-                                "id",
-                                usuarioAtual.id
-                            );
-
-                    if (updateError) {
-                        throw updateError;
-                    }
-
-                    avatarUsuario.innerHTML =
-                        "";
-
-                    const imagem =
-                        document.createElement(
-                            "img"
-                        );
-
-                    imagem.src =
-                        avatarUrl +
-                        "?t=" +
-                        Date.now();
-
-                    imagem.alt =
-                        "Avatar";
-
-                    avatarUsuario.appendChild(
-                        imagem
-                    );
-
-                    await carregarMembros();
-
-                } catch (error) {
-
-                    console.error(
-                        "Erro no avatar:",
-                        error
-                    );
-
-                    alert(
-                        "Não foi possível alterar o avatar:\n\n" +
-                        error.message
-                    );
-
-                } finally {
-
-                    inputAvatar.value =
-                        "";
-                }
-            }
-        );
-
-
-        /* =================================================
-           CANAIS
-        ================================================== */
-
-        document
-            .querySelectorAll(".canal")
-            .forEach(
-                botao => {
-
-                    botao.addEventListener(
-                        "click",
-                        async () => {
-
-                            document
-                                .querySelectorAll(
-                                    ".canal"
-                                )
-                                .forEach(
-                                    item => {
-
-                                        item.classList.remove(
-                                            "ativo"
-                                        );
-                                    }
-                                );
-
-                            botao.classList.add(
-                                "ativo"
-                            );
-
-                            canalAtual =
-                                botao.dataset.channel;
-
-                            nomeCanal.textContent =
-                                "# " +
-                                canalAtual;
-
-                            inputMensagem.placeholder =
-                                "Enviar mensagem em #" +
-                                canalAtual;
-
-                            try {
-
-                                await carregarMensagens();
-
-                            } catch (error) {
-
-                                console.error(
-                                    "Erro ao mudar canal:",
-                                    error
-                                );
-                            }
-                        }
-                    );
-                }
-            );
-
-
-        /* =================================================
-           CARREGAR MENSAGENS
-        ================================================== */
-
-        async function carregarMensagens() {
-
-            if (!supabaseClient) {
-                return;
-            }
-
-            const canalCarregado =
-                canalAtual;
-
-            carregandoMensagens =
-                true;
-
-            mensagensRealtimePendentes =
-                [];
-
-            mensagens.innerHTML =
-                `<div class="mensagem-sucesso">Carregando mensagens...</div>`;
-
-            try {
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .from("messages")
-                        .select("*")
-                        .eq(
-                            "channel",
-                            canalCarregado
-                        )
-                        .order(
-                            "created_at",
-                            {
-                                ascending: true
-                            }
-                        );
-
-                if (error) {
-                    throw error;
-                }
-
-                if (
-                    canalAtual !==
-                    canalCarregado
-                ) {
-                    return;
-                }
-
-                mensagens.innerHTML =
-                    "";
-
-                mensagensRenderizadas.clear();
-
-                if (
-                    !data ||
-                    data.length === 0
-                ) {
-
-                    mensagens.innerHTML =
-                        `<div class="mensagem-sucesso">Nenhuma mensagem ainda neste canal.</div>`;
-
-                } else {
-
-                    data.forEach(
-                        mensagem => {
-
-                            adicionarMensagemNaTela(
-                                mensagem
-                            );
-                        }
-                    );
-                }
-
-                const pendentes =
-                    mensagensRealtimePendentes.filter(
-                        mensagem =>
-                            mensagem &&
-                            mensagem.channel ===
-                            canalCarregado
-                    );
-
-                pendentes.forEach(
-                    mensagem => {
-
-                        adicionarMensagemNaTela(
-                            mensagem
-                        );
-                    }
-                );
-
-                mensagensRealtimePendentes =
-                    [];
-
-                mensagens.scrollTop =
-                    mensagens.scrollHeight;
-
-            } catch (error) {
-
-                console.error(
-                    "Erro ao carregar mensagens:",
-                    error
-                );
-
-                if (
-                    canalAtual ===
-                    canalCarregado
-                ) {
-
-                    mensagens.innerHTML =
-                        `<div class="mensagem-erro">Não foi possível carregar as mensagens.<br><br>${escapeHtml(error.message)}</div>`;
-                }
-
-            } finally {
-
-                if (
-                    canalAtual ===
-                    canalCarregado
-                ) {
-
-                    carregandoMensagens =
-                        false;
-                }
-            }
-        }
-
-
-        /* =================================================
-           ADICIONAR MENSAGEM
-        ================================================== */
-
-        function adicionarMensagemNaTela(
-            mensagem
-        ) {
-
-            if (!mensagem) {
-                return;
-            }
-
-            if (
-                mensagem.channel !==
-                canalAtual
-            ) {
-                return;
-            }
-
-            const idMensagem =
-                mensagem.id !== undefined &&
-                mensagem.id !== null
-                    ? String(mensagem.id)
-                    : null;
-
-            if (
-                idMensagem &&
-                mensagensRenderizadas.has(
-                    idMensagem
-                )
-            ) {
-                return;
-            }
-
-            if (idMensagem) {
-
-                mensagensRenderizadas.add(
-                    idMensagem
-                );
-            }
-
-            const elemento =
-                document.createElement(
-                    "div"
-                );
-
-            elemento.className =
-                "mensagem";
-
-            const avatar =
-                document.createElement(
-                    "div"
-                );
-
-            avatar.className =
-                "avatar-mensagem";
-
-            const primeiraLetra =
-                (
-                    mensagem.username ||
-                    "U"
-                )
-                    .charAt(0)
-                    .toUpperCase();
-
-            avatar.textContent =
-                primeiraLetra;
-
-            const conteudo =
-                document.createElement(
-                    "div"
-                );
-
-            conteudo.className =
-                "conteudo-mensagem";
-
-            const cabecalho =
-                document.createElement(
-                    "div"
-                );
-
-            cabecalho.className =
-                "cabecalho-mensagem";
-
-            const autor =
-                document.createElement(
-                    "span"
-                );
-
-            autor.className =
-                "autor-mensagem";
-
-            autor.textContent =
-                mensagem.username ||
-                "Usuário";
-
-            const hora =
-                document.createElement(
-                    "span"
-                );
-
-            hora.className =
-                "hora-mensagem";
-
-            if (mensagem.created_at) {
-
-                hora.textContent =
-                    new Date(
-                        mensagem.created_at
-                    ).toLocaleTimeString(
-                        "pt-BR",
-                        {
-                            hour: "2-digit",
-                            minute: "2-digit"
-                        }
-                    );
-            }
-
-            cabecalho.appendChild(
-                autor
-            );
-
-            cabecalho.appendChild(
-                hora
-            );
-
-            const texto =
-                document.createElement(
-                    "div"
-                );
-
-            texto.className =
-                "texto-mensagem";
-
-            texto.textContent =
-                mensagem.content ||
-                "";
-
-            conteudo.appendChild(
-                cabecalho
-            );
-
-            conteudo.appendChild(
-                texto
-            );
-
-            elemento.appendChild(
-                avatar
-            );
-
-            elemento.appendChild(
-                conteudo
-            );
-
-            mensagens.appendChild(
-                elemento
-            );
-        }
-
-
-        /* =================================================
-           ESCAPE HTML
-        ================================================== */
-
-        function escapeHtml(
-            texto
-        ) {
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-            div.textContent =
-                texto || "";
-
-            return div.innerHTML;
-        }
-
-
-        /* =================================================
-           ENVIAR MENSAGEM
-        ================================================== */
-
-        formMensagem.addEventListener(
-            "submit",
-            async event => {
-
-                event.preventDefault();
-
-                const texto =
-                    inputMensagem.value.trim();
-
-                if (!texto) {
-                    return;
-                }
-
-                if (!usuarioAtual) {
-
-                    alert(
-                        "Você não está conectado."
-                    );
-
-                    return;
-                }
-
-                inputMensagem.disabled =
+                aplicacaoAberta =
                     true;
 
-                try {
 
-                    const nome =
-                        nomeUsuario.textContent ||
-                        "Usuário";
-
-                    const {
-                        error
-                    } =
-                        await supabaseClient
-                            .from("messages")
-                            .insert({
-                                user_id:
-                                    usuarioAtual.id,
-
-                                channel:
-                                    canalAtual,
-
-                                username:
-                                    nome,
-
-                                content:
-                                    texto
-                            });
-
-                    if (error) {
-                        throw error;
-                    }
-
-                    inputMensagem.value =
-                        "";
-
-                } catch (error) {
-
-                    console.error(
-                        "Erro ao enviar mensagem:",
-                        error
-                    );
-
-                    alert(
-                        "Erro ao enviar mensagem:\n\n" +
-                        error.message
-                    );
-
-                } finally {
-
-                    inputMensagem.disabled =
-                        false;
-
-                    inputMensagem.focus();
-                }
-            }
-        );
-
-
-        /* =================================================
-           MEMBROS
-        ================================================== */
-
-        async function carregarMembros() {
-
-            if (!supabaseClient) {
-                return;
-            }
-
-            listaMembros.innerHTML =
-                `<div class="membro-nome">
-                    Carregando...
-                </div>`;
-
-            const {
-                data,
-                error
-            } =
-                await supabaseClient
-                    .from("profiles")
-                    .select(
-                        "id, username, avatar_url"
-                    )
-                    .order(
-                        "username",
-                        {
-                            ascending: true
-                        }
-                    );
-
-            if (error) {
+            } catch (error) {
 
                 console.error(
-                    "Erro ao carregar membros:",
+                    "Erro ao abrir aplicação:",
                     error
                 );
 
-                listaMembros.innerHTML =
-                    `<div class="membro-nome">
-                        Não foi possível carregar os membros.
-                    </div>`;
 
-                return;
+            } finally {
+
+                carregandoAplicacao =
+                    false;
+
             }
 
-            listaMembros.innerHTML =
-                "";
-
-            if (!data) {
-                return;
-            }
-
-            data.forEach(
-                membro => {
-
-                    adicionarMembroNaTela(
-                        membro
-                    );
-                }
-            );
         }
 
-
-        function adicionarMembroNaTela(
-            membro
-        ) {
-
-            const elemento =
-                document.createElement(
-                    "div"
-                );
-
-            elemento.className =
-                "membro";
-
-            const avatar =
-                document.createElement(
-                    "div"
-                );
-
-            avatar.className =
-                "avatar-membro";
-
-            if (membro.avatar_url) {
-
-                const imagem =
-                    document.createElement(
-                        "img"
-                    );
-
-                imagem.src =
-                    membro.avatar_url;
-
-                imagem.alt =
-                    "Avatar";
-
-                avatar.appendChild(
-                    imagem
-                );
-
-            } else {
-
-                avatar.textContent =
-                    (
-                        membro.username ||
-                        "U"
-                    )
-                        .charAt(0)
-                        .toUpperCase();
-            }
-
-            const status =
-                document.createElement(
-                    "span"
-                );
-
-            status.className =
-                "avatar-membro-status";
-
-            avatar.appendChild(
-                status
-            );
-
-            const nome =
-                document.createElement(
-                    "div"
-                );
-
-            nome.className =
-                "membro-nome";
-
-            nome.textContent =
-                membro.username ||
-                "Usuário";
-
-            elemento.appendChild(
-                avatar
-            );
-
-            elemento.appendChild(
-                nome
-            );
-
-            listaMembros.appendChild(
-                elemento
-            );
-        }
-
-
-        /* =================================================
-           REALTIME
-        ================================================== */
-
-        function configurarRealtime() {
-
-            if (!supabaseClient) {
-                return;
-            }
-
-            if (mensagensSubscription) {
-
-                supabaseClient.removeChannel(
-                    mensagensSubscription
-                );
-
-                mensagensSubscription =
-                    null;
-            }
-
-            mensagensSubscription =
-                supabaseClient
-                    .channel(
-                        "discordia-messages-realtime"
-                    )
-                    .on(
-                        "postgres_changes",
-                        {
-                            event: "INSERT",
-                            schema: "public",
-                            table: "messages"
-                        },
-                        payload => {
-
-                            console.log(
-                                "Realtime INSERT:",
-                                payload
-                            );
-
-                            const mensagem =
-                                payload?.new;
-
-                            if (
-                                !mensagem ||
-                                mensagem.channel !==
-                                canalAtual
-                            ) {
-                                return;
-                            }
-
-                            if (
-                                carregandoMensagens
-                            ) {
-
-                                mensagensRealtimePendentes.push(
-                                    mensagem
-                                );
-
-                                return;
-                            }
-
-                            adicionarMensagemNaTela(
-                                mensagem
-                            );
-
-                            mensagens.scrollTop =
-                                mensagens.scrollHeight;
-                        }
-                    )
-                    .subscribe(
-                        status => {
-
-                            console.log(
-                                "Realtime messages:",
-                                status
-                            );
-
-                            if (
-                                status ===
-                                "SUBSCRIBED"
-                            ) {
-
-                                console.log(
-                                    "Realtime conectado com sucesso."
-                                );
-                            }
-
-                            if (
-                                status ===
-                                "CHANNEL_ERROR"
-                            ) {
-
-                                console.error(
-                                    "Erro no canal Realtime."
-                                );
-                            }
-
-                            if (
-                                status ===
-                                "TIMED_OUT"
-                            ) {
-
-                                console.error(
-                                    "Realtime demorou demais para conectar."
-                                );
-                            }
-                        }
-                    );
-        }
-
-
-        /* =================================================
-           VOZ
-        ================================================== */
-
-        document
-            .querySelectorAll(".canal-voz")
-            .forEach(
-                botao => {
-
-                    botao.addEventListener(
-                        "click",
-                        () => {
-
-                            entrarSalaVoz(
-                                botao.dataset.voice
-                            );
-                        }
-                    );
-                }
-            );
-
-
-        function entrarSalaVoz(
-            sala
-        ) {
-
-            salaVozAtual =
-                sala;
-
-            nomeSalaVoz.textContent =
-                sala;
-
-            painelVoz.classList.add(
-                "visivel"
-            );
-
-            const nome =
-                nomeUsuario.textContent ||
-                "Usuário";
-
-            participantesVoz.innerHTML =
-                "";
-
-            const participante =
-                document.createElement(
-                    "div"
-                );
-
-            participante.className =
-                "participante-voz";
-
-            const avatar =
-                document.createElement(
-                    "div"
-                );
-
-            avatar.className =
-                "avatar-voz";
-
-            avatar.textContent =
-                nome
-                    .charAt(0)
-                    .toUpperCase();
-
-            const nomeElemento =
-                document.createElement(
-                    "span"
-                );
-
-            nomeElemento.textContent =
-                nome;
-
-            const status =
-                document.createElement(
-                    "small"
-                );
-
-            status.textContent =
-                "🎤 conectado";
-
-            participante.appendChild(
-                avatar
-            );
-
-            participante.appendChild(
-                nomeElemento
-            );
-
-            participante.appendChild(
-                status
-            );
-
-            participantesVoz.appendChild(
-                participante
-            );
-
-            document
-                .querySelectorAll(
-                    ".canal-voz"
-                )
-                .forEach(
-                    item => {
-
-                        item.classList.remove(
-                            "conectado"
-                        );
-                    }
-                );
-
-            document
-                .querySelectorAll(
-                    ".canal-voz"
-                )
-                .forEach(
-                    item => {
-
-                        if (
-                            item.dataset.voice ===
-                            sala
-                        ) {
-
-                            item.classList.add(
-                                "conectado"
-                            );
-                        }
-                    }
-                );
-        }
-
-
-        function sairSalaVoz() {
-
-            salaVozAtual =
-                null;
-
-            painelVoz.classList.remove(
-                "visivel"
-            );
-
-            participantesVoz.innerHTML =
-                "";
-
-            document
-                .querySelectorAll(
-                    ".canal-voz"
-                )
-                .forEach(
-                    item => {
-
-                        item.classList.remove(
-                            "conectado"
-                        );
-                    }
-                );
-        }
-
-
-        botaoFecharVoz.addEventListener(
-            "click",
-            sairSalaVoz
-        );
-
-
-        botaoSairVoz.addEventListener(
-            "click",
-            sairSalaVoz
-        );
-
-
-        /* =================================================
-           SAIR
-        ================================================== */
-
-        botaoSair.addEventListener(
-            "click",
-            async () => {
-
-                if (
-                    !confirm(
-                        "Deseja sair da sua conta?"
-                    )
-                ) {
-                    return;
-                }
-
-                try {
-
-                    sairSalaVoz();
-
-                    if (
-                        mensagensSubscription
-                    ) {
-
-                        await supabaseClient
-                            .removeChannel(
-                                mensagensSubscription
-                            );
-
-                        mensagensSubscription =
-                            null;
-
-                        mensagensRenderizadas.clear();
-
-                        mensagensRealtimePendentes =
-                            [];
-                    }
-
-                    await supabaseClient
-                        .auth
-                        .signOut();
-
-                } catch (error) {
-
-                    console.error(
-                        "Erro ao sair:",
-                        error
-                    );
-
-                } finally {
-
-                    usuarioAtual =
-                        null;
-
-                    aplicacaoAberta =
-                        false;
-
-                    carregandoAplicacao =
-                        false;
-
-                    emailLogin.value =
-                        "";
-
-                    senhaLogin.value =
-                        "";
-
-                    mostrarTelaLogin();
-
-                    mostrarMensagemLogin(
-                        ""
-                    );
-                }
-            }
-        );
-
-
-        /* =================================================
-           AUTH STATE CHANGE
-        ================================================== */
-
-        if (supabaseClient) {
-
-            supabaseClient.auth.onAuthStateChange(
-                (
-                    event,
-                    session
-                ) => {
-
-                    console.log(
-                        "AUTH EVENT:",
-                        event
-                    );
-
-                    if (
-                        event ===
-                        "SIGNED_IN" &&
-                        session?.user
-                    ) {
-
-                        usuarioAtual =
-                            session.user;
-
-                        setTimeout(
-                            () => {
-
-                                abrirAplicacao(
-                                    session.user
-                                );
-
-                            },
-                            0
-                        );
-                    }
-
-                    if (
-                        event ===
-                        "SIGNED_OUT"
-                    ) {
-
-                        usuarioAtual =
-                            null;
-
-                        aplicacaoAberta =
-                            false;
-
-                        carregandoAplicacao =
-                            false;
-
-                        mostrarTelaLogin();
-                    }
-                }
-            );
-        }
-
-
-        /* =================================================
-           VERIFICAR SESSÃO
-        ================================================== */
 
         async function verificarSessao() {
 
             if (!supabaseClient) {
 
-                mostrarMensagemLogin(
-                    "Não foi possível iniciar o Supabase."
-                );
+                mostrarTelaLogin();
 
                 return;
+
             }
 
-            try {
 
-                console.log(
-                    "Verificando sessão..."
-                );
+            try {
 
                 const {
                     data,
                     error
                 } =
-                    await supabaseClient
-                        .auth
+                    await supabaseClient.auth
                         .getSession();
+
 
                 if (error) {
                     throw error;
                 }
 
-                if (
-                    data &&
-                    data.session &&
-                    data.session.user
-                ) {
 
-                    console.log(
-                        "Sessão encontrada."
-                    );
+                if (data?.session?.user) {
 
                     usuarioAtual =
                         data.session.user;
@@ -2379,12 +1834,10 @@
 
                 } else {
 
-                    console.log(
-                        "Nenhuma sessão encontrada."
-                    );
-
                     mostrarTelaLogin();
+
                 }
+
 
             } catch (error) {
 
@@ -2393,34 +1846,2481 @@
                     error
                 );
 
-                mostrarMensagemLogin(
-                    "Erro ao verificar sua sessão."
+                mostrarTelaLogin();
+
+            }
+
+        }
+                /* =================================================
+           MEMBROS
+        ================================================== */
+
+        async function carregarMembros() {
+
+            if (!listaMembros) {
+                return;
+            }
+
+
+            listaMembros.innerHTML =
+                "";
+
+
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .from("profiles")
+                        .select(
+                            "id, username, avatar_url"
+                        )
+                        .order(
+                            "username",
+                            {
+                                ascending: true
+                            }
+                        );
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                if (!data || data.length === 0) {
+
+                    listaMembros.innerHTML =
+                        "<div>Nenhum membro encontrado.</div>";
+
+                    return;
+
+                }
+
+
+                data.forEach(
+                    (membro) => {
+
+                        const item =
+                            document.createElement(
+                                "div"
+                            );
+
+                        item.className =
+                            "membro";
+
+
+                        const avatar =
+                            document.createElement(
+                                "div"
+                            );
+
+                        avatar.className =
+                            "avatar-membro";
+
+
+                        if (membro.avatar_url) {
+
+                            avatar.style.backgroundImage =
+                                `url("${membro.avatar_url}")`;
+
+                            avatar.style.backgroundSize =
+                                "cover";
+
+                            avatar.style.backgroundPosition =
+                                "center";
+
+                        } else {
+
+                            avatar.textContent =
+                                (
+                                    membro.username ||
+                                    "U"
+                                )
+                                    .charAt(0)
+                                    .toUpperCase();
+
+                        }
+
+
+                        const nome =
+                            document.createElement(
+                                "span"
+                            );
+
+                        nome.textContent =
+                            membro.username ||
+                            "Usuário";
+
+
+                        item.appendChild(
+                            avatar
+                        );
+
+                        item.appendChild(
+                            nome
+                        );
+
+
+                        listaMembros.appendChild(
+                            item
+                        );
+
+                    }
                 );
 
-                mostrarTelaLogin();
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao carregar membros:",
+                    error
+                );
+
+                listaMembros.innerHTML =
+                    "<div>Não foi possível carregar os membros.</div>";
+
             }
+
         }
 
 
         /* =================================================
-           EVENTOS LOGIN
+           MENSAGENS
         ================================================== */
 
-        botaoEntrar.addEventListener(
+        async function carregarMensagens() {
+
+            if (!mensagens) {
+                return;
+            }
+
+
+            mensagens.innerHTML =
+                "";
+
+
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .from("messages")
+                        .select(
+                            "*"
+                        )
+                        .eq(
+                            "channel",
+                            canalAtual
+                        )
+                        .order(
+                            "created_at",
+                            {
+                                ascending: true
+                            }
+                        )
+                        .limit(200);
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                (data || []).forEach(
+                    adicionarMensagemNaTela
+                );
+
+
+                mensagens.scrollTop =
+                    mensagens.scrollHeight;
+
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao carregar mensagens:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        const cacheAvataresMensagens = new Map();
+
+
+        async function obterAvatarMensagem(userId) {
+
+            if (!userId) {
+                return null;
+            }
+
+
+            if (cacheAvataresMensagens.has(userId)) {
+                return cacheAvataresMensagens.get(userId);
+            }
+
+
+            if (usuarioAtual?.id === userId) {
+
+                const imagemAtual =
+                    avatarUsuario?.style?.backgroundImage ||
+                    null;
+
+                if (imagemAtual) {
+                    cacheAvataresMensagens.set(
+                        userId,
+                        imagemAtual
+                    );
+                    return imagemAtual;
+                }
+
+            }
+
+
+            try {
+
+                const { data, error } =
+                    await supabaseClient
+                        .from("profiles")
+                        .select("avatar_url")
+                        .eq("id", userId)
+                        .maybeSingle();
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                const url =
+                    data?.avatar_url ||
+                    null;
+
+
+                cacheAvataresMensagens.set(
+                    userId,
+                    url
+                );
+
+
+                return url;
+
+            } catch (error) {
+
+                console.warn(
+                    "Não foi possível carregar o avatar da mensagem:",
+                    error
+                );
+
+                cacheAvataresMensagens.set(
+                    userId,
+                    null
+                );
+
+                return null;
+
+            }
+
+        }
+
+
+        function adicionarMensagemNaTela(
+            mensagem
+        ) {
+
+            if (!mensagens) {
+                return;
+            }
+
+
+            const bloco =
+                document.createElement(
+                    "div"
+                );
+
+            bloco.className =
+                "mensagem";
+
+
+            const avatar =
+                document.createElement(
+                    "div"
+                );
+
+            avatar.className =
+                "avatar-mensagem";
+
+            avatar.textContent =
+                (
+                    mensagem.username ||
+                    "U"
+                )
+                    .charAt(0)
+                    .toUpperCase();
+
+
+            const conteudo =
+                document.createElement(
+                    "div"
+                );
+
+            conteudo.className =
+                "conteudo-mensagem";
+
+
+            const cabecalho =
+                document.createElement(
+                    "div"
+                );
+
+            cabecalho.className =
+                "cabecalho-mensagem";
+
+
+            const nome =
+                document.createElement(
+                    "strong"
+                );
+
+            nome.textContent =
+                mensagem.username ||
+                "Usuário";
+
+
+            cabecalho.appendChild(
+                nome
+            );
+
+
+            const texto =
+                document.createElement(
+                    "p"
+                );
+
+            texto.textContent =
+                mensagem.content ||
+                "";
+
+
+            conteudo.appendChild(
+                cabecalho
+            );
+
+            conteudo.appendChild(
+                texto
+            );
+
+
+            bloco.appendChild(
+                avatar
+            );
+
+            bloco.appendChild(
+                conteudo
+            );
+
+            mensagens.appendChild(
+                bloco
+            );
+
+
+            obterAvatarMensagem(
+                mensagem.user_id
+            ).then(
+                (avatarUrl) => {
+
+                    if (!avatarUrl) {
+                        return;
+                    }
+
+                    avatar.style.backgroundImage =
+                        avatarUrl;
+
+                    avatar.style.backgroundSize =
+                        "cover";
+
+                    avatar.style.backgroundPosition =
+                        "center";
+
+                    avatar.textContent =
+                        "";
+
+                }
+            );
+
+
+            mensagens.scrollTop =
+                mensagens.scrollHeight;
+
+        }
+
+
+
+        async function enviarMensagem(
+            texto
+        ) {
+
+            if (!usuarioAtual) {
+                return;
+            }
+
+
+            const conteudo =
+                texto.trim();
+
+
+            if (!conteudo) {
+                return;
+            }
+
+
+            const nome =
+                nomeUsuario?.textContent ||
+                usuarioAtual.email
+                    ?.split("@")[0] ||
+                "Usuário";
+
+
+            try {
+
+                const {
+                    error
+                } =
+                    await supabaseClient
+                        .from("messages")
+                        .insert({
+
+                            user_id:
+                                usuarioAtual.id,
+
+                            username:
+                                nome,
+
+                            content:
+                                conteudo,
+
+                            channel:
+                                canalAtual
+
+                        });
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                inputMensagem.value =
+                    "";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao enviar mensagem:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =================================================
+           REALTIME DO CHAT
+        ================================================== */
+
+        let canalMensagens =
+            null;
+
+
+        function configurarRealtimeMensagens() {
+
+            if (!supabaseClient) {
+                return;
+            }
+
+
+            if (canalMensagens) {
+
+                try {
+
+                    supabaseClient.removeChannel(
+                        canalMensagens
+                    );
+
+                } catch (error) {
+
+                    console.warn(error);
+
+                }
+
+            }
+
+
+            canalMensagens =
+                supabaseClient
+                    .channel(
+                        "mensagens-discordia"
+                    )
+                    .on(
+                        "postgres_changes",
+                        {
+                            event: "INSERT",
+                            schema: "public",
+                            table: "messages"
+                        },
+                        (payload) => {
+
+                            const mensagem =
+                                payload.new;
+
+
+                            if (
+                                mensagem.channel ===
+                                canalAtual
+                            ) {
+
+                                adicionarMensagemNaTela(
+                                    mensagem
+                                );
+
+                            }
+
+                        }
+                    )
+                    .subscribe();
+
+        }
+
+
+        /* =================================================
+           TROCAR CANAL
+        ================================================== */
+
+        async function trocarCanal(
+            canal
+        ) {
+
+            canalAtual =
+                canal;
+
+
+            const nomes = {
+
+                geral:
+                    "Bem-vindo ao Discordia",
+
+                jogos:
+                    "Converse sobre seus jogos favoritos",
+
+                resenha:
+                    "Área livre para conversar"
+
+            };
+
+
+            if (nomeCanal) {
+
+                nomeCanal.textContent =
+                    `# ${canal}`;
+
+            }
+
+
+            if (descricaoCanal) {
+
+                descricaoCanal.textContent =
+                    nomes[canal] ||
+                    "";
+
+            }
+
+
+            if (inputMensagem) {
+
+                inputMensagem.placeholder =
+                    `Enviar mensagem em #${canal}`;
+
+            }
+
+
+            document
+                .querySelectorAll(
+                    ".canal"
+                )
+                .forEach(
+                    (botao) => {
+
+                        botao.classList.toggle(
+                            "ativo",
+                            botao.dataset.channel ===
+                            canal
+                        );
+
+                    }
+                );
+
+
+            await carregarMensagens();
+
+        }
+
+
+        /* =================================================
+           WEBRTC — VOZ
+        ================================================== */
+
+        function criarPeerConnection(
+            idRemoto
+        ) {
+
+            if (
+                conexoesVoz.has(
+                    idRemoto
+                )
+            ) {
+
+                return conexoesVoz.get(
+                    idRemoto
+                );
+
+            }
+
+
+            const pc =
+                new RTCPeerConnection(
+                    CONFIG_WEBRTC
+                );
+
+
+            /*
+             * Criamos um transceiver de vídeo
+             * desde o começo.
+             *
+             * Isso permite ativar o compartilhamento
+             * de tela depois sem precisar recriar
+             * toda a conexão.
+             */
+
+            pc.addTransceiver(
+                "video",
+                {
+                    direction:
+                        "sendrecv"
+                }
+            );
+
+
+            /*
+             * MICROFONE
+             */
+
+            if (streamLocal) {
+
+                streamLocal
+                    .getAudioTracks()
+                    .forEach(
+                        (track) => {
+
+                            pc.addTrack(
+                                track,
+                                streamLocal
+                            );
+
+                        }
+                    );
+
+            }
+
+
+            /*
+             * ICE
+             */
+
+            pc.onicecandidate =
+                async (event) => {
+
+                    if (
+                        !event.candidate ||
+                        !canalSinalizacaoVoz
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    await canalSinalizacaoVoz.send({
+
+                        type:
+                            "broadcast",
+
+                        event:
+                            "signal",
+
+                        payload: {
+
+                            from:
+                                usuarioAtual.id,
+
+                            to:
+                                idRemoto,
+
+                            kind:
+                                "ice",
+
+                            data:
+                                event.candidate
+
+                        }
+
+                    });
+
+                };
+
+
+            /*
+             * ÁUDIO / VÍDEO REMOTO
+             */
+
+            pc.ontrack =
+                (event) => {
+
+                    const stream =
+                        event.streams[0];
+
+
+                    if (!stream) {
+                        return;
+                    }
+
+
+                    if (
+                        event.track.kind ===
+                        "audio"
+                    ) {
+
+                        adicionarAudioRemoto(
+                            idRemoto,
+                            stream
+                        );
+
+                    }
+
+
+                    if (
+                        event.track.kind ===
+                        "video"
+                    ) {
+
+                        adicionarVideoRemoto(
+                            idRemoto,
+                            stream
+                        );
+
+                    }
+
+                };
+
+
+            /*
+             * QUANDO A CONEXÃO MUDA
+             */
+
+            pc.onconnectionstatechange =
+                () => {
+
+                    const estado =
+                        pc.connectionState;
+
+
+                    console.log(
+                        "WebRTC",
+                        idRemoto,
+                        estado
+                    );
+
+
+                    if (
+                        estado ===
+                        "failed" ||
+                        estado ===
+                        "closed" ||
+                        estado ===
+                        "disconnected"
+                    ) {
+
+                        removerPeer(
+                            idRemoto
+                        );
+
+                    }
+
+                };
+
+
+            conexoesVoz.set(
+                idRemoto,
+                pc
+            );
+
+
+            return pc;
+
+        }
+
+
+        /* =================================================
+           ÁUDIO REMOTO
+        ================================================== */
+
+        function adicionarAudioRemoto(
+            idRemoto,
+            stream
+        ) {
+
+            let audio =
+                document.querySelector(
+                    `[data-audio-user="${idRemoto}"]`
+                );
+
+
+            if (!audio) {
+
+                audio =
+                    document.createElement(
+                        "audio"
+                    );
+
+                audio.autoplay =
+                    true;
+
+                audio.playsInline =
+                    true;
+
+                audio.dataset.audioUser =
+                    idRemoto;
+
+                audio.className =
+                    "audio-voz-remoto";
+
+
+                audiosRemotos.appendChild(
+                    audio
+                );
+
+            }
+
+
+            audio.srcObject =
+                stream;
+
+            audio.muted =
+                !somAtivo;
+
+
+            audio.play()
+                .catch(
+                    (error) => {
+
+                        console.warn(
+                            "O navegador bloqueou o áudio:",
+                            error
+                        );
+
+                    }
+                );
+
+        }
+
+
+        /* =================================================
+           VÍDEO REMOTO
+        ================================================== */
+
+        function adicionarVideoRemoto(
+            idRemoto,
+            stream
+        ) {
+
+            let video =
+                document.querySelector(
+                    `[data-video-user="${idRemoto}"]`
+                );
+
+
+            if (!video) {
+
+                const caixa =
+                    document.createElement(
+                        "div"
+                    );
+
+                caixa.className =
+                    "caixa-video-voz";
+
+
+                video =
+                    document.createElement(
+                        "video"
+                    );
+
+                video.autoplay =
+                    true;
+
+                video.playsInline =
+                    true;
+
+                video.className =
+                    "video-voz-remoto";
+
+                video.dataset.videoUser =
+                    idRemoto;
+
+
+                const titulo =
+                    document.createElement(
+                        "span"
+                    );
+
+                titulo.className =
+                    "titulo-video-voz";
+
+                titulo.textContent =
+                    "Compartilhando tela";
+
+
+                caixa.appendChild(
+                    video
+                );
+
+                caixa.appendChild(
+                    titulo
+                );
+
+
+                telasCompartilhadas.appendChild(
+                    caixa
+                );
+
+            }
+
+
+            video.srcObject =
+                stream;
+
+        }
+
+
+        /* =================================================
+           REMOVER PEER
+        ================================================== */
+
+        function removerPeer(
+            idRemoto
+        ) {
+
+            const pc =
+                conexoesVoz.get(
+                    idRemoto
+                );
+
+
+            if (pc) {
+
+                try {
+                    pc.close();
+                } catch (error) {
+                    console.warn(error);
+                }
+
+            }
+
+
+            conexoesVoz.delete(
+                idRemoto
+            );
+
+
+            document
+                .querySelectorAll(
+                    `[data-audio-user="${idRemoto}"]`
+                )
+                .forEach(
+                    (elemento) =>
+                        elemento.remove()
+                );
+
+
+            document
+                .querySelectorAll(
+                    `[data-video-user="${idRemoto}"]`
+                )
+                .forEach(
+                    (elemento) => {
+
+                        const caixa =
+                            elemento.closest(
+                                ".caixa-video-voz"
+                            );
+
+                        if (caixa) {
+                            caixa.remove();
+                        } else {
+                            elemento.remove();
+                        }
+
+                    }
+                );
+
+        }
+
+
+        /* =================================================
+           CRIAR OFFER
+        ================================================== */
+
+        async function criarOffer(
+            idRemoto
+        ) {
+
+            const pc =
+                criarPeerConnection(
+                    idRemoto
+                );
+
+
+            try {
+
+                const offer =
+                    await pc.createOffer();
+
+
+                await pc.setLocalDescription(
+                    offer
+                );
+
+
+                await canalSinalizacaoVoz.send({
+
+                    type:
+                        "broadcast",
+
+                    event:
+                        "signal",
+
+                    payload: {
+
+                        from:
+                            usuarioAtual.id,
+
+                        to:
+                            idRemoto,
+
+                        kind:
+                            "offer",
+
+                        data:
+                            pc.localDescription
+
+                    }
+
+                });
+
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao criar offer:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =================================================
+           RECEBER SIGNAL
+        ================================================== */
+
+        async function receberSinal(
+            payload
+        ) {
+
+            if (!payload) {
+                return;
+            }
+
+
+            if (!usuarioAtual) {
+                return;
+            }
+
+
+            if (
+                payload.to &&
+                payload.to !==
+                usuarioAtual.id
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                payload.from ===
+                usuarioAtual.id
+            ) {
+
+                return;
+
+            }
+
+
+            const idRemoto =
+                payload.from;
+
+
+            if (!idRemoto) {
+                return;
+            }
+
+
+            try {
+
+                const pc =
+                    criarPeerConnection(
+                        idRemoto
+                    );
+
+
+                if (
+                    payload.kind ===
+                    "offer"
+                ) {
+
+                    await pc.setRemoteDescription(
+                        payload.data
+                    );
+
+
+                    const answer =
+                        await pc.createAnswer();
+
+
+                    await pc.setLocalDescription(
+                        answer
+                    );
+
+
+                    await canalSinalizacaoVoz.send({
+
+                        type:
+                            "broadcast",
+
+                        event:
+                            "signal",
+
+                        payload: {
+
+                            from:
+                                usuarioAtual.id,
+
+                            to:
+                                idRemoto,
+
+                            kind:
+                                "answer",
+
+                            data:
+                                pc.localDescription
+
+                        }
+
+                    });
+
+                }
+
+
+                else if (
+                    payload.kind ===
+                    "answer"
+                ) {
+
+                    await pc.setRemoteDescription(
+                        payload.data
+                    );
+
+                }
+
+
+                else if (
+                    payload.kind ===
+                    "ice"
+                ) {
+
+                    await pc.addIceCandidate(
+                        payload.data
+                    );
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Erro no sinal WebRTC:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =================================================
+           PARTICIPANTES DA SALA
+        ================================================== */
+
+        function desenharParticipantesVoz(
+            lista
+        ) {
+
+            participantesVoz.innerHTML =
+                "";
+
+
+            lista.forEach(
+                (participante) => {
+
+                    const item =
+                        document.createElement(
+                            "div"
+                        );
+
+                    item.className =
+                        "participante-voz";
+
+
+                    const avatar =
+                        document.createElement(
+                            "div"
+                        );
+
+                    avatar.className =
+                        "avatar-voz";
+
+
+                    if (
+                        participante.avatar_url
+                    ) {
+
+                        avatar.style.backgroundImage =
+                            `url("${participante.avatar_url}")`;
+
+                        avatar.style.backgroundSize =
+                            "cover";
+
+                        avatar.style.backgroundPosition =
+                            "center";
+
+                    } else {
+
+                        avatar.textContent =
+                            (
+                                participante.username ||
+                                "U"
+                            )
+                                .charAt(0)
+                                .toUpperCase();
+
+                    }
+
+
+                    const nome =
+                        document.createElement(
+                            "span"
+                        );
+
+                    nome.textContent =
+                        participante.username ||
+                        "Usuário";
+
+
+                    const microfone =
+                        document.createElement(
+                            "span"
+                        );
+
+                    microfone.textContent =
+                        participante.microphone ===
+                        false
+                            ? "🔇"
+                            : "🎤";
+
+
+                    item.appendChild(
+                        avatar
+                    );
+
+                    item.appendChild(
+                        nome
+                    );
+
+                    item.appendChild(
+                        microfone
+                    );
+
+
+                    participantesVoz.appendChild(
+                        item
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =================================================
+           ATUALIZAR PRESENÇA
+        ================================================== */
+
+        async function atualizarPresencaVoz() {
+
+            if (
+                !canalSinalizacaoVoz ||
+                !usuarioAtual
+            ) {
+
+                return;
+
+            }
+
+
+            try {
+
+                await canalSinalizacaoVoz.track({
+
+                    user_id:
+                        usuarioAtual.id,
+
+                    username:
+                        nomeUsuario?.textContent ||
+                        "Usuário",
+
+                    avatar_url:
+                        null,
+
+                    microphone:
+                        microfoneAtivo,
+
+                    screen:
+                        compartilhandoTela
+
+                });
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao atualizar presença:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =================================================
+           ENTRAR NA SALA DE VOZ
+        ================================================== */
+
+        async function entrarSalaVoz(
+            sala
+        ) {
+
+            if (!usuarioAtual) {
+
+                alert(
+                    "Você precisa estar logado."
+                );
+
+                return;
+
+            }
+
+
+            if (salaVozAtual === sala) {
+                return;
+            }
+
+
+            if (salaVozAtual) {
+
+                await sairSalaVoz();
+
+            }
+
+
+            salaVozAtual =
+                sala;
+
+
+            nomeSalaVoz.textContent =
+                sala;
+
+
+            statusVoz.textContent =
+                "Pedindo acesso ao microfone...";
+
+
+            painelVoz.classList.add(
+                "visivel"
+            );
+
+
+            try {
+
+                streamLocal =
+                    await navigator.mediaDevices
+                        .getUserMedia({
+                            audio: true,
+                            video: false
+                        });
+
+
+                microfoneAtivo =
+                    true;
+
+
+                streamLocal
+                    .getAudioTracks()
+                    .forEach(
+                        (track) => {
+
+                            track.enabled =
+                                true;
+
+                        }
+                    );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao acessar microfone:",
+                    error
+                );
+
+
+                statusVoz.textContent =
+                    "Microfone bloqueado";
+
+
+                alert(
+                    "Permita o acesso ao microfone no navegador para usar a sala de voz."
+                );
+
+
+                salaVozAtual =
+                    null;
+
+                painelVoz.classList.remove(
+                    "visivel"
+                );
+
+                return;
+
+            }
+
+
+            statusVoz.textContent =
+                "Conectando à sala...";
+
+
+            const nomeCanalVoz =
+                "voz-" +
+                encodeURIComponent(
+                    sala
+                );
+
+
+            canalSinalizacaoVoz =
+                supabaseClient
+                    .channel(
+                        nomeCanalVoz,
+                        {
+                            config: {
+                                presence: {
+                                    key:
+                                        usuarioAtual.id
+                                },
+                                broadcast: {
+                                    self:
+                                        false
+                                }
+                            }
+                        }
+                    );
+
+
+            canalSinalizacaoVoz
+                .on(
+                    "broadcast",
+                    {
+                        event:
+                            "signal"
+                    },
+                    ({
+                        payload
+                    }) => {
+
+                        receberSinal(
+                            payload
+                        );
+
+                    }
+                );
+
+
+            canalSinalizacaoVoz
+                .on(
+                    "presence",
+                    {
+                        event:
+                            "sync"
+                    },
+                    () => {
+
+                        atualizarListaPresencaVoz();
+
+                    }
+                );
+
+
+            canalSinalizacaoVoz
+                .on(
+                    "presence",
+                    {
+                        event:
+                            "join"
+                    },
+                    ({
+                        newPresences
+                    }) => {
+
+                        console.log(
+                            "Entrou na sala:",
+                            newPresences
+                        );
+
+
+                        atualizarListaPresencaVoz();
+
+                    }
+                );
+
+
+            canalSinalizacaoVoz
+                .on(
+                    "presence",
+                    {
+                        event:
+                            "leave"
+                    },
+                    ({
+                        leftPresences
+                    }) => {
+
+                        console.log(
+                            "Saiu da sala:",
+                            leftPresences
+                        );
+
+
+                        (
+                            leftPresences ||
+                            []
+                        ).forEach(
+                            (participante) => {
+
+                                const id =
+                                    participante.user_id ||
+                                    participante.presence_ref;
+
+                                if (id) {
+                                    removerPeer(id);
+                                }
+
+                            }
+                        );
+
+
+                        atualizarListaPresencaVoz();
+
+                    }
+                );
+
+
+            const estado =
+                await canalSinalizacaoVoz.subscribe(
+                    async (
+                        status
+                    ) => {
+
+                        if (
+                            status ===
+                            "SUBSCRIBED"
+                        ) {
+
+                            statusVoz.textContent =
+                                "Conectado";
+
+
+                            await atualizarPresencaVoz();
+
+                            await atualizarListaPresencaVoz();
+
+                        }
+
+                    }
+                );
+
+
+            console.log(
+                "Canal de voz:",
+                estado
+            );
+
+        }
+
+
+        /* =================================================
+           PRESENÇA — LISTA DE PARTICIPANTES
+        ================================================== */
+
+        async function atualizarListaPresencaVoz() {
+
+            if (
+                !canalSinalizacaoVoz
+            ) {
+
+                return;
+
+            }
+
+
+            const estado =
+                canalSinalizacaoVoz.presenceState();
+
+
+            const participantes =
+                [];
+
+
+            Object
+                .values(
+                    estado
+                )
+                .forEach(
+                    (grupo) => {
+
+                        (
+                            grupo ||
+                            []
+                        ).forEach(
+                            (item) => {
+
+                                if (
+                                    !item.user_id
+                                ) {
+
+                                    return;
+
+                                }
+
+
+                                const existente =
+                                    participantes.find(
+                                        (p) =>
+                                            p.user_id ===
+                                            item.user_id
+                                    );
+
+
+                                if (!existente) {
+
+                                    participantes.push(
+                                        item
+                                    );
+
+                                }
+
+                            }
+                        );
+
+                    }
+                );
+
+
+            desenharParticipantesVoz(
+                participantes
+            );
+
+
+            /*
+             * Criamos conexão com os usuários
+             * que já estão na sala.
+             */
+
+            for (
+                const participante
+                of participantes
+            ) {
+
+                if (
+                    participante.user_id ===
+                    usuarioAtual.id
+                ) {
+
+                    continue;
+
+                }
+
+
+                /*
+                 * Apenas um dos dois usuários
+                 * cria o OFFER.
+                 *
+                 * Isso evita duas offers ao
+                 * mesmo tempo.
+                 */
+
+                if (
+                    String(
+                        usuarioAtual.id
+                    ) <
+                    String(
+                        participante.user_id
+                    )
+                ) {
+
+                    await criarOffer(
+                        participante.user_id
+                    );
+
+                }
+
+            }
+
+        }
+
+
+        /* =================================================
+           MICROFONE
+        ================================================== */
+
+        async function alternarMicrofone() {
+
+            if (!streamLocal) {
+                return;
+            }
+
+
+            const tracks =
+                streamLocal.getAudioTracks();
+
+
+            if (!tracks.length) {
+                return;
+            }
+
+
+            microfoneAtivo =
+                !microfoneAtivo;
+
+
+            tracks.forEach(
+                (track) => {
+
+                    track.enabled =
+                        microfoneAtivo;
+
+                }
+            );
+
+
+            botaoMicrofone.classList.toggle(
+                "desligado",
+                !microfoneAtivo
+            );
+
+
+            botaoMicrofone.textContent =
+                microfoneAtivo
+                    ? "🎤"
+                    : "🔇";
+
+
+            await atualizarPresencaVoz();
+
+        }
+
+
+        /* =================================================
+           SOM
+        ================================================== */
+
+        function alternarSom() {
+
+            somAtivo =
+                !somAtivo;
+
+
+            document
+                .querySelectorAll(
+                    ".audio-voz-remoto"
+                )
+                .forEach(
+                    (audio) => {
+
+                        audio.muted =
+                            !somAtivo;
+
+                    }
+                );
+
+
+            botaoSom.classList.toggle(
+                "desligado",
+                !somAtivo
+            );
+
+
+            botaoSom.textContent =
+                somAtivo
+                    ? "🔊"
+                    : "🔇";
+
+        }
+
+
+        /* =================================================
+           COMPARTILHAR TELA
+        ================================================== */
+
+        async function compartilharTela() {
+
+            if (
+                !salaVozAtual ||
+                !usuarioAtual
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                !navigator.mediaDevices ||
+                !navigator.mediaDevices.getDisplayMedia
+            ) {
+
+                alert(
+                    "Seu navegador não suporta compartilhamento de tela."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                streamTela =
+                    await navigator.mediaDevices
+                        .getDisplayMedia({
+
+                            video: {
+                                frameRate: 30
+                            },
+
+                            audio: true
+
+                        });
+
+
+                const trackTela =
+                    streamTela.getVideoTracks()[0];
+
+
+                if (!trackTela) {
+
+                    return;
+
+                }
+
+
+                compartilhandoTela =
+                    true;
+
+
+                /*
+                 * Colocamos a tela em todas
+                 * as conexões existentes.
+                 */
+
+                for (
+                    const [
+                        idRemoto,
+                        dados
+                    ]
+                    of conexoesVoz.entries()
+                ) {
+
+                    const pc =
+                        dados;
+
+
+                    const transceiver =
+                        pc
+                            .getTransceivers()
+                            .find(
+                                (t) =>
+                                    t.receiver
+                                        ?.track
+                                        ?.kind ===
+                                    "video"
+                            );
+
+
+                    if (
+                        transceiver?.sender
+                    ) {
+
+                        await transceiver
+                            .sender
+                            .replaceTrack(
+                                trackTela
+                            );
+
+                    }
+
+                }
+
+
+                /*
+                 * Se o usuário parar a tela pelo
+                 * próprio navegador, detectamos aqui.
+                 */
+
+                trackTela.onended =
+                    async () => {
+
+                        await pararCompartilhamentoTela();
+
+                    };
+
+
+                botaoCompartilharTela.classList.add(
+                    "oculto"
+                );
+
+                botaoPararTela.classList.remove(
+                    "oculto"
+                );
+
+
+                await atualizarPresencaVoz();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao compartilhar tela:",
+                    error
+                );
+
+
+                compartilhandoTela =
+                    false;
+
+            }
+
+        }
+
+
+        /* =================================================
+           PARAR TELA
+        ================================================== */
+
+        async function pararCompartilhamentoTela() {
+
+            if (!streamTela) {
+
+                compartilhandoTela =
+                    false;
+
+                return;
+
+            }
+
+
+            streamTela
+                .getTracks()
+                .forEach(
+                    (track) => {
+
+                        try {
+                            track.stop();
+                        } catch (error) {
+                            console.warn(error);
+                        }
+
+                    }
+                );
+
+
+            streamTela =
+                null;
+
+
+            compartilhandoTela =
+                false;
+
+
+            /*
+             * Retiramos o vídeo das conexões.
+             */
+
+            for (
+                const [
+                    idRemoto,
+                    pc
+                ]
+                of conexoesVoz.entries()
+            ) {
+
+                const transceiver =
+                    pc
+                        .getTransceivers()
+                        .find(
+                            (t) =>
+                                t.receiver
+                                    ?.track
+                                    ?.kind ===
+                                "video"
+                        );
+
+
+                if (
+                    transceiver?.sender
+                ) {
+
+                    try {
+
+                        await transceiver
+                            .sender
+                            .replaceTrack(
+                                null
+                            );
+
+                    } catch (error) {
+
+                        console.warn(
+                            "Erro ao parar vídeo:",
+                            error
+                        );
+
+                    }
+
+                }
+
+            }
+
+
+            botaoCompartilharTela.classList.remove(
+                "oculto"
+            );
+
+            botaoPararTela.classList.add(
+                "oculto"
+            );
+
+
+            await atualizarPresencaVoz();
+
+        }
+
+
+        /* =================================================
+           SAIR DA SALA
+        ================================================== */
+
+        async function sairSalaVoz() {
+
+            if (streamTela) {
+
+                streamTela
+                    .getTracks()
+                    .forEach(
+                        (track) => {
+
+                            try {
+                                track.stop();
+                            } catch (error) {
+                                console.warn(error);
+                            }
+
+                        }
+                    );
+
+                streamTela =
+                    null;
+
+            }
+
+
+            if (streamLocal) {
+
+                streamLocal
+                    .getTracks()
+                    .forEach(
+                        (track) => {
+
+                            try {
+                                track.stop();
+                            } catch (error) {
+                                console.warn(error);
+                            }
+
+                        }
+                    );
+
+                streamLocal =
+                    null;
+
+            }
+
+
+            for (
+                const [
+                    id,
+                    pc
+                ]
+                of conexoesVoz.entries()
+            ) {
+
+                try {
+                    pc.close();
+                } catch (error) {
+                    console.warn(error);
+                }
+
+            }
+
+
+            conexoesVoz.clear();
+
+
+            if (
+                canalSinalizacaoVoz
+            ) {
+
+                try {
+
+                    await canalSinalizacaoVoz.untrack();
+
+                } catch (error) {
+
+                    console.warn(
+                        "Erro ao remover presença:",
+                        error
+                    );
+
+                }
+
+
+                try {
+
+                    await supabaseClient
+                        .removeChannel(
+                            canalSinalizacaoVoz
+                        );
+
+                } catch (error) {
+
+                    console.warn(
+                        "Erro ao fechar canal:",
+                        error
+                    );
+
+                }
+
+            }
+
+
+            canalSinalizacaoVoz =
+                null;
+
+
+            salaVozAtual =
+                null;
+
+
+            microfoneAtivo =
+                false;
+
+
+            compartilhandoTela =
+                false;
+
+
+            participantesVoz.innerHTML =
+                "";
+
+
+            audiosRemotos.innerHTML =
+                "";
+
+
+            telasCompartilhadas.innerHTML =
+                "";
+
+
+            botaoMicrofone.textContent =
+                "🎤";
+
+            botaoMicrofone.classList.remove(
+                "desligado"
+            );
+
+
+            botaoCompartilharTela.classList.remove(
+                "oculto"
+            );
+
+            botaoPararTela.classList.add(
+                "oculto"
+            );
+
+
+            statusVoz.textContent =
+                "Desconectado";
+
+
+            painelVoz.classList.remove(
+                "visivel"
+            );
+
+        }
+
+
+        /* =================================================
+           EDITAR NOME
+        ================================================== */
+
+        function abrirModalNome() {
+
+            if (!modalNome) {
+                return;
+            }
+
+
+            inputNovoNome.value =
+                nomeUsuario?.textContent ||
+                "";
+
+
+            modalNome.classList.add(
+                "visivel"
+            );
+
+
+            inputNovoNome.focus();
+
+        }
+
+
+        function fecharModalNome() {
+
+            modalNome.classList.remove(
+                "visivel"
+            );
+
+        }
+
+
+        async function salvarNome() {
+
+            const novoNome =
+                inputNovoNome.value.trim();
+
+
+            if (!novoNome) {
+
+                alert(
+                    "Digite um nome."
+                );
+
+                return;
+
+            }
+
+
+            if (!usuarioAtual) {
+                return;
+            }
+
+
+            try {
+
+                const {
+                    error
+                } =
+                    await supabaseClient
+                        .from("profiles")
+                        .upsert({
+
+                            id:
+                                usuarioAtual.id,
+
+                            username:
+                                novoNome
+
+                        });
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                atualizarNomeNaTela(
+                    novoNome
+                );
+
+
+                fecharModalNome();
+
+
+                await atualizarPresencaVoz();
+
+
+                await carregarMembros();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao salvar nome:",
+                    error
+                );
+
+
+                alert(
+                    "Não foi possível salvar o nome."
+                );
+
+            }
+
+        }
+
+
+        /* =================================================
+           AVATAR
+        ================================================== */
+
+        botaoAvatar?.addEventListener(
+            "click",
+            () => {
+
+                inputAvatar?.click();
+
+            }
+        );
+
+
+        inputAvatar?.addEventListener(
+            "change",
+            () => {
+
+                const arquivo =
+                    inputAvatar.files?.[0];
+
+
+                if (!arquivo) {
+                    return;
+                }
+
+
+                const leitor =
+                    new FileReader();
+
+
+                leitor.onload =
+                    () => {
+
+                        avatarUsuario.style.backgroundImage =
+                            `url("${leitor.result}")`;
+
+                        if (usuarioAtual?.id) {
+                            cacheAvataresMensagens.set(
+                                usuarioAtual.id,
+                                `url("${leitor.result}")`
+                            );
+                        }
+
+                        avatarUsuario.style.backgroundSize =
+                            "cover";
+
+                        avatarUsuario.style.backgroundPosition =
+                            "center";
+
+                        avatarUsuario.textContent =
+                            "";
+
+                    };
+
+
+                leitor.readAsDataURL(
+                    arquivo
+                );
+
+            }
+        );
+
+
+        /* =================================================
+           EVENTOS DE LOGIN
+        ================================================== */
+
+        botaoEntrar?.addEventListener(
             "click",
             entrar
         );
 
 
-        botaoCriarConta.addEventListener(
+        botaoCriarConta?.addEventListener(
             "click",
             criarConta
         );
 
 
-        senhaLogin.addEventListener(
+        senhaLogin?.addEventListener(
             "keydown",
-            event => {
+            (event) => {
 
                 if (
                     event.key ===
@@ -2428,59 +4328,349 @@
                 ) {
 
                     entrar();
+
                 }
+
             }
         );
 
 
-        emailLogin.addEventListener(
+        botaoEsqueciSenha?.addEventListener(
+            "click",
+            mostrarTelaRecuperarSenha
+        );
+
+
+        botaoVoltarLogin?.addEventListener(
+            "click",
+            mostrarTelaLogin
+        );
+
+
+        botaoEnviarRecuperacao?.addEventListener(
+            "click",
+            enviarRecuperacaoSenha
+        );
+
+
+        botaoSalvarNovaSenha?.addEventListener(
+            "click",
+            salvarNovaSenha
+        );
+
+
+        /* =================================================
+           EVENTOS DO CHAT
+        ================================================== */
+
+        formMensagem?.addEventListener(
+            "submit",
+            async (event) => {
+
+                event.preventDefault();
+
+                await enviarMensagem(
+                    inputMensagem.value
+                );
+
+            }
+        );
+
+
+        document
+            .querySelectorAll(
+                ".canal"
+            )
+            .forEach(
+                (botao) => {
+
+                    botao.addEventListener(
+                        "click",
+                        () => {
+
+                            trocarCanal(
+                                botao.dataset.channel
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* =================================================
+           EVENTOS DE VOZ
+        ================================================== */
+
+        document
+            .querySelectorAll(
+                ".canal-voz"
+            )
+            .forEach(
+                (botao) => {
+
+                    botao.addEventListener(
+                        "click",
+                        () => {
+
+                            entrarSalaVoz(
+                                botao.dataset.voice
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+
+        botaoMicrofone?.addEventListener(
+            "click",
+            alternarMicrofone
+        );
+
+
+        botaoSom?.addEventListener(
+            "click",
+            alternarSom
+        );
+
+
+        botaoCompartilharTela?.addEventListener(
+            "click",
+            compartilharTela
+        );
+
+
+        botaoPararTela?.addEventListener(
+            "click",
+            pararCompartilhamentoTela
+        );
+
+
+        botaoFecharVoz?.addEventListener(
+            "click",
+            sairSalaVoz
+        );
+
+
+        botaoSairVoz?.addEventListener(
+            "click",
+            sairSalaVoz
+        );
+
+
+        /* =================================================
+           EVENTOS DO PERFIL
+        ================================================== */
+
+        botaoEditarNome?.addEventListener(
+            "click",
+            abrirModalNome
+        );
+
+
+        botaoCancelarNome?.addEventListener(
+            "click",
+            fecharModalNome
+        );
+
+
+        botaoSalvarNome?.addEventListener(
+            "click",
+            salvarNome
+        );
+
+
+        inputNovoNome?.addEventListener(
             "keydown",
-            event => {
+            (event) => {
 
                 if (
                     event.key ===
                     "Enter"
                 ) {
 
-                    entrar();
+                    salvarNome();
+
                 }
+
+
+                if (
+                    event.key ===
+                    "Escape"
+                ) {
+
+                    fecharModalNome();
+
+                }
+
             }
         );
 
 
         /* =================================================
-           MODAL
+           LOGOUT
         ================================================== */
 
-        modalNome.addEventListener(
+        botaoSair?.addEventListener(
             "click",
-            event => {
+            async () => {
 
-                if (
-                    event.target ===
-                    modalNome
-                ) {
+                try {
 
-                    modalNome.classList.remove(
-                        "aberto"
+                    await sairSalaVoz();
+
+
+                    if (
+                        supabaseClient
+                    ) {
+
+                        await supabaseClient
+                            .auth
+                            .signOut();
+
+                    }
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Erro ao sair:",
+                        error
                     );
+
                 }
+
+
+                usuarioAtual =
+                    null;
+
+                aplicacaoAberta =
+                    false;
+
+
+                mostrarTelaLogin();
+
             }
         );
+
+
+        /* =================================================
+           AUTENTICAÇÃO
+        ================================================== */
+
+        if (supabaseClient) {
+
+            supabaseClient.auth
+                .onAuthStateChange(
+                    async (
+                        event,
+                        session
+                    ) => {
+
+                        console.log(
+                            "Auth:",
+                            event
+                        );
+
+
+                        if (
+                            event ===
+                            "PASSWORD_RECOVERY"
+                        ) {
+
+                            mostrarTelaNovaSenha();
+
+                            return;
+
+                        }
+
+
+                        if (
+                            session?.user
+                        ) {
+
+                            usuarioAtual =
+                                session.user;
+
+
+                            /*
+                             * Evita abrir a aplicação
+                             * várias vezes.
+                             */
+
+                            if (
+                                !aplicacaoAberta &&
+                                !carregandoAplicacao
+                            ) {
+
+                                await abrirAplicacao(
+                                    session.user
+                                );
+
+                            }
+
+                        } else {
+
+                            if (
+                                salaVozAtual
+                            ) {
+
+                                await sairSalaVoz();
+
+                            }
+
+
+                            usuarioAtual =
+                                null;
+
+                            aplicacaoAberta =
+                                false;
+
+                            mostrarTelaLogin();
+
+                        }
+
+                    }
+                );
+
+        }
 
 
         /* =================================================
            INICIAR
         ================================================== */
 
-        console.log(
-            "Discordia iniciado."
+        document.addEventListener(
+            "DOMContentLoaded",
+            () => {
+
+                verificarSessao();
+
+            }
         );
 
-        verificarSessao();
+
+        /*
+         * Alguns navegadores já executam o script
+         * depois do DOM estar carregado.
+         */
+
+        if (
+            document.readyState ===
+            "interactive" ||
+            document.readyState ===
+            "complete"
+        ) {
+
+            verificarSessao();
+
+        }
 
     </script>
 
 </body>
 
-</html> 
+</html>

@@ -605,18 +605,20 @@ button { -webkit-tap-highlight-color: transparent; }
     border: 1px solid #65232c;
 }
 .avatar-membro img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-.avatar-membro span {
+.avatar-membro .indicador-status {
     position: absolute;
     right: -1px;
     bottom: -1px;
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #45c46a;
     border: 2px solid #250f13;
 }
+.avatar-membro .indicador-status.online { background: #45c46a; }
+.avatar-membro .indicador-status.offline { background: #7f7375; }
 .membro strong { display: block; font-size: 13px; color: #dfd1d3; }
 .membro small { display: block; margin-top: 2px; color: #4fc36d; font-size: 10px; }
+.membro:has(.indicador-status.offline) small { color: #938387; }
 
 /* =========================================================
    MODAIS
@@ -770,6 +772,7 @@ button { -webkit-tap-highlight-color: transparent; }
 .video-voz-remoto,
 .video-voz-local { display: block; width: 100%; min-height: 150px; max-height: 260px; object-fit: contain; background: #080405; }
 .titulo-video-voz { position: absolute; left: 8px; bottom: 7px; padding: 4px 7px; border-radius: 5px; background: rgba(0,0,0,.65); color: #f0e1e3; font-size: 11px; }
+.botao-miniatura-tela { position: absolute; right: 8px; top: 8px; width: 32px; height: 32px; border: 1px solid #78404a; border-radius: 7px; background: rgba(22, 8, 11, .88); color: #fff; cursor: pointer; font-size: 17px; }
 .audio-voz-remoto { position: fixed; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 .telas-compartilhadas { display: flex; flex-wrap: wrap; gap: 10px; }
 .tela-compartilhada { position: relative; flex: 1 1 280px; min-width: 0; overflow: hidden; border: 1px solid #4d2027; border-radius: 10px; background: #080405; }

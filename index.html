@@ -1107,6 +1107,9 @@
 
         let canalSinalizacaoVoz = null;
 
+        // Presença geral: só fica online enquanto a pessoa mantém o site aberto.
+        let canalPresencaGeral = null;
+
         // Canal usado para receber novas mensagens de texto em tempo real.
         let canalMensagens = null;
 
@@ -1795,6 +1798,7 @@
                 const precisaPerfilInicial =
                     await carregarPerfil();
 
+                configurarPresencaGeral();
                 await carregarMembros();
                 await carregarMensagens();
                 configurarRealtimeMensagens();
@@ -1815,6 +1819,41 @@
             } finally {
                 carregandoAplicacao = false;
             }
+
+        }
+
+
+        function usuarioEstaOnline(userId) {
+
+            return Boolean(
+                canalPresencaGeral
+                    ?.presenceState?.()[userId]?.length
+            );
+
+        }
+
+
+        function configurarPresencaGeral() {
+
+            if (!supabaseClient || !usuarioAtual || canalPresencaGeral) {
+                return;
+            }
+
+            canalPresencaGeral = supabaseClient
+                .channel("presenca-discordia", {
+                    config: { presence: { key: usuarioAtual.id } }
+                })
+                .on("presence", { event: "sync" }, async () => {
+                    await carregarMembros();
+                    if (typeof modoPrivado !== "undefined" && modoPrivado) {
+                        await carregarConversasPrivadas();
+                    }
+                })
+                .subscribe(async (status) => {
+                    if (status === "SUBSCRIBED") {
+                        await canalPresencaGeral.track({ user_id: usuarioAtual.id });
+                    }
+                });
 
         }
 
@@ -1939,6 +1978,8 @@
                         avatar.className =
                             "avatar-membro";
 
+                        const online = usuarioEstaOnline(membro.id);
+
 
                         if (membro.avatar_url) {
 
@@ -1964,23 +2005,25 @@
                         }
 
 
-                        const nome =
-                            document.createElement(
-                                "span"
-                            );
+                        const nomeTexto = document.createElement("strong");
+                        nomeTexto.textContent = membro.username || "Usuário";
 
-                        nome.textContent =
-                            membro.username ||
-                            "Usuário";
+                        const estado = document.createElement("small");
+                        estado.textContent = online ? "Online" : "Offline";
+
+                        const dados = document.createElement("div");
+                        dados.append(nomeTexto, estado);
+
+                        const indicador = document.createElement("span");
+                        indicador.className = `indicador-status ${online ? "online" : "offline"}`;
+                        avatar.appendChild(indicador);
 
 
                         item.appendChild(
                             avatar
                         );
 
-                        item.appendChild(
-                            nome
-                        );
+                        item.appendChild(dados);
 
 
                         listaMembros.appendChild(
@@ -2471,6 +2514,25 @@
                 titulo.textContent =
                     "Compartilhando tela";
 
+                const botaoMiniatura = document.createElement("button");
+                botaoMiniatura.type = "button";
+                botaoMiniatura.className = "botao-miniatura-tela";
+                botaoMiniatura.title = "Abrir em miniatura";
+                botaoMiniatura.textContent = "↗";
+                botaoMiniatura.addEventListener("click", async () => {
+                    if (!document.pictureInPictureEnabled || !video.requestPictureInPicture) {
+                        alert("A miniatura não é suportada neste navegador. Tente no Chrome atualizado.");
+                        return;
+                    }
+
+                    try {
+                        await video.requestPictureInPicture();
+                    } catch (error) {
+                        console.error("Não foi possível abrir a miniatura:", error);
+                        alert("Não foi possível abrir a miniatura agora.");
+                    }
+                });
+
 
                 caixa.appendChild(
                     video
@@ -2479,6 +2541,8 @@
                 caixa.appendChild(
                     titulo
                 );
+
+                caixa.appendChild(botaoMiniatura);
 
 
                 telasCompartilhadas.appendChild(
@@ -3440,7 +3504,7 @@
             ) {
 
                 alert(
-                    "Seu navegador não suporta compartilhamento de tela."
+                    "Compartilhar tela não está disponível neste navegador/dispositivo. No celular, tente o Chrome atualizado; no computador, use Chrome ou Edge."
                 );
 
                 return;
@@ -3553,6 +3617,10 @@
                     "Erro ao compartilhar tela:",
                     error
                 );
+
+                if (error?.name !== "NotAllowedError") {
+                    alert("Não foi possível iniciar o compartilhamento de tela neste navegador.");
+                }
 
 
                 compartilhandoTela =
@@ -5125,7 +5193,8 @@ function criarItemUsuarioPrivado(usuario) {
     item.className = "item-privado";
     item.appendChild(criarAvatarPrivado(usuario.avatar_url, usuario.username));
     const dados = document.createElement("span");
-    dados.innerHTML = `<strong>${escaparHtmlPrivado(usuario.username || "Usuário")}</strong><small>${usuario.status === "online" ? "🟢 Online" : "Offline"}</small>`;
+    const online = usuarioEstaOnline(usuario.id);
+    dados.innerHTML = `<strong>${escaparHtmlPrivado(usuario.username || "Usuário")}</strong><small>${online ? "🟢 Online" : "Offline"}</small>`;
     item.appendChild(dados);
     item.addEventListener("click", () => abrirConversaPrivada(usuario));
     return item;
@@ -5162,7 +5231,7 @@ async function abrirConversaPrivada(usuario) {
     resultadosUsuarios.innerHTML = "";
     inputBuscaUsuario.value = "";
     nomePrivado.textContent = usuario.username || "Usuário";
-    statusPrivado.textContent = usuario.status === "online" ? "🟢 Online" : "Offline";
+    statusPrivado.textContent = usuarioEstaOnline(usuario.id) ? "🟢 Online" : "Offline";
     avatarPrivado.style.backgroundImage = usuario.avatar_url ? `url("${usuario.avatar_url}")` : "";
     avatarPrivado.textContent = usuario.avatar_url ? "" : (usuario.username || "U").charAt(0).toUpperCase();
     inputMensagem.placeholder = `Mensagem para ${usuario.username || "Usuário"}`;

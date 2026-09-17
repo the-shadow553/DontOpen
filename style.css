@@ -1292,6 +1292,22 @@ label.botao-extra-mensagem input {
 .cabecalho-privado.oculto {
     display: none !important;
 }
+
+.botao-abrir-voz {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 1001;
+    width: 48px;
+    height: 48px;
+    border: 1px solid #8b3541;
+    border-radius: 50%;
+    background: #c93645;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .4);
+    cursor: pointer;
+    font-size: 20px;
+}
 /* =====================================================
    CORREÇÃO PARA CELULAR
 ===================================================== */
@@ -1369,5 +1385,30 @@ label.botao-extra-mensagem input {
     .servidor {
         width: 38px;
         height: 38px;
+    }
+}
+
+/* =====================================================
+   CELULAR — PRIORIDADE PARA A CONVERSA
+===================================================== */
+@media (max-width: 760px) {
+    /* A coluna de membros ocupa o espaço do chat em telas estreitas. */
+    .sidebar-membros {
+        display: none !important;
+    }
+
+    /* Deixa sempre espaço abaixo para digitar uma mensagem. */
+    .painel-voz {
+        top: 72px;
+        right: 8px;
+        bottom: auto;
+        width: calc(100vw - 16px);
+        max-height: calc(100dvh - 190px);
+        padding: 12px;
+    }
+
+    .botao-abrir-voz {
+        right: 12px;
+        bottom: 78px;
     }
 }

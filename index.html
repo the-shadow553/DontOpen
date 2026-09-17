@@ -85,7 +85,6 @@
 
     </section>
 
-
     <!-- =====================================================
          RECUPERAR SENHA
     ====================================================== -->
@@ -738,6 +737,15 @@
 
     </section>
 
+    <button
+        id="botaoAbrirVoz"
+        class="botao-abrir-voz oculto"
+        type="button"
+        title="Abrir chat de voz"
+    >
+        🎙️
+    </button>
+
 
     <!-- =====================================================
          JAVASCRIPT
@@ -1058,6 +1066,11 @@
         const botaoFecharVoz =
             document.getElementById(
                 "botaoFecharVoz"
+            );
+
+        const botaoAbrirVoz =
+            document.getElementById(
+                "botaoAbrirVoz"
             );
 
         const botaoSairVoz =
@@ -2923,6 +2936,8 @@
 
 
             if (salaVozAtual === sala) {
+                painelVoz.classList.add("visivel");
+                botaoAbrirVoz?.classList.add("oculto");
                 return;
             }
 
@@ -3000,6 +3015,8 @@
                 painelVoz.classList.remove(
                     "visivel"
                 );
+
+                botaoAbrirVoz?.classList.add("oculto");
 
                 return;
 
@@ -3163,6 +3180,30 @@
                 "Canal de voz:",
                 estado
             );
+
+        }
+
+
+        function minimizarPainelVoz() {
+
+            if (!salaVozAtual) {
+                return;
+            }
+
+            painelVoz.classList.remove("visivel");
+            botaoAbrirVoz?.classList.remove("oculto");
+
+        }
+
+
+        function abrirPainelVoz() {
+
+            if (!salaVozAtual) {
+                return;
+            }
+
+            painelVoz.classList.add("visivel");
+            botaoAbrirVoz?.classList.add("oculto");
 
         }
 
@@ -3785,6 +3826,8 @@
                 "visivel"
             );
 
+            botaoAbrirVoz?.classList.add("oculto");
+
         }
 
 
@@ -4386,7 +4429,13 @@
 
         botaoFecharVoz?.addEventListener(
             "click",
-            sairSalaVoz
+            minimizarPainelVoz
+        );
+
+
+        botaoAbrirVoz?.addEventListener(
+            "click",
+            abrirPainelVoz
         );
 
 

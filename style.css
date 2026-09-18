@@ -209,17 +209,17 @@ button { -webkit-tap-highlight-color: transparent; }
     flex: 0 0 48px;
     width: 48px;
     height: 48px;
-    border: none;
-    border-radius: 16px;
+    border: 1px solid #4b2026;
+    border-radius: 10px;
     background: #301419;
     color: #dfc8cb;
     font-size: 18px;
     cursor: pointer;
-    transition: border-radius .2s, background .2s, transform .2s, color .2s, box-shadow .2s;
+    transition: background .2s, transform .2s, color .2s, box-shadow .2s;
 }
 .servidor:hover,
 .servidor.ativo {
-    border-radius: 13px;
+    border-color: #a33b49;
     background: var(--vermelho);
     color: #fff;
     box-shadow: 0 5px 15px rgba(201,54,69,.20);
@@ -787,59 +787,6 @@ button { -webkit-tap-highlight-color: transparent; }
 ::-webkit-scrollbar-thumb:hover { background: #783039; }
 
 /* =========================================================
-   RESPONSIVIDADE
-========================================================= */
-@media (max-width: 1100px) {
-    .sidebar-membros { flex-basis: 190px; width: 190px; min-width: 190px; }
-}
-
-@media (max-width: 900px) {
-    .sidebar-membros { display: none; }
-}
-
-@media (max-width: 700px) {
-    .lista-servidores { flex-basis: 60px; width: 60px; min-width: 60px; }
-    .servidor { width: 42px; height: 42px; flex-basis: 42px; font-size: 16px; }
-    .sidebar { flex-basis: 210px; width: 210px; min-width: 210px; }
-    .nome-usuario { max-width: 55px; }
-    .dados-usuario > div:last-child { min-width: 0; }
-    .area-usuario { gap: 5px; }
-    .botao-editar-nome, .botao-avatar, .botao-sair { width: 28px; height: 28px; flex-basis: 28px; font-size: 14px; }
-}
-
-@media (max-width: 560px) {
-    .lista-servidores { display: none; }
-    .sidebar { flex-basis: 190px; width: 190px; min-width: 190px; }
-    .topo-sidebar { padding: 0 14px; }
-    .cabecalho-chat { padding: 0 12px; }
-    .mensagens { padding: 12px 8px; }
-    .area-envio { padding: 8px 8px 12px; }
-    .mensagem { padding: 7px 5px; }
-    .caixa-login { padding: 30px 22px; }
-    .painel-voz { right: 8px; bottom: 8px; width: calc(100vw - 16px); max-height: calc(100vh - 16px); }
-    .telas-compartilhadas { flex-direction: column; }
-}
-
-@media (max-width: 430px) {
-    .sidebar { flex-basis: 175px; width: 175px; min-width: 175px; }
-    .nome-usuario { max-width: 65px; }
-    .botao-editar-nome, .botao-avatar, .botao-sair { width: 29px; height: 29px; flex-basis: 29px; font-size: 14px; }
-    .titulo-chat h2, .cabecalho-chat h2 { font-size: 15px; }
-    .acoes-chat button:nth-child(2), .acoes-chat button:nth-child(3) { display: none; }
-    .mensagem .avatar-mensagem { width: 36px; height: 36px; min-width: 36px; }
-    .caixa-login { padding: 24px 16px; border-radius: 14px; }
-    .caixa-login h1 { font-size: 22px; }
-    .caixa-login > p { margin-bottom: 20px; }
-}
-
-@media (max-width: 360px) {
-    .sidebar { flex-basis: 160px; width: 160px; min-width: 160px; }
-    .area-usuario { padding: 8px; }
-    .avatar-usuario { width: 36px; height: 36px; min-width: 36px; }
-    .nome-usuario { max-width: 55px; }
-}
-
-/* =========================================================
    MENSAGENS PRIVADAS — 1x1
 ========================================================= */
 
@@ -1216,52 +1163,6 @@ label.botao-extra-mensagem input {
     cursor: pointer;
 }
 
-@media (max-width: 760px) {
-    .sidebar-membros {
-        display: none;
-    }
-}
-
-@media (max-width: 620px) {
-    .lista-servidores {
-        width: 60px;
-        min-width: 60px;
-    }
-
-    .sidebar {
-        width: 205px;
-        min-width: 205px;
-    }
-
-    .cabecalho-chat,
-    .cabecalho-privado {
-        padding: 0 10px;
-    }
-
-    .area-envio {
-        padding: 8px 8px 12px;
-    }
-
-    .form-mensagem {
-        padding-left: 6px;
-    }
-}
-
-@media (max-width: 500px) {
-    .lista-servidores {
-        display: none;
-    }
-
-    .sidebar {
-        width: 180px;
-        min-width: 180px;
-    }
-
-    .botao-extra-mensagem {
-        width: 30px;
-    }
-}
-
 .badge-nao-lidas {
     flex: 0 0 auto;
     min-width: 20px;
@@ -1311,107 +1212,61 @@ label.botao-extra-mensagem input {
     cursor: pointer;
     font-size: 20px;
 }
-/* =====================================================
-   CORREÇÃO PARA CELULAR
-===================================================== */
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+@media (max-width: 1100px) {
+    .sidebar-membros { flex-basis: 190px; width: 190px; min-width: 190px; }
+}
+
+@media (max-width: 900px) {
+    .sidebar-membros { display: none; }
+}
 
 @media (max-width: 760px) {
-
-    /* Mantém a barra de servidores visível */
+    /* Em telefone, a conversa tem prioridade; membros continuam acessíveis no desktop/tablet. */
+    .sidebar-membros { display: none; }
     .lista-servidores {
-        display: flex !important;
-        width: 58px !important;
-        min-width: 58px !important;
-        flex-direction: column;
-        align-items: center;
+        flex: 0 0 58px;
+        width: 58px;
+        min-width: 58px;
         padding: 8px 5px;
         gap: 10px;
     }
-
-    .servidor {
-        display: flex !important;
-        width: 44px;
-        height: 44px;
-        flex-shrink: 0;
-    }
-
-    /* Mantém os botões D e de mensagens privadas */
-    .botao-servidor-privadas {
-        display: flex !important;
-    }
-
-    /* A lista de membros volta a aparecer */
-    .sidebar-membros {
-        display: flex !important;
-        width: 145px !important;
-        min-width: 145px !important;
-        max-width: 145px !important;
-    }
-
-    /* Diminui o texto dos membros para caber */
-    .sidebar-membros .membro,
-    .sidebar-membros .nome-membro {
-        font-size: 11px;
-    }
-
-    /* Evita que o conteúdo central desapareça */
-    .area-principal {
-        min-width: 0;
-        flex: 1;
-    }
-
-    .sidebar {
-        width: 150px;
-        min-width: 150px;
-    }
+    .servidor { flex: 0 0 44px; width: 44px; height: 44px; font-size: 16px; }
+    .sidebar { flex: 0 0 150px; width: 150px; min-width: 150px; }
+    .area-principal { min-width: 0; flex: 1 1 auto; }
+    .nome-usuario { max-width: 55px; }
+    .dados-usuario > div:last-child { min-width: 0; }
+    .area-usuario { gap: 5px; }
+    .botao-editar-nome, .botao-avatar, .botao-sair { width: 28px; height: 28px; flex-basis: 28px; font-size: 14px; }
+    .cabecalho-chat, .cabecalho-privado { padding: 0 10px; }
+    .mensagens { padding: 12px 8px; }
+    .area-envio { padding: 8px 8px 12px; }
+    .form-mensagem { padding-left: 6px; }
+    .mensagem { padding: 7px 5px; }
+    .caixa-login { padding: 30px 22px; }
+    .painel-voz { top: 72px; right: 8px; bottom: auto; width: calc(100vw - 16px); max-height: calc(100dvh - 190px); padding: 12px; }
+    .telas-compartilhadas { flex-direction: column; }
+    .botao-abrir-voz { right: 12px; bottom: 78px; }
 }
 
-/* Em celulares muito pequenos, deixa a lista de membros mais estreita */
 @media (max-width: 500px) {
-
-    .sidebar-membros {
-        width: 110px !important;
-        min-width: 110px !important;
-        max-width: 110px !important;
-    }
-
-    .sidebar {
-        width: 125px;
-        min-width: 125px;
-    }
-
-    .lista-servidores {
-        width: 50px !important;
-        min-width: 50px !important;
-    }
-
-    .servidor {
-        width: 38px;
-        height: 38px;
-    }
+    .lista-servidores { flex-basis: 50px; width: 50px; min-width: 50px; }
+    .servidor { flex-basis: 38px; width: 38px; height: 38px; }
+    .sidebar { flex-basis: 125px; width: 125px; min-width: 125px; }
+    .botao-extra-mensagem { width: 30px; }
+    .titulo-chat h2, .cabecalho-chat h2 { font-size: 15px; }
+    .acoes-chat button:nth-child(2), .acoes-chat button:nth-child(3) { display: none; }
+    .mensagem .avatar-mensagem { width: 36px; height: 36px; min-width: 36px; }
+    .caixa-login { padding: 24px 16px; border-radius: 14px; }
+    .caixa-login h1 { font-size: 22px; }
+    .caixa-login > p { margin-bottom: 20px; }
 }
 
-/* =====================================================
-   CELULAR — PRIORIDADE PARA A CONVERSA
-===================================================== */
-@media (max-width: 760px) {
-    /* A coluna de membros ocupa o espaço do chat em telas estreitas. */
-    .sidebar-membros {
-        display: none !important;
-    }
-
-    /* Deixa sempre espaço abaixo para digitar uma mensagem. */
-    .painel-voz {
-        top: 72px;
-        right: 8px;
-        bottom: auto;
-        width: calc(100vw - 16px);
-        max-height: calc(100dvh - 190px);
-        padding: 12px;
-    }
-
-    .botao-abrir-voz {
-        right: 12px;
-        bottom: 78px;
-    }
+@media (max-width: 360px) {
+    .sidebar { flex-basis: 118px; width: 118px; min-width: 118px; }
+    .area-usuario { padding: 8px; }
+    .avatar-usuario { width: 36px; height: 36px; min-width: 36px; }
+    .nome-usuario { max-width: 48px; }
 }

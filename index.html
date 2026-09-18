@@ -424,6 +424,8 @@
 
                 </div>
 
+                <button id="botaoBuscarCanal" class="botao-buscar-canal" type="button" title="Pesquisar neste canal">🔎</button>
+
             </header>
 
 
@@ -468,6 +470,7 @@
                     <span id="textoRespostaPrivada"></span>
                     <button id="cancelarRespostaPrivada" type="button">✕</button>
                 </div>
+                <div id="indicadorDigitacao" class="indicador-digitacao oculto"></div>
 
             </div>
 
@@ -4759,6 +4762,13 @@
            CHAT NORMAL — MENSAGENS E CANAIS
         ================================================== */
 
+        let respostaNormalAtual = null;
+        let temporizadorDigitacaoNormal = null;
+        let ultimaDigitacaoNormal = 0;
+
+        const indicadorDigitacao = document.getElementById("indicadorDigitacao");
+        const botaoBuscarCanal = document.getElementById("botaoBuscarCanal");
+
 function adicionarMensagemNaTela(
             mensagem
         ) {
@@ -4836,14 +4846,68 @@ function adicionarMensagemNaTela(
                 mensagem.content ||
                 "";
 
+            conteudo.appendChild(cabecalho);
 
-            conteudo.appendChild(
-                cabecalho
-            );
+            if (mensagem.reply_to) {
+                const citacao = document.createElement("div");
+                citacao.className = "citacao-resposta";
+                citacao.textContent = "↩️ Resposta a uma mensagem";
+                conteudo.appendChild(citacao);
+            }
+
+            if (mensagem.attachment_url) {
+                const anexo = document.createElement("a");
+                anexo.className = "anexo-privado";
+                anexo.href = mensagem.attachment_url;
+                anexo.target = "_blank";
+                anexo.rel = "noopener";
+                anexo.textContent = `📎 ${mensagem.attachment_name || "Arquivo"}`;
+                conteudo.appendChild(anexo);
+            }
+
+            const acoes = document.createElement("div");
+            acoes.className = "acoes-mensagem-privada";
+            const responder = document.createElement("button");
+            responder.type = "button";
+            responder.title = "Responder";
+            responder.textContent = "↩️";
+            responder.addEventListener("click", () => prepararRespostaNormal(mensagem));
+            acoes.appendChild(responder);
+
+            const reagir = document.createElement("button");
+            reagir.type = "button";
+            reagir.title = "Reagir";
+            reagir.textContent = "😊";
+            reagir.addEventListener("click", () => adicionarReacaoNormal(mensagem.id));
+            acoes.appendChild(reagir);
+
+            if (mensagem.user_id === usuarioAtual?.id) {
+                const editar = document.createElement("button");
+                editar.type = "button";
+                editar.title = "Editar";
+                editar.textContent = "✏️";
+                editar.addEventListener("click", () => editarMensagemNormal(mensagem));
+                acoes.appendChild(editar);
+
+                const apagar = document.createElement("button");
+                apagar.type = "button";
+                apagar.title = "Apagar";
+                apagar.textContent = "🗑️";
+                apagar.addEventListener("click", () => apagarMensagemNormal(mensagem.id));
+                acoes.appendChild(apagar);
+            }
+
+            const reacoes = document.createElement("div");
+            reacoes.className = "reacoes-mensagem";
+            reacoes.dataset.messageId = mensagem.id;
+
 
             conteudo.appendChild(
                 texto
             );
+
+            conteudo.appendChild(reacoes);
+            conteudo.appendChild(acoes);
 
 
             bloco.appendChild(
@@ -4857,6 +4921,8 @@ function adicionarMensagemNaTela(
             mensagens.appendChild(
                 bloco
             );
+
+            carregarReacoesNormais(mensagem.id, reacoes);
 
 
             obterAvatarMensagem(
@@ -4889,6 +4955,89 @@ function adicionarMensagemNaTela(
 
         }
 
+        async function carregarReacoesNormais(messageId, destino) {
+            if (!messageId || !destino) return;
+            const { data, error } = await supabaseClient.from("message_reactions")
+                .select("emoji, user_id").eq("message_id", messageId);
+            if (error) return;
+            const grupos = new Map();
+            (data || []).forEach(reacao => {
+                const grupo = grupos.get(reacao.emoji) || { total: 0, minha: false };
+                grupo.total += 1;
+                grupo.minha ||= reacao.user_id === usuarioAtual?.id;
+                grupos.set(reacao.emoji, grupo);
+            });
+            destino.innerHTML = "";
+            grupos.forEach((grupo, emoji) => {
+                const botao = document.createElement("button");
+                botao.type = "button";
+                botao.className = grupo.minha ? "reacao ativa" : "reacao";
+                botao.textContent = `${emoji} ${grupo.total}`;
+                botao.addEventListener("click", () => alternarReacaoNormal(messageId, emoji, grupo.minha));
+                destino.appendChild(botao);
+            });
+        }
+
+        async function adicionarReacaoNormal(messageId) {
+            const emoji = prompt("Escolha um emoji para reagir:", "👍");
+            if (!emoji?.trim()) return;
+            await alternarReacaoNormal(messageId, emoji.trim(), false);
+        }
+
+        async function alternarReacaoNormal(messageId, emoji, existe) {
+            const consulta = supabaseClient.from("message_reactions");
+            const resultado = existe
+                ? await consulta.delete().eq("message_id", messageId).eq("user_id", usuarioAtual.id).eq("emoji", emoji)
+                : await consulta.insert({ message_id: messageId, user_id: usuarioAtual.id, emoji });
+            if (resultado.error) {
+                alert("Não foi possível atualizar a reação. Execute primeiro o arquivo supabase/normal_chat.sql.");
+                return;
+            }
+            await carregarMensagens();
+        }
+
+        function prepararRespostaNormal(mensagem) {
+            respostaNormalAtual = mensagem;
+            textoRespostaPrivada.textContent = `Respondendo: ${(mensagem.content || "Arquivo").slice(0, 80)}`;
+            respostaPrivada.classList.remove("oculto");
+            inputMensagem.focus();
+        }
+
+        async function editarMensagemNormal(mensagem) {
+            const novo = prompt("Editar mensagem:", mensagem.content || "");
+            if (novo === null || !novo.trim()) return;
+            const { error } = await supabaseClient.from("messages")
+                .update({ content: novo.trim(), edited_at: new Date().toISOString() })
+                .eq("id", mensagem.id).eq("user_id", usuarioAtual.id);
+            if (error) alert("Não foi possível editar. Execute primeiro o arquivo supabase/normal_chat.sql.");
+        }
+
+        async function apagarMensagemNormal(id) {
+            if (!confirm("Apagar esta mensagem?")) return;
+            const { error } = await supabaseClient.from("messages")
+                .delete().eq("id", id).eq("user_id", usuarioAtual.id);
+            if (error) alert("Não foi possível apagar a mensagem.");
+        }
+
+        async function pesquisarNoCanal() {
+            const termo = prompt("O que você quer procurar neste canal?");
+            if (!termo?.trim()) return;
+            const { data, error } = await supabaseClient.from("messages")
+                .select("*").eq("channel", canalAtual).ilike("content", `%${termo.trim()}%`)
+                .order("created_at", { ascending: true }).limit(100);
+            if (error) { alert("Não foi possível pesquisar neste canal."); return; }
+            mensagens.innerHTML = "";
+            for (const mensagem of data || []) adicionarMensagemNaTela(mensagem);
+        }
+
+        function avisarDigitacaoNormal() {
+            if (!canalMensagens || modoPrivado || !usuarioAtual) return;
+            const agora = Date.now();
+            if (agora - ultimaDigitacaoNormal < 900) return;
+            ultimaDigitacaoNormal = agora;
+            canalMensagens.send({ type: "broadcast", event: "typing", payload: { user_id: usuarioAtual.id, username: nomeUsuario?.textContent || "Alguém", channel: canalAtual } });
+        }
+
 function configurarRealtimeMensagens() {
 
             if (!supabaseClient) {
@@ -4919,6 +5068,17 @@ function configurarRealtimeMensagens() {
                         "mensagens-discordia"
                     )
                     .on(
+                        "broadcast",
+                        { event: "typing" },
+                        ({ payload }) => {
+                            if (payload?.channel !== canalAtual || payload?.user_id === usuarioAtual?.id) return;
+                            indicadorDigitacao.textContent = `${payload.username || "Alguém"} está digitando...`;
+                            indicadorDigitacao.classList.remove("oculto");
+                            clearTimeout(temporizadorDigitacaoNormal);
+                            temporizadorDigitacaoNormal = setTimeout(() => indicadorDigitacao.classList.add("oculto"), 1600);
+                        }
+                    )
+                    .on(
                         "postgres_changes",
                         {
                             event: "INSERT",
@@ -4944,12 +5104,22 @@ function configurarRealtimeMensagens() {
 
                         }
                     )
+                    .on("postgres_changes", { event: "UPDATE", schema: "public", table: "messages" }, async () => {
+                        await carregarMensagens();
+                    })
+                    .on("postgres_changes", { event: "DELETE", schema: "public", table: "messages" }, async () => {
+                        await carregarMensagens();
+                    })
+                    .on("postgres_changes", { event: "*", schema: "public", table: "message_reactions" }, async () => {
+                        await carregarMensagens();
+                    })
                     .subscribe();
 
         }
 
 async function enviarMensagem(
-            texto
+            texto,
+            arquivo = null
         ) {
 
             if (!usuarioAtual) {
@@ -4961,7 +5131,7 @@ async function enviarMensagem(
                 texto.trim();
 
 
-            if (!conteudo) {
+            if (!conteudo && !arquivo) {
                 return;
             }
 
@@ -4974,6 +5144,18 @@ async function enviarMensagem(
 
 
             try {
+
+                let attachment_url = null;
+                let attachment_name = null;
+
+                if (arquivo) {
+                    const caminho = `${usuarioAtual.id}/${Date.now()}-${arquivo.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+                    const { error: erroUpload } = await supabaseClient.storage.from("chat-files").upload(caminho, arquivo, { upsert: false });
+                    if (erroUpload) throw erroUpload;
+                    const { data: url } = supabaseClient.storage.from("chat-files").getPublicUrl(caminho);
+                    attachment_url = url.publicUrl;
+                    attachment_name = arquivo.name;
+                }
 
                 const {
                     error
@@ -4989,10 +5171,17 @@ async function enviarMensagem(
                                 nome,
 
                             content:
-                                conteudo,
+                                conteudo || null,
 
                             channel:
-                                canalAtual
+                                canalAtual,
+
+                            reply_to:
+                                respostaNormalAtual?.id || null,
+
+                            attachment_url,
+
+                            attachment_name
 
                         });
 
@@ -5004,6 +5193,9 @@ async function enviarMensagem(
 
                 inputMensagem.value =
                     "";
+
+                respostaNormalAtual = null;
+                respostaPrivada.classList.add("oculto");
 
 
             } catch (error) {
@@ -5416,15 +5608,17 @@ document.querySelectorAll(".lista-servidores .servidor:not(#botaoPrivadas)").for
 botaoPrivadas?.addEventListener("click", mostrarPainelPrivadas);
 botaoNovaConversa?.addEventListener("click", () => { inputBuscaUsuario?.focus(); resultadosUsuarios.innerHTML = '<div class="privado-vazio">Digite um nome para procurar.</div>'; });
 inputBuscaUsuario?.addEventListener("input", () => { clearTimeout(buscaPrivadaTimer); buscaPrivadaTimer = setTimeout(() => buscarUsuariosPrivados(inputBuscaUsuario.value), 250); });
-cancelarRespostaPrivada?.addEventListener("click", () => { respostaPrivadaAtual = null; respostaPrivada.classList.add("oculto"); });
+cancelarRespostaPrivada?.addEventListener("click", () => { respostaPrivadaAtual = null; respostaNormalAtual = null; respostaPrivada.classList.add("oculto"); });
 botaoEmoji?.addEventListener("click", () => menuEmoji?.classList.toggle("oculto"));
 menuEmoji?.addEventListener("click", e => { if (e.target.nodeType === 3) return; const emoji = e.target.textContent; inputMensagem.value += emoji; inputMensagem.focus(); });
 if (menuEmoji) {
     menuEmoji.innerHTML = "😀 😂 😎 ❤️ 🔥 👍 👎 🎮 🤣 😭 😡 👀 🙏 💀".split(" ").map(e => `<button type="button">${e}</button>`).join("");
 }
-inputArquivoPrivado?.addEventListener("change", () => { const arquivo = inputArquivoPrivado.files?.[0]; if (!arquivo) return; if (!modoPrivado || !conversaPrivadaAtual) { alert("Abra uma conversa privada primeiro."); inputArquivoPrivado.value=""; return; } enviarMensagemPrivada("", arquivo); inputArquivoPrivado.value=""; });
+inputArquivoPrivado?.addEventListener("change", () => { const arquivo = inputArquivoPrivado.files?.[0]; if (!arquivo) return; if (modoPrivado) { if (!conversaPrivadaAtual) { alert("Abra uma conversa privada primeiro."); inputArquivoPrivado.value=""; return; } enviarMensagemPrivada("", arquivo); } else { enviarMensagem("", arquivo); } inputArquivoPrivado.value=""; });
 document.getElementById("botaoBloquearPrivado")?.addEventListener("click", bloquearUsuarioPrivado);
 document.getElementById("botaoBuscarPrivado")?.addEventListener("click", pesquisarNaConversaPrivada);
+botaoBuscarCanal?.addEventListener("click", pesquisarNoCanal);
+inputMensagem?.addEventListener("input", avisarDigitacaoNormal);
 
 
 

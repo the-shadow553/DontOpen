@@ -1197,6 +1197,21 @@ label.botao-extra-mensagem input {
     display: none !important;
 }
 
+.botao-buscar-canal {
+    width: 34px;
+    height: 34px;
+    border: 1px solid #5a242c;
+    border-radius: 8px;
+    background: #2a1115;
+    color: #e4c9cd;
+    cursor: pointer;
+}
+.botao-buscar-canal:hover { background: #451820; }
+.indicador-digitacao { min-height: 20px; padding: 0 18px 6px; color: #bda5a9; font-size: 11px; }
+.reacoes-mensagem { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+.reacao { padding: 3px 7px; border: 1px solid #5a242c; border-radius: 7px; background: #281116; color: #ead8da; cursor: pointer; font-size: 12px; }
+.reacao:hover, .reacao.ativa { border-color: #b84453; background: #461920; }
+
 .botao-abrir-voz {
     position: fixed;
     right: 20px;

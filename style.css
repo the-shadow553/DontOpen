@@ -1211,6 +1211,8 @@ label.botao-extra-mensagem input {
 .reacoes-mensagem { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
 .reacao { padding: 3px 7px; border: 1px solid #5a242c; border-radius: 7px; background: #281116; color: #ead8da; cursor: pointer; font-size: 12px; }
 .reacao:hover, .reacao.ativa { border-color: #b84453; background: #461920; }
+.acoes-mobile-cabecalho { display: none; }
+#botaoMenuPrivadoMobile { display: none; }
 
 .botao-abrir-voz {
     position: fixed;
@@ -1239,23 +1241,40 @@ label.botao-extra-mensagem input {
 }
 
 @media (max-width: 760px) {
-    /* Em telefone, a conversa tem prioridade; membros continuam acessíveis no desktop/tablet. */
+    /* Layout mobile próprio: a conversa ocupa a tela; canais abrem como gaveta. */
     .sidebar-membros { display: none; }
-    .lista-servidores {
-        flex: 0 0 58px;
-        width: 58px;
-        min-width: 58px;
-        padding: 8px 5px;
-        gap: 10px;
+    .lista-servidores { display: none; }
+    .sidebar {
+        position: fixed;
+        z-index: 1200;
+        top: 0;
+        left: 0;
+        width: min(82vw, 310px);
+        min-width: 0;
+        height: 100dvh;
+        transform: translateX(-105%);
+        box-shadow: 18px 0 42px rgba(0, 0, 0, .38);
+        transition: transform .24s ease;
     }
-    .servidor { flex: 0 0 44px; width: 44px; height: 44px; font-size: 16px; }
-    .sidebar { flex: 0 0 150px; width: 150px; min-width: 150px; }
-    .area-principal { min-width: 0; flex: 1 1 auto; }
-    .nome-usuario { max-width: 55px; }
-    .dados-usuario > div:last-child { min-width: 0; }
-    .area-usuario { gap: 5px; }
+    .sidebar.mobile-aberta { transform: translateX(0); }
+    .area-principal { width: 100%; min-width: 0; flex: 1 1 100%; }
+    .nome-usuario { max-width: 125px; }
     .botao-editar-nome, .botao-avatar, .botao-sair { width: 28px; height: 28px; flex-basis: 28px; font-size: 14px; }
     .cabecalho-chat, .cabecalho-privado { padding: 0 10px; }
+    .cabecalho-chat { min-height: 62px; }
+    .acoes-mobile-cabecalho { display: flex; gap: 6px; }
+    .acoes-mobile-cabecalho button, #botaoMenuPrivadoMobile {
+        display: inline-grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border: 1px solid #5a242c;
+        border-radius: 8px;
+        background: #2a1115;
+        color: #f1d8db;
+        cursor: pointer;
+    }
+    .botao-buscar-canal { display: none; }
     .mensagens { padding: 12px 8px; }
     .area-envio { padding: 8px 8px 12px; }
     .form-mensagem { padding-left: 6px; }
@@ -1267,9 +1286,6 @@ label.botao-extra-mensagem input {
 }
 
 @media (max-width: 500px) {
-    .lista-servidores { flex-basis: 50px; width: 50px; min-width: 50px; }
-    .servidor { flex-basis: 38px; width: 38px; height: 38px; }
-    .sidebar { flex-basis: 125px; width: 125px; min-width: 125px; }
     .botao-extra-mensagem { width: 30px; }
     .titulo-chat h2, .cabecalho-chat h2 { font-size: 15px; }
     .acoes-chat button:nth-child(2), .acoes-chat button:nth-child(3) { display: none; }
@@ -1280,7 +1296,6 @@ label.botao-extra-mensagem input {
 }
 
 @media (max-width: 360px) {
-    .sidebar { flex-basis: 118px; width: 118px; min-width: 118px; }
     .area-usuario { padding: 8px; }
     .avatar-usuario { width: 36px; height: 36px; min-width: 36px; }
     .nome-usuario { max-width: 48px; }

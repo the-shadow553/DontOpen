@@ -425,6 +425,10 @@
                 </div>
 
                 <button id="botaoBuscarCanal" class="botao-buscar-canal" type="button" title="Pesquisar neste canal">🔎</button>
+                <div class="acoes-mobile-cabecalho">
+                    <button id="botaoPrivadasMobile" type="button" title="Mensagens privadas">💬</button>
+                    <button id="botaoMenuMobile" type="button" title="Abrir canais">☰</button>
+                </div>
 
             </header>
 
@@ -440,6 +444,7 @@
                 <div class="acoes-privado">
                     <button id="botaoBuscarPrivado" type="button" title="Pesquisar conversa">🔎</button>
                     <button id="botaoBloquearPrivado" type="button" title="Bloquear usuário">🚫</button>
+                    <button id="botaoMenuPrivadoMobile" type="button" title="Abrir canais">☰</button>
                 </div>
             </div>
 
@@ -1107,6 +1112,10 @@
         const conexoesVoz =
             new Map();
 
+        // Candidatos ICE podem chegar antes da oferta/resposta em redes mais lentas.
+        const candidatosIcePendentes = new Map();
+        const temporizadoresDesconexaoVoz = new Map();
+
 
         let canalSinalizacaoVoz = null;
 
@@ -1130,6 +1139,8 @@
         ================================================== */
 
         const CONFIG_WEBRTC = {
+
+            iceCandidatePoolSize: 4,
 
             iceServers: [
 
@@ -2369,19 +2380,18 @@
                     );
 
 
-                    if (
-                        estado ===
-                        "failed" ||
-                        estado ===
-                        "closed" ||
-                        estado ===
-                        "disconnected"
-                    ) {
-
-                        removerPeer(
-                            idRemoto
-                        );
-
+                    if (estado === "connected") {
+                        clearTimeout(temporizadoresDesconexaoVoz.get(idRemoto));
+                        temporizadoresDesconexaoVoz.delete(idRemoto);
+                    } else if (estado === "disconnected") {
+                        clearTimeout(temporizadoresDesconexaoVoz.get(idRemoto));
+                        temporizadoresDesconexaoVoz.set(idRemoto, setTimeout(() => {
+                            if (pc.connectionState === "disconnected") {
+                                try { pc.restartIce(); } catch (_) {}
+                            }
+                        }, 5000));
+                    } else if (estado === "failed" || estado === "closed") {
+                        removerPeer(idRemoto);
                     }
 
                 };
@@ -2394,6 +2404,18 @@
 
 
             return pc;
+
+        }
+
+
+        async function aplicarCandidatosIcePendentes(idRemoto, pc) {
+
+            const pendentes = candidatosIcePendentes.get(idRemoto) || [];
+            candidatosIcePendentes.delete(idRemoto);
+
+            for (const candidato of pendentes) {
+                await pc.addIceCandidate(candidato);
+            }
 
         }
 
@@ -2590,6 +2612,10 @@
                 idRemoto
             );
 
+            clearTimeout(temporizadoresDesconexaoVoz.get(idRemoto));
+            temporizadoresDesconexaoVoz.delete(idRemoto);
+            candidatosIcePendentes.delete(idRemoto);
+
 
             document
                 .querySelectorAll(
@@ -2754,6 +2780,8 @@
                         payload.data
                     );
 
+                    await aplicarCandidatosIcePendentes(idRemoto, pc);
+
 
                     const answer =
                         await pc.createAnswer();
@@ -2802,6 +2830,8 @@
                         payload.data
                     );
 
+                    await aplicarCandidatosIcePendentes(idRemoto, pc);
+
                 }
 
 
@@ -2810,9 +2840,13 @@
                     "ice"
                 ) {
 
-                    await pc.addIceCandidate(
-                        payload.data
-                    );
+                    if (pc.remoteDescription) {
+                        await pc.addIceCandidate(payload.data);
+                    } else {
+                        const pendentes = candidatosIcePendentes.get(idRemoto) || [];
+                        pendentes.push(payload.data);
+                        candidatosIcePendentes.set(idRemoto, pendentes);
+                    }
 
                 }
 
@@ -4441,6 +4475,8 @@
                                 botao.dataset.channel
                             );
 
+                            fecharMenuMobile?.();
+
                         }
                     );
 
@@ -5311,6 +5347,17 @@ const inputArquivoPrivado = document.getElementById("inputArquivoPrivado");
 const respostaPrivada = document.getElementById("respostaPrivada");
 const textoRespostaPrivada = document.getElementById("textoRespostaPrivada");
 const cancelarRespostaPrivada = document.getElementById("cancelarRespostaPrivada");
+const botaoMenuMobile = document.getElementById("botaoMenuMobile");
+const botaoMenuPrivadoMobile = document.getElementById("botaoMenuPrivadoMobile");
+const botaoPrivadasMobile = document.getElementById("botaoPrivadasMobile");
+
+function alternarMenuMobile() {
+    document.querySelector(".sidebar")?.classList.toggle("mobile-aberta");
+}
+
+function fecharMenuMobile() {
+    document.querySelector(".sidebar")?.classList.remove("mobile-aberta");
+}
 
 function mostrarPainelPrivadas() {
     modoPrivado = true;
@@ -5606,6 +5653,9 @@ document.querySelectorAll(".lista-servidores .servidor:not(#botaoPrivadas)").for
 });
 
 botaoPrivadas?.addEventListener("click", mostrarPainelPrivadas);
+botaoPrivadasMobile?.addEventListener("click", () => { mostrarPainelPrivadas(); fecharMenuMobile(); });
+botaoMenuMobile?.addEventListener("click", alternarMenuMobile);
+botaoMenuPrivadoMobile?.addEventListener("click", alternarMenuMobile);
 botaoNovaConversa?.addEventListener("click", () => { inputBuscaUsuario?.focus(); resultadosUsuarios.innerHTML = '<div class="privado-vazio">Digite um nome para procurar.</div>'; });
 inputBuscaUsuario?.addEventListener("input", () => { clearTimeout(buscaPrivadaTimer); buscaPrivadaTimer = setTimeout(() => buscarUsuariosPrivados(inputBuscaUsuario.value), 250); });
 cancelarRespostaPrivada?.addEventListener("click", () => { respostaPrivadaAtual = null; respostaNormalAtual = null; respostaPrivada.classList.add("oculto"); });

@@ -11,6 +11,8 @@
 
     <title>Discordia</title>
 
+    <link rel="icon" type="image/jpeg" href="assets/discordia-logo.jpg">
+
     <link
         rel="stylesheet"
         href="style.css"
@@ -1988,7 +1990,9 @@
                 const membrosUnicos = new Map();
 
                 (data || []).forEach((membro) => {
-                    const chaveVisual = `${(membro.username || "").trim().toLocaleLowerCase()}|${membro.avatar_url || ""}`;
+                    // A lista é uma visão social: nomes repetidos aparecem uma única vez.
+                    // As contas continuam intactas no Supabase.
+                    const chaveVisual = (membro.username || "usuário").trim().toLocaleLowerCase();
                     if (!membrosUnicos.has(chaveVisual)) {
                         membrosUnicos.set(chaveVisual, membro);
                     }

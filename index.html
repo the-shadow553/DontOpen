@@ -1949,10 +1949,6 @@
             }
 
 
-            listaMembros.innerHTML =
-                "";
-
-
             try {
 
                 const {
@@ -1975,6 +1971,10 @@
                 if (error) {
                     throw error;
                 }
+
+                // Limpa somente depois da consulta. Assim, duas atualizações
+                // simultâneas não conseguem acrescentar a mesma lista duas vezes.
+                listaMembros.innerHTML = "";
 
 
                 if (!data || data.length === 0) {

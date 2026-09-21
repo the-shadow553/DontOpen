@@ -237,6 +237,7 @@ button { -webkit-tap-highlight-color: transparent; }
 }
 .servidor-logo img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .adicionar-servidor { color: #df4e5b; font-size: 27px; }
+.lista-servidores .adicionar-servidor { font-weight: 700; background: #241014; }
 
 /* =========================================================
    SIDEBAR DE CANAIS
@@ -1207,6 +1208,21 @@ label.botao-extra-mensagem input {
 .cabecalho-privado.oculto {
     display: none !important;
 }
+
+.menu-emoji input {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    color: #f5e8e9;
+    border: 1px solid #5d2830;
+    border-radius: 7px;
+    outline: none;
+    background: #16090c;
+}
+
+#listaEmoji { max-height: 220px; overflow-y: auto; display: flex; flex-wrap: wrap; gap: 3px; }
+.menu-emoji .emoji-vazio { width: 100%; padding: 12px; color: #ad9699; font-size: 13px; }
 
 .botao-buscar-canal {
     width: 34px;

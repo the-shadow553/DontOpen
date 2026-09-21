@@ -216,6 +216,9 @@
                 💬
             </button>
 
+            <button id="botaoCriarServidor" class="servidor adicionar-servidor" type="button" title="Criar servidor">＋</button>
+            <button id="botaoEntrarServidor" class="servidor adicionar-servidor" type="button" title="Entrar com convite">↗</button>
+
         </aside>
 
 
@@ -227,13 +230,11 @@
 
             <header class="cabecalho-servidor">
 
-                <strong>
+                <strong id="nomeServidor">
                     Discordia
                 </strong>
 
-                <span>
-                    ⌄
-                </span>
+                <button id="botaoCriarCanal" class="oculto" type="button" title="Criar canal">＋</button>
 
             </header>
 
@@ -472,7 +473,10 @@
                     >
                     <button type="submit" title="Enviar">➤</button>
                 </form>
-                <div id="menuEmoji" class="menu-emoji oculto">😀 😂 😎 ❤️ 🔥 👍 👎 🎮 🤣 😭 😡 👀 🙏 💀</div>
+                <div id="menuEmoji" class="menu-emoji oculto">
+                    <input id="buscaEmoji" type="search" placeholder="Pesquisar emoji..." autocomplete="off">
+                    <div id="listaEmoji"></div>
+                </div>
                 <div id="respostaPrivada" class="resposta-privada oculto">
                     <span id="textoRespostaPrivada"></span>
                     <button id="cancelarRespostaPrivada" type="button">✕</button>
@@ -502,6 +506,19 @@
         </aside>
 
     </main>
+
+    <div id="modalServidor" class="modal-nome" aria-hidden="true">
+        <div class="caixa-modal">
+            <h2 id="tituloModalServidor">Criar servidor</h2>
+            <p id="textoModalServidor">Escolha um nome para o seu espaço.</p>
+            <input id="inputServidor" class="input-nome" type="text" maxlength="50" placeholder="Nome do servidor" autocomplete="off">
+            <div id="mensagemServidor" class="mensagem-login"></div>
+            <div class="botoes-modal">
+                <button id="cancelarModalServidor" type="button">Cancelar</button>
+                <button id="confirmarModalServidor" class="botao-login" type="button">Criar</button>
+            </div>
+        </div>
+    </div>
 
 
     <!-- =====================================================
@@ -1096,6 +1113,9 @@
         let usuarioAtual = null;
 
         let canalAtual = "geral";
+        let servidorAtual = null;
+        let canalAtualDados = null;
+        let meusServidores = [];
 
         let salaVozAtual = null;
 
@@ -1829,6 +1849,7 @@
 
                 configurarPresencaGeral();
                 await carregarMembros();
+                await carregarServidores();
                 await carregarMensagens();
                 configurarRealtimeMensagens();
 
@@ -2107,26 +2128,12 @@
 
             try {
 
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .from("messages")
-                        .select(
-                            "*"
-                        )
-                        .eq(
-                            "channel",
-                            canalAtual
-                        )
-                        .order(
-                            "created_at",
-                            {
-                                ascending: true
-                            }
-                        )
-                        .limit(200);
+                let consultaMensagens = supabaseClient.from("messages").select("*");
+                consultaMensagens = servidorAtual && canalAtualDados
+                    ? consultaMensagens.eq("server_id", servidorAtual.id).eq("channel_id", canalAtualDados.id)
+                    : consultaMensagens.eq("channel", canalAtual);
+                const { data, error } = await consultaMensagens
+                    .order("created_at", { ascending: true }).limit(200);
 
 
                 if (error) {
@@ -5098,7 +5105,13 @@ function adicionarMensagemNaTela(
             const agora = Date.now();
             if (agora - ultimaDigitacaoNormal < 900) return;
             ultimaDigitacaoNormal = agora;
-            canalMensagens.send({ type: "broadcast", event: "typing", payload: { user_id: usuarioAtual.id, username: nomeUsuario?.textContent || "Alguém", channel: canalAtual } });
+            canalMensagens.send({ type: "broadcast", event: "typing", payload: {
+                user_id: usuarioAtual.id,
+                username: nomeUsuario?.textContent || "Alguém",
+                channel: canalAtual,
+                server_id: servidorAtual?.id || null,
+                channel_id: canalAtualDados?.id || null
+            } });
         }
 
 function configurarRealtimeMensagens() {
@@ -5134,7 +5147,7 @@ function configurarRealtimeMensagens() {
                         "broadcast",
                         { event: "typing" },
                         ({ payload }) => {
-                            if (payload?.channel !== canalAtual || payload?.user_id === usuarioAtual?.id) return;
+                            if (!mensagemPertenceAoCanalAtual(payload) || payload?.user_id === usuarioAtual?.id) return;
                             indicadorDigitacao.textContent = `${payload.username || "Alguém"} está digitando...`;
                             indicadorDigitacao.classList.remove("oculto");
                             clearTimeout(temporizadorDigitacaoNormal);
@@ -5154,10 +5167,7 @@ function configurarRealtimeMensagens() {
                                 payload.new;
 
 
-                            if (
-                                mensagem.channel ===
-                                canalAtual
-                            ) {
+                            if (mensagemPertenceAoCanalAtual(mensagem)) {
 
                                 adicionarMensagemNaTela(
                                     mensagem
@@ -5220,33 +5230,20 @@ async function enviarMensagem(
                     attachment_name = arquivo.name;
                 }
 
-                const {
-                    error
-                } =
-                    await supabaseClient
-                        .from("messages")
-                        .insert({
-
-                            user_id:
-                                usuarioAtual.id,
-
-                            username:
-                                nome,
-
-                            content:
-                                conteudo || null,
-
-                            channel:
-                                canalAtual,
-
-                            reply_to:
-                                respostaNormalAtual?.id || null,
-
-                            attachment_url,
-
-                            attachment_name
-
-                        });
+                const novaMensagem = {
+                    user_id: usuarioAtual.id,
+                    username: nome,
+                    content: conteudo || null,
+                    channel: canalAtual,
+                    reply_to: respostaNormalAtual?.id || null,
+                    attachment_url,
+                    attachment_name
+                };
+                if (servidorAtual && canalAtualDados) {
+                    novaMensagem.server_id = servidorAtual.id;
+                    novaMensagem.channel_id = canalAtualDados.id;
+                }
+                const { error } = await supabaseClient.from("messages").insert(novaMensagem);
 
 
                 if (error) {
@@ -5275,6 +5272,168 @@ async function enviarMensagem(
 
             }
 
+        }
+
+        /* =================================================
+           SERVIDORES DA COMUNIDADE
+        ================================================== */
+
+        const nomeServidor = document.getElementById("nomeServidor");
+        const botaoCriarServidor = document.getElementById("botaoCriarServidor");
+        const botaoEntrarServidor = document.getElementById("botaoEntrarServidor");
+        const botaoCriarCanal = document.getElementById("botaoCriarCanal");
+        const modalServidor = document.getElementById("modalServidor");
+        const tituloModalServidor = document.getElementById("tituloModalServidor");
+        const textoModalServidor = document.getElementById("textoModalServidor");
+        const inputServidor = document.getElementById("inputServidor");
+        const mensagemServidor = document.getElementById("mensagemServidor");
+        const confirmarModalServidor = document.getElementById("confirmarModalServidor");
+        let acaoModalServidor = null;
+
+        async function carregarServidores() {
+            if (!supabaseClient || !usuarioAtual) return;
+            const { data: participacoes, error: erroParticipacoes } = await supabaseClient
+                .from("server_members").select("server_id, role").eq("user_id", usuarioAtual.id);
+            // Se o SQL ainda não foi executado, o Discordia original continua funcionando.
+            if (erroParticipacoes) return;
+            const ids = (participacoes || []).map(item => item.server_id);
+            if (!ids.length) { meusServidores = []; renderizarBotoesServidores(); return; }
+            const { data: servidores, error } = await supabaseClient
+                .from("servers").select("id, name, owner_id").in("id", ids).order("created_at", { ascending: true });
+            if (error) return;
+            meusServidores = (servidores || []).map(servidor => ({
+                ...servidor,
+                role: participacoes.find(item => item.server_id === servidor.id)?.role || "member"
+            }));
+            renderizarBotoesServidores();
+        }
+
+        function renderizarBotoesServidores() {
+            document.querySelectorAll(".servidor-comunidade").forEach(botao => botao.remove());
+            const ancora = botaoCriarServidor;
+            meusServidores.forEach(servidor => {
+                const botao = document.createElement("button");
+                botao.type = "button";
+                botao.className = "servidor servidor-comunidade" + (servidorAtual?.id === servidor.id ? " ativo" : "");
+                botao.title = servidor.name;
+                botao.textContent = servidor.name.slice(0, 2).toUpperCase();
+                botao.addEventListener("click", () => abrirServidor(servidor));
+                ancora.before(botao);
+            });
+        }
+
+        async function abrirServidor(servidor) {
+            modoPrivado = false;
+            painelPrivadas?.classList.add("oculto");
+            painelCanais?.classList.remove("oculto");
+            servidorAtual = servidor;
+            canalAtualDados = null;
+            nomeServidor.textContent = servidor.name;
+            botaoCriarCanal.classList.toggle("oculto", servidor.owner_id !== usuarioAtual?.id);
+            renderizarBotoesServidores();
+            const { data: canais, error } = await supabaseClient
+                .from("server_channels").select("id, name, kind, position")
+                .eq("server_id", servidor.id).order("position", { ascending: true });
+            if (error) { alert("Não foi possível abrir os canais. Execute supabase/servers.sql no Supabase."); return; }
+            painelCanais.innerHTML = "";
+            const categoria = document.createElement("div");
+            categoria.className = "categoria-canal";
+            const titulo = document.createElement("div");
+            titulo.className = "titulo-categoria";
+            titulo.textContent = "Canais de texto";
+            categoria.appendChild(titulo);
+            const textos = (canais || []).filter(canal => canal.kind === "text");
+            textos.forEach(canal => {
+                const botao = document.createElement("button");
+                botao.type = "button";
+                botao.className = "canal";
+                botao.dataset.channel = canal.name;
+                botao.textContent = `# ${canal.name}`;
+                botao.addEventListener("click", () => trocarCanalServidor(canal));
+                categoria.appendChild(botao);
+            });
+            painelCanais.appendChild(categoria);
+            if (textos[0]) await trocarCanalServidor(textos[0]);
+        }
+
+        async function trocarCanalServidor(canal) {
+            canalAtualDados = canal;
+            canalAtual = canal.name;
+            nomeCanal.textContent = `# ${canal.name}`;
+            descricaoCanal.textContent = `Canal de ${servidorAtual.name}`;
+            inputMensagem.placeholder = `Enviar mensagem em #${canal.name}`;
+            document.querySelectorAll(".canal").forEach(botao => botao.classList.toggle("ativo", botao.dataset.channel === canal.name));
+            await carregarMensagens();
+        }
+
+        function abrirModalServidor(acao) {
+            acaoModalServidor = acao;
+            mensagemServidor.textContent = "";
+            inputServidor.value = "";
+            tituloModalServidor.textContent = acao === "criar" ? "Criar servidor" : "Entrar em servidor";
+            textoModalServidor.textContent = acao === "criar" ? "Escolha um nome para o seu espaço." : "Cole o código de convite que recebeu.";
+            inputServidor.placeholder = acao === "criar" ? "Nome do servidor" : "Código do convite";
+            confirmarModalServidor.textContent = acao === "criar" ? "Criar" : "Entrar";
+            modalServidor.classList.add("visivel");
+            setTimeout(() => inputServidor.focus(), 0);
+        }
+
+        function fecharModalServidor() { modalServidor.classList.remove("visivel"); }
+
+        async function confirmarServidor() {
+            const valor = inputServidor.value.trim();
+            if (!valor) { mensagemServidor.textContent = "Preencha este campo."; return; }
+            confirmarModalServidor.disabled = true;
+            try {
+                if (acaoModalServidor === "criar") {
+                    const { data: servidor, error } = await supabaseClient.from("servers")
+                        .insert({ name: valor, owner_id: usuarioAtual.id }).select("id, name, owner_id").single();
+                    if (error) throw error;
+                    await carregarServidores();
+                    fecharModalServidor();
+                    await abrirServidor(servidor);
+                    const { data: convite } = await supabaseClient.from("server_invites")
+                        .select("code").eq("server_id", servidor.id).maybeSingle();
+                    alert(`Servidor criado! Código para convidar amigos: ${convite?.code || "abra novamente"}`);
+                } else {
+                    const { data: idServidor, error } = await supabaseClient.rpc("join_server_by_invite", { p_code: valor });
+                    if (error) throw error;
+                    await carregarServidores();
+                    const servidor = meusServidores.find(item => item.id === idServidor);
+                    fecharModalServidor();
+                    if (servidor) await abrirServidor(servidor);
+                }
+            } catch (error) {
+                mensagemServidor.textContent = error?.message || "Não foi possível concluir.";
+            } finally { confirmarModalServidor.disabled = false; }
+        }
+
+        async function criarCanalServidor() {
+            if (!servidorAtual || servidorAtual.owner_id !== usuarioAtual?.id) return;
+            const nome = prompt("Nome do novo canal:")?.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "-");
+            if (!nome) return;
+            const { data: existentes } = await supabaseClient.from("server_channels").select("position").eq("server_id", servidorAtual.id);
+            const { error } = await supabaseClient.from("server_channels").insert({
+                server_id: servidorAtual.id, name: nome, kind: "text", position: (existentes || []).length
+            });
+            if (error) { alert(error.message || "Não foi possível criar o canal."); return; }
+            await abrirServidor(servidorAtual);
+        }
+
+        async function abrirDiscordiaPadrao() {
+            servidorAtual = null;
+            canalAtualDados = null;
+            nomeServidor.textContent = "Discordia";
+            botaoCriarCanal.classList.add("oculto");
+            renderizarBotoesServidores();
+            await trocarCanal("geral");
+        }
+
+        function mensagemPertenceAoCanalAtual(mensagem) {
+            if (servidorAtual && canalAtualDados) {
+                return mensagem?.server_id === servidorAtual.id && mensagem?.channel_id === canalAtualDados.id;
+            }
+            return !mensagem?.server_id && mensagem?.channel === canalAtual;
         }
 
 async function trocarCanal(
@@ -5675,22 +5834,37 @@ async function bloquearUsuarioPrivado() {
     } catch (error) { console.error(error); alert("Crie a tabela user_blocks no Supabase para ativar o bloqueio."); }
 }
 
-document.querySelectorAll(".lista-servidores .servidor:not(#botaoPrivadas)").forEach(botao => {
-    botao.addEventListener("click", voltarParaCanais);
+document.querySelectorAll(".lista-servidores .servidor-logo").forEach(botao => {
+    botao.addEventListener("click", () => { voltarParaCanais(); abrirDiscordiaPadrao(); });
 });
 
 botaoPrivadas?.addEventListener("click", mostrarPainelPrivadas);
+botaoCriarServidor?.addEventListener("click", () => abrirModalServidor("criar"));
+botaoEntrarServidor?.addEventListener("click", () => abrirModalServidor("entrar"));
+botaoCriarCanal?.addEventListener("click", criarCanalServidor);
+document.getElementById("cancelarModalServidor")?.addEventListener("click", fecharModalServidor);
+confirmarModalServidor?.addEventListener("click", confirmarServidor);
+inputServidor?.addEventListener("keydown", event => { if (event.key === "Enter") confirmarServidor(); });
 botaoPrivadasMobile?.addEventListener("click", () => { mostrarPainelPrivadas(); fecharMenuMobile(); });
 botaoMenuMobile?.addEventListener("click", alternarMenuMobile);
 botaoMenuPrivadoMobile?.addEventListener("click", alternarMenuMobile);
 botaoNovaConversa?.addEventListener("click", () => { inputBuscaUsuario?.focus(); resultadosUsuarios.innerHTML = '<div class="privado-vazio">Digite um nome para procurar.</div>'; });
 inputBuscaUsuario?.addEventListener("input", () => { clearTimeout(buscaPrivadaTimer); buscaPrivadaTimer = setTimeout(() => buscarUsuariosPrivados(inputBuscaUsuario.value), 250); });
 cancelarRespostaPrivada?.addEventListener("click", () => { respostaPrivadaAtual = null; respostaNormalAtual = null; respostaPrivada.classList.add("oculto"); });
-botaoEmoji?.addEventListener("click", () => menuEmoji?.classList.toggle("oculto"));
-menuEmoji?.addEventListener("click", e => { if (e.target.nodeType === 3) return; const emoji = e.target.textContent; inputMensagem.value += emoji; inputMensagem.focus(); });
-if (menuEmoji) {
-    menuEmoji.innerHTML = "😀 😂 😎 ❤️ 🔥 👍 👎 🎮 🤣 😭 😡 👀 🙏 💀".split(" ").map(e => `<button type="button">${e}</button>`).join("");
+const catalogoEmoji = `😀 😃 😄 😁 😆 😅 😂 🤣 😊 😇 🙂 🙃 😉 😌 😍 🥰 😘 😋 😜 🤪 🤨 🧐 🤓 😎 🥳 🤩 😏 😒 😞 😔 😟 😕 🙁 ☹️ 😣 😖 😫 😩 🥺 😢 😭 😤 😠 😡 🤬 🤯 😳 🥵 🥶 😱 😨 😰 😥 😓 🤗 🤔 🫡 🤭 🫢 🤫 🤥 😶 🫠 😐 🫤 😑 😬 🙄 😯 😦 😧 😮 😲 🥱 😴 🤤 😪 😵 🤐 🥴 🤢 🤮 🤧 😷 🤒 🤕 ❤️ 🩷 🧡 💛 💚 💙 💜 🖤 🤍 🤎 💔 ❤️‍🔥 ❤️‍🩹 💕 💞 💓 💗 💖 💘 💝 💟 ✨ ⭐ 🌟 💫 🔥 💥 💯 ✅ ❌ ⚠️ 🚀 🎉 🎊 🎈 🎁 🏆 🥇 🎮 🕹️ 🎲 🧩 ⚽ 🏀 🏈 ⚾ 🎾 🏐 🥊 🏋️ 🚗 🏍️ ✈️ 🛸 🌎 🌙 ☀️ 🌈 🍕 🍔 🍟 🌭 🌮 🌯 🍿 🍩 🍪 🎂 ☕ 🍺 🍻 🥤 👍 👎 👏 🙌 🫶 🤝 🙏 ✌️ 🤞 🤟 🤘 👌 🤌 🤙 💪 🫵 👀 🧠 🫀 🗣️ 👤 🐶 🐱 🐭 🐹 🐰 🦊 🐻 🐼 🐨 🐯 🦁 🐮 🐷 🐸 🐵 🦄 🐝 🦋 🌹 🌸 🌻 🌲 🌴 🍀 🍎 🍓 🍇 🍉 🥑 🌶️ 🧀 🍗 🍣 🍜 🍫 🧁 🎵 🎶 🎤 🎧 📷 💻 📱 ⌨️ 🖥️ 💡 🔒 🔑 💎 💰 💸 📌 📍 ✉️ 📩 💬 🗨️ 📝 📚 🔎 🛡️ ⚔️ 🧨 🧯 💣 ☠️ 👑 💀 🤖 👻 👽 🎃 😈 👾`.split(/\s+/);
+const buscaEmoji = document.getElementById("buscaEmoji");
+const listaEmoji = document.getElementById("listaEmoji");
+function renderizarEmojis(termo = "") {
+    if (!listaEmoji) return;
+    const filtrados = catalogoEmoji.filter(emoji => emoji.includes(termo.trim())).slice(0, 280);
+    listaEmoji.innerHTML = "";
+    if (!filtrados.length) { listaEmoji.innerHTML = '<div class="emoji-vazio">Não encontrado. Você também pode digitar ou colar qualquer emoji no campo da mensagem.</div>'; return; }
+    filtrados.forEach(emoji => { const botao = document.createElement("button"); botao.type = "button"; botao.textContent = emoji; botao.title = emoji; listaEmoji.appendChild(botao); });
 }
+botaoEmoji?.addEventListener("click", () => { menuEmoji?.classList.toggle("oculto"); if (!menuEmoji?.classList.contains("oculto")) { renderizarEmojis(buscaEmoji?.value || ""); buscaEmoji?.focus(); } });
+buscaEmoji?.addEventListener("input", () => renderizarEmojis(buscaEmoji.value));
+menuEmoji?.addEventListener("click", event => { const botao = event.target.closest("button"); if (!botao) return; inputMensagem.value += botao.textContent; inputMensagem.focus(); });
+renderizarEmojis();
 inputArquivoPrivado?.addEventListener("change", () => { const arquivo = inputArquivoPrivado.files?.[0]; if (!arquivo) return; if (modoPrivado) { if (!conversaPrivadaAtual) { alert("Abra uma conversa privada primeiro."); inputArquivoPrivado.value=""; return; } enviarMensagemPrivada("", arquivo); } else { enviarMensagem("", arquivo); } inputArquivoPrivado.value=""; });
 document.getElementById("botaoBloquearPrivado")?.addEventListener("click", bloquearUsuarioPrivado);
 document.getElementById("botaoBuscarPrivado")?.addEventListener("click", pesquisarNaConversaPrivada);

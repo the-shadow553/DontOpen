@@ -198,11 +198,11 @@
         <aside class="lista-servidores">
 
             <button
-                class="servidor ativo"
+                class="servidor servidor-logo ativo"
                 type="button"
                 title="Discordia"
             >
-                D
+                <img src="assets/discordia-logo.jpg" alt="Logo Discordia">
             </button>
 
             <button
@@ -1134,6 +1134,19 @@
         let modoRecuperacaoSenha = false;
 
 
+        function atualizarAlturaVisual() {
+
+            const altura = window.visualViewport?.height || window.innerHeight;
+            document.documentElement.style.setProperty("--altura-visual", `${Math.round(altura)}px`);
+
+        }
+
+        window.visualViewport?.addEventListener("resize", atualizarAlturaVisual);
+        window.visualViewport?.addEventListener("scroll", atualizarAlturaVisual);
+        window.addEventListener("resize", atualizarAlturaVisual);
+        atualizarAlturaVisual();
+
+
         /* =================================================
            CONFIGURAÇÃO WEBRTC
         ================================================== */
@@ -1972,7 +1985,17 @@
                 }
 
 
-                data.forEach(
+                const membrosUnicos = new Map();
+
+                (data || []).forEach((membro) => {
+                    const chaveVisual = `${(membro.username || "").trim().toLocaleLowerCase()}|${membro.avatar_url || ""}`;
+                    if (!membrosUnicos.has(chaveVisual)) {
+                        membrosUnicos.set(chaveVisual, membro);
+                    }
+                });
+
+
+                Array.from(membrosUnicos.values()).forEach(
                     (membro) => {
 
                         const item =
@@ -5669,6 +5692,9 @@ document.getElementById("botaoBloquearPrivado")?.addEventListener("click", bloqu
 document.getElementById("botaoBuscarPrivado")?.addEventListener("click", pesquisarNaConversaPrivada);
 botaoBuscarCanal?.addEventListener("click", pesquisarNoCanal);
 inputMensagem?.addEventListener("input", avisarDigitacaoNormal);
+inputMensagem?.addEventListener("focus", () => {
+    setTimeout(() => document.querySelector(".area-envio")?.scrollIntoView({ block: "end", behavior: "smooth" }), 150);
+});
 
 
 

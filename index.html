@@ -11,7 +11,7 @@
 
     <title>Discordia</title>
 
-    <link rel="icon" type="image/jpeg" href="assets/discordia-logo.jpg">
+    <link rel="icon" type="image/png" href="assets/discordia-logo.png">
 
     <link
         rel="stylesheet"
@@ -204,7 +204,7 @@
                 type="button"
                 title="Discordia"
             >
-                <img src="assets/discordia-logo.jpg" alt="Logo Discordia">
+                <img src="assets/discordia-logo.png" alt="Logo Discordia">
             </button>
 
             <button
@@ -245,6 +245,7 @@
                         <strong>Mensagens privadas</strong>
                         <small>Conversas 1×1</small>
                     </div>
+                    <button id="botaoPedidosAmizade" type="button" title="Pedidos de amizade">👥</button>
                     <button id="botaoNovaConversa" type="button" title="Nova conversa">＋</button>
                 </div>
 
@@ -254,6 +255,7 @@
                 </div>
 
                 <div id="resultadosUsuarios" class="resultados-usuarios"></div>
+                <div id="listaPedidosAmizade" class="lista-conversas-privadas oculto"></div>
                 <div id="listaConversasPrivadas" class="lista-conversas-privadas"></div>
             </div>
 
@@ -464,6 +466,7 @@
                     class="form-mensagem"
                 >
                     <button id="botaoEmoji" class="botao-extra-mensagem" type="button" title="Emoji">😀</button>
+                    <button id="botaoFigurinha" class="botao-extra-mensagem" type="button" title="Minhas figurinhas">🖼️</button>
                     <label id="botaoArquivo" class="botao-extra-mensagem" title="Enviar arquivo">📎<input id="inputArquivoPrivado" type="file" hidden></label>
                     <input
                         id="inputMensagem"
@@ -476,6 +479,10 @@
                 <div id="menuEmoji" class="menu-emoji oculto">
                     <input id="buscaEmoji" type="search" placeholder="Pesquisar emoji..." autocomplete="off">
                     <div id="listaEmoji"></div>
+                </div>
+                <div id="menuFigurinha" class="menu-emoji menu-figurinhas oculto">
+                    <label class="botao-enviar-figurinha" title="Criar figurinha">＋ Criar figurinha<input id="inputFigurinha" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden></label>
+                    <div id="listaFigurinhas" class="lista-figurinhas"></div>
                 </div>
                 <div id="respostaPrivada" class="resposta-privada oculto">
                     <span id="textoRespostaPrivada"></span>
@@ -1154,6 +1161,13 @@
 
         // Impede que a sessão temporária de recuperação abra o aplicativo.
         let modoRecuperacaoSenha = false;
+
+        function mensagemErroNomeUsuario(error) {
+            if (error?.code === "23505" || /unique|duplicate/i.test(error?.message || "")) {
+                return "Esse nome de usuário já está sendo usado. Escolha outro.";
+            }
+            return error?.message || "Não foi possível salvar seu perfil.";
+        }
 
 
         function atualizarAlturaVisual() {
@@ -4105,10 +4119,7 @@
                     error
                 );
 
-                mostrarMensagemPerfilInicial(
-                    error?.message ||
-                    "Não foi possível salvar seu perfil."
-                );
+                mostrarMensagemPerfilInicial(mensagemErroNomeUsuario(error));
 
             } finally {
                 botaoSalvarPerfilInicial.disabled = false;
@@ -4259,9 +4270,7 @@
                 );
 
 
-                alert(
-                    "Não foi possível salvar o nome."
-                );
+                alert(mensagemErroNomeUsuario(error));
 
             }
 
@@ -4926,13 +4935,21 @@ function adicionarMensagemNaTela(
             }
 
             if (mensagem.attachment_url) {
-                const anexo = document.createElement("a");
-                anexo.className = "anexo-privado";
-                anexo.href = mensagem.attachment_url;
-                anexo.target = "_blank";
-                anexo.rel = "noopener";
-                anexo.textContent = `📎 ${mensagem.attachment_name || "Arquivo"}`;
-                conteudo.appendChild(anexo);
+                if (mensagem.attachment_name?.startsWith("figurinha:")) {
+                    const figurinha = document.createElement("img");
+                    figurinha.className = "imagem-figurinha";
+                    figurinha.src = mensagem.attachment_url;
+                    figurinha.alt = mensagem.attachment_name.slice(10) || "Figurinha";
+                    conteudo.appendChild(figurinha);
+                } else {
+                    const anexo = document.createElement("a");
+                    anexo.className = "anexo-privado";
+                    anexo.href = mensagem.attachment_url;
+                    anexo.target = "_blank";
+                    anexo.rel = "noopener";
+                    anexo.textContent = `📎 ${mensagem.attachment_name || "Arquivo"}`;
+                    conteudo.appendChild(anexo);
+                }
             }
 
             const acoes = document.createElement("div");
@@ -5387,7 +5404,7 @@ async function enviarMensagem(
             try {
                 if (acaoModalServidor === "criar") {
                     const { data: servidor, error } = await supabaseClient.from("servers")
-                        .insert({ name: valor, owner_id: usuarioAtual.id }).select("id, name, owner_id").single();
+                        .insert({ name: valor }).select("id, name, owner_id").single();
                     if (error) throw error;
                     await carregarServidores();
                     fecharModalServidor();
@@ -5523,6 +5540,8 @@ const listaConversasPrivadas = document.getElementById("listaConversasPrivadas")
 const resultadosUsuarios = document.getElementById("resultadosUsuarios");
 const inputBuscaUsuario = document.getElementById("inputBuscaUsuario");
 const botaoNovaConversa = document.getElementById("botaoNovaConversa");
+const botaoPedidosAmizade = document.getElementById("botaoPedidosAmizade");
+const listaPedidosAmizade = document.getElementById("listaPedidosAmizade");
 const cabecalhoPrivado = document.getElementById("cabecalhoPrivado");
 const avatarPrivado = document.getElementById("avatarPrivado");
 const nomePrivado = document.getElementById("nomePrivado");
@@ -5597,9 +5616,10 @@ async function buscarUsuariosPrivados(termo = "") {
             .limit(20);
         if (error) throw error;
         resultadosUsuarios.innerHTML = data?.length ? "" : '<div class="privado-vazio">Nenhum usuário encontrado.</div>';
-        (data || []).forEach(u => {
-            resultadosUsuarios.appendChild(criarItemUsuarioPrivado(u));
-        });
+        for (const usuario of (data || [])) {
+            const estado = await obterEstadoAmizade(usuario.id);
+            resultadosUsuarios.appendChild(criarItemUsuarioPrivado(usuario, estado));
+        }
     } catch (error) {
         console.error("Erro ao buscar usuários:", error);
         resultadosUsuarios.innerHTML = '<div class="privado-vazio">Não foi possível pesquisar agora.</div>';
@@ -5614,16 +5634,44 @@ function criarAvatarPrivado(url, nome, classe = "avatar-privado-lista") {
     return el;
 }
 
-function criarItemUsuarioPrivado(usuario) {
+async function obterEstadoAmizade(outroId) {
+    const { data, error } = await supabaseClient.from("friend_requests")
+        .select("id, sender_id, receiver_id, status")
+        .or(`sender_id.eq.${usuarioAtual.id},receiver_id.eq.${usuarioAtual.id}`);
+    // Enquanto o SQL social ainda não foi instalado, mantém as conversas antigas funcionando.
+    if (error) return "amigo";
+    const pedido = (data || []).find(item => item.sender_id === outroId || item.receiver_id === outroId);
+    if (!pedido) return "nenhum";
+    if (pedido.status === "accepted") return "amigo";
+    return pedido.sender_id === usuarioAtual.id ? "enviado" : "recebido";
+}
+
+async function enviarPedidoAmizade(usuario) {
+    const { error } = await supabaseClient.from("friend_requests")
+        .insert({ sender_id: usuarioAtual.id, receiver_id: usuario.id });
+    if (error) { alert(error.code === "23505" ? "Já existe um pedido entre vocês." : (error.message || "Não foi possível enviar o pedido.")); return; }
+    alert(`Pedido de amizade enviado para ${usuario.username}.`);
+    await buscarUsuariosPrivados(inputBuscaUsuario?.value || "");
+}
+
+function criarItemUsuarioPrivado(usuario, estadoAmizade = "amigo") {
     const item = document.createElement("button");
     item.type = "button";
     item.className = "item-privado";
     item.appendChild(criarAvatarPrivado(usuario.avatar_url, usuario.username));
     const dados = document.createElement("span");
     const online = usuarioEstaOnline(usuario.id);
-    dados.innerHTML = `<strong>${escaparHtmlPrivado(usuario.username || "Usuário")}</strong><small>${online ? "🟢 Online" : "Offline"}</small>`;
+    const textoEstado = estadoAmizade === "amigo" ? (online ? "🟢 Online" : "Offline")
+        : estadoAmizade === "enviado" ? "Pedido enviado"
+        : estadoAmizade === "recebido" ? "Pedido recebido"
+        : estadoAmizade === "indisponivel" ? "Amizades indisponíveis"
+        : "Adicionar amigo";
+    dados.innerHTML = `<strong>${escaparHtmlPrivado(usuario.username || "Usuário")}</strong><small>${textoEstado}</small>`;
     item.appendChild(dados);
-    item.addEventListener("click", () => abrirConversaPrivada(usuario));
+    if (estadoAmizade === "amigo") item.addEventListener("click", () => abrirConversaPrivada(usuario));
+    else if (estadoAmizade === "nenhum") item.addEventListener("click", () => enviarPedidoAmizade(usuario));
+    else if (estadoAmizade === "recebido") item.addEventListener("click", carregarPedidosAmizade);
+    else item.disabled = true;
     return item;
 }
 
@@ -5651,6 +5699,8 @@ async function criarOuEncontrarConversaPrivada(outroId) {
 
 async function abrirConversaPrivada(usuario) {
     if (!usuarioAtual || !usuario) return;
+    const { data: amigo } = await supabaseClient.rpc("are_friends", { p_other: usuario.id });
+    if (!amigo) { alert("Envie e aceite um pedido de amizade antes de conversar."); return; }
     modoPrivado = true;
     usuarioPrivadoAtual = usuario;
     conversaPrivadaAtual = await criarOuEncontrarConversaPrivada(usuario.id);
@@ -5692,6 +5742,38 @@ async function pesquisarNaConversaPrivada() {
     mensagens.scrollTop = mensagens.scrollHeight;
 }
 
+async function responderPedidoAmizade(id, aceitar) {
+    const { error } = await supabaseClient.from("friend_requests")
+        .update({ status: aceitar ? "accepted" : "rejected", responded_at: new Date().toISOString() })
+        .eq("id", id).eq("receiver_id", usuarioAtual.id);
+    if (error) { alert(error.message || "Não foi possível responder ao pedido."); return; }
+    await carregarPedidosAmizade();
+    await carregarConversasPrivadas();
+}
+
+async function carregarPedidosAmizade() {
+    if (!usuarioAtual || !listaPedidosAmizade) return;
+    painelCanais?.classList.add("oculto");
+    listaConversasPrivadas?.classList.add("oculto");
+    resultadosUsuarios.innerHTML = "";
+    listaPedidosAmizade.classList.remove("oculto");
+    const { data, error } = await supabaseClient.from("friend_requests")
+        .select("id, sender_id, created_at").eq("receiver_id", usuarioAtual.id).eq("status", "pending")
+        .order("created_at", { ascending: false });
+    if (error) { listaPedidosAmizade.innerHTML = '<div class="privado-vazio">Execute supabase/social_and_usernames.sql para ativar pedidos.</div>'; return; }
+    listaPedidosAmizade.innerHTML = data?.length ? "" : '<div class="privado-vazio">Nenhum pedido de amizade.</div>';
+    for (const pedido of (data || [])) {
+        const { data: perfil } = await supabaseClient.from("profiles").select("id, username, avatar_url").eq("id", pedido.sender_id).maybeSingle();
+        if (!perfil) continue;
+        const item = document.createElement("div"); item.className = "item-privado";
+        item.appendChild(criarAvatarPrivado(perfil.avatar_url, perfil.username));
+        const dados = document.createElement("span"); dados.innerHTML = `<strong>${escaparHtmlPrivado(perfil.username)}</strong><small>Quer ser seu amigo</small>`; item.appendChild(dados);
+        const aceitar = document.createElement("button"); aceitar.type = "button"; aceitar.textContent = "✓"; aceitar.title = "Aceitar"; aceitar.addEventListener("click", () => responderPedidoAmizade(pedido.id, true));
+        const recusar = document.createElement("button"); recusar.type = "button"; recusar.textContent = "✕"; recusar.title = "Recusar"; recusar.addEventListener("click", () => responderPedidoAmizade(pedido.id, false));
+        item.append(aceitar, recusar); listaPedidosAmizade.appendChild(item);
+    }
+}
+
 async function carregarConversasPrivadas() {
     if (!usuarioAtual || !listaConversasPrivadas) return;
     try {
@@ -5700,9 +5782,13 @@ async function carregarConversasPrivadas() {
             .or(`user_a.eq.${usuarioAtual.id},user_b.eq.${usuarioAtual.id}`)
             .order("updated_at", { ascending: false });
         if (error) throw error;
-        listaConversasPrivadas.innerHTML = data?.length ? "" : '<div class="privado-vazio">Nenhuma conversa ainda.<br>Use a busca acima para falar com alguém.</div>';
+        listaPedidosAmizade?.classList.add("oculto");
+        listaConversasPrivadas.classList.remove("oculto");
+        listaConversasPrivadas.innerHTML = data?.length ? "" : '<div class="privado-vazio">Nenhuma conversa ainda.<br>Envie um pedido de amizade para conversar.</div>';
         for (const conversa of (data || [])) {
             const outroId = conversa.user_a === usuarioAtual.id ? conversa.user_b : conversa.user_a;
+            const estadoAmizade = await obterEstadoAmizade(outroId);
+            if (estadoAmizade !== "amigo") continue;
             const { data: perfil } = await supabaseClient.from("profiles").select("id, username, avatar_url, status").eq("id", outroId).maybeSingle();
             if (perfil) {
                 const item = criarItemUsuarioPrivado(perfil);
@@ -5757,7 +5843,11 @@ async function adicionarMensagemPrivadaNaTela(mensagem) {
     }
     const texto = document.createElement("p"); texto.textContent = mensagem.content || ""; conteudo.appendChild(texto);
     if (mensagem.attachment_url) {
-        const anexo = document.createElement("a"); anexo.href = mensagem.attachment_url; anexo.target = "_blank"; anexo.rel = "noopener"; anexo.className = "anexo-privado"; anexo.textContent = `📎 ${mensagem.attachment_name || "Arquivo"}`; conteudo.appendChild(anexo);
+        if (mensagem.attachment_name?.startsWith("figurinha:")) {
+            const figurinha = document.createElement("img"); figurinha.className = "imagem-figurinha"; figurinha.src = mensagem.attachment_url; figurinha.alt = mensagem.attachment_name.slice(10) || "Figurinha"; conteudo.appendChild(figurinha);
+        } else {
+            const anexo = document.createElement("a"); anexo.href = mensagem.attachment_url; anexo.target = "_blank"; anexo.rel = "noopener"; anexo.className = "anexo-privado"; anexo.textContent = `📎 ${mensagem.attachment_name || "Arquivo"}`; conteudo.appendChild(anexo);
+        }
     }
     const acoes = document.createElement("div"); acoes.className = "acoes-mensagem-privada";
     const responder = document.createElement("button"); responder.type="button"; responder.textContent="↩️"; responder.title="Responder"; responder.onclick=()=>prepararRespostaPrivada(mensagem); acoes.appendChild(responder);
@@ -5834,11 +5924,71 @@ async function bloquearUsuarioPrivado() {
     } catch (error) { console.error(error); alert("Crie a tabela user_blocks no Supabase para ativar o bloqueio."); }
 }
 
+const botaoFigurinha = document.getElementById("botaoFigurinha");
+const menuFigurinha = document.getElementById("menuFigurinha");
+const inputFigurinha = document.getElementById("inputFigurinha");
+const listaFigurinhas = document.getElementById("listaFigurinhas");
+
+async function carregarFigurinhas() {
+    if (!usuarioAtual || !listaFigurinhas) return;
+    const { data, error } = await supabaseClient.from("user_stickers")
+        .select("id, name, image_url").eq("user_id", usuarioAtual.id).order("created_at", { ascending: false });
+    if (error) { listaFigurinhas.innerHTML = '<div class="figurinha-vazia">Execute supabase/stickers.sql para ativar suas figurinhas.</div>'; return; }
+    listaFigurinhas.innerHTML = "";
+    if (!(data || []).length) { listaFigurinhas.innerHTML = '<div class="figurinha-vazia">Você ainda não criou figurinhas.</div>'; return; }
+    data.forEach(figurinha => {
+        const botao = document.createElement("button"); botao.type = "button"; botao.className = "figurinha-item"; botao.title = `Enviar ${figurinha.name}`;
+        const imagem = document.createElement("img"); imagem.src = figurinha.image_url; imagem.alt = figurinha.name; botao.appendChild(imagem);
+        botao.addEventListener("click", () => enviarFigurinha(figurinha)); listaFigurinhas.appendChild(botao);
+    });
+}
+
+async function criarFigurinha(arquivo) {
+    if (!usuarioAtual || !arquivo) return;
+    if (!arquivo.type.startsWith("image/")) { alert("Escolha uma imagem."); return; }
+    if (arquivo.size > 2 * 1024 * 1024) { alert("A figurinha pode ter no máximo 2 MB."); return; }
+    const nome = prompt("Nome da figurinha:", arquivo.name.replace(/\.[^.]+$/, ""))?.trim();
+    if (!nome) return;
+    try {
+        const caminho = `stickers/${usuarioAtual.id}/${Date.now()}-${arquivo.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+        const { error: erroUpload } = await supabaseClient.storage.from("chat-files").upload(caminho, arquivo, { upsert: false });
+        if (erroUpload) throw erroUpload;
+        const { data: url } = supabaseClient.storage.from("chat-files").getPublicUrl(caminho);
+        const { error } = await supabaseClient.from("user_stickers").insert({ user_id: usuarioAtual.id, name: nome, image_url: url.publicUrl });
+        if (error) throw error;
+        await carregarFigurinhas();
+    } catch (error) { alert(error?.message || "Não foi possível criar a figurinha."); }
+}
+
+async function enviarFigurinha(figurinha) {
+    if (!usuarioAtual) return;
+    try {
+        if (modoPrivado) {
+            if (!conversaPrivadaAtual) return;
+            const { error } = await supabaseClient.from("private_messages").insert({
+                conversation_id: conversaPrivadaAtual.id, sender_id: usuarioAtual.id,
+                content: null, attachment_url: figurinha.image_url, attachment_name: `figurinha:${figurinha.name}`
+            });
+            if (error) throw error;
+        } else {
+            const mensagemFigurinha = {
+                user_id: usuarioAtual.id, username: nomeUsuario?.textContent || "Usuário", content: null,
+                channel: canalAtual, attachment_url: figurinha.image_url, attachment_name: `figurinha:${figurinha.name}`
+            };
+            if (servidorAtual && canalAtualDados) { mensagemFigurinha.server_id = servidorAtual.id; mensagemFigurinha.channel_id = canalAtualDados.id; }
+            const { error } = await supabaseClient.from("messages").insert(mensagemFigurinha);
+            if (error) throw error;
+        }
+        menuFigurinha?.classList.add("oculto");
+    } catch (error) { alert(error?.message || "Não foi possível enviar a figurinha."); }
+}
+
 document.querySelectorAll(".lista-servidores .servidor-logo").forEach(botao => {
     botao.addEventListener("click", () => { voltarParaCanais(); abrirDiscordiaPadrao(); });
 });
 
 botaoPrivadas?.addEventListener("click", mostrarPainelPrivadas);
+botaoPedidosAmizade?.addEventListener("click", carregarPedidosAmizade);
 botaoCriarServidor?.addEventListener("click", () => abrirModalServidor("criar"));
 botaoEntrarServidor?.addEventListener("click", () => abrirModalServidor("entrar"));
 botaoCriarCanal?.addEventListener("click", criarCanalServidor);
@@ -5865,6 +6015,8 @@ botaoEmoji?.addEventListener("click", () => { menuEmoji?.classList.toggle("ocult
 buscaEmoji?.addEventListener("input", () => renderizarEmojis(buscaEmoji.value));
 menuEmoji?.addEventListener("click", event => { const botao = event.target.closest("button"); if (!botao) return; inputMensagem.value += botao.textContent; inputMensagem.focus(); });
 renderizarEmojis();
+botaoFigurinha?.addEventListener("click", async () => { menuFigurinha?.classList.toggle("oculto"); if (!menuFigurinha?.classList.contains("oculto")) await carregarFigurinhas(); });
+inputFigurinha?.addEventListener("change", async () => { const arquivo = inputFigurinha.files?.[0]; if (arquivo) await criarFigurinha(arquivo); inputFigurinha.value = ""; });
 inputArquivoPrivado?.addEventListener("change", () => { const arquivo = inputArquivoPrivado.files?.[0]; if (!arquivo) return; if (modoPrivado) { if (!conversaPrivadaAtual) { alert("Abra uma conversa privada primeiro."); inputArquivoPrivado.value=""; return; } enviarMensagemPrivada("", arquivo); } else { enviarMensagem("", arquivo); } inputArquivoPrivado.value=""; });
 document.getElementById("botaoBloquearPrivado")?.addEventListener("click", bloquearUsuarioPrivado);
 document.getElementById("botaoBuscarPrivado")?.addEventListener("click", pesquisarNaConversaPrivada);
